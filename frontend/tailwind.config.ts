@@ -56,6 +56,22 @@ const config: Config = {
                 "tighter-editorial": "-0.08em",
                 "tight-editorial": "-0.06em",
             },
+            fontSize: {
+                "fluid-hero": "var(--text-hero)",
+                "fluid-hero-sub": "var(--text-hero-sub)",
+                "fluid-title": "var(--text-section-title)",
+                "fluid-card": "var(--text-card-title)",
+            },
+            height: {
+                svh: "100svh",
+                lvh: "100lvh",
+                dvh: "100dvh",
+            },
+            minHeight: {
+                svh: "100svh",
+                lvh: "100lvh",
+                dvh: "100dvh",
+            },
         },
     },
     plugins: [],

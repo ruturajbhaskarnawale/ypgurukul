@@ -70,12 +70,12 @@ export default function ContactPage() {
 
       <div className="relative z-10">
         {/* Terminal Header */}
-        <section className="pt-48 pb-32 border-b border-border">
-        <div className="max-w-[1800px] mx-auto px-12">
+        <section className="pt-32 md:pt-48 pb-16 md:pb-32 border-b border-border">
+        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="flex flex-col items-start leading-[0.85]">
             <FadeIn>
-              <span className="font-script text-4xl text-muted-foreground/40 lowercase mb-8 block">the</span>
-              <h1 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-foreground">
+              <span className="font-script text-3xl md:text-4xl text-muted-foreground/40 lowercase mb-6 md:mb-8 block">the</span>
+              <h1 className="text-fluid-hero font-black uppercase tracking-tighter-editorial text-foreground">
                 Inquiry <br /> <span className="text-foreground/10">Terminal</span>
               </h1>
               <p className="text-xl text-muted-foreground/60 lowercase mt-12 max-w-xl leading-relaxed">
@@ -86,18 +86,18 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="py-32">
-        <div className="max-w-[1800px] mx-auto px-12">
-          <div className="grid lg:grid-cols-12 gap-24">
+      <section className="py-16 md:py-32">
+        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+          <div className="grid lg:grid-cols-12 gap-16 md:gap-24">
             
             {/* The Terminal Form */}
             <div className="lg:col-span-8">
               <FadeIn>
-                <div className="bg-secondary/20 backdrop-blur-3xl border border-border rounded-[2.5rem] p-12 md:p-16 overflow-hidden relative group/form">
+                <div className="bg-secondary/20 backdrop-blur-3xl border border-border rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative group/form">
                   {/* Subtle Glow Accent */}
                   <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[100px] rounded-full pointer-events-none group-hover/form:bg-primary/10 transition-colors duration-1000" />
                   
-                  <div className="mb-24 relative z-10">
+                  <div className="mb-12 md:mb-24 relative z-10">
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-8 block">Transmission Form</span>
                     {successMsg && (
                       <div className="p-8 border border-border bg-background text-[10px] font-black uppercase tracking-[0.5em] text-foreground animate-pulse mb-8 rounded-xl backdrop-blur-sm shadow-xl">
@@ -111,8 +111,8 @@ export default function ContactPage() {
                     )}
                   </div>
   
-                  <form onSubmit={handleSubmit} className="space-y-16 relative z-10">
-                     <div className="grid md:grid-cols-2 gap-16">
+                  <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16 relative z-10">
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
                         <div className="flex flex-col group">
                            <label className="text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 group-focus-within:text-foreground transition-colors mb-4 italic">01. Identity_Name</label>
                            <input 
@@ -178,8 +178,8 @@ export default function ContactPage() {
             </div>
   
             {/* Sidebar Locations */}
-            <div className="lg:col-span-4 lg:pl-12">
-               <div className="sticky top-48 space-y-24">
+            <div className="lg:col-span-4 lg:pl-12 mt-16 lg:mt-0">
+               <div className="sticky top-48 space-y-16 md:space-y-24">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-12 block">Physical Hubs</span>
                     <StaggerContainer className="space-y-8">
@@ -219,11 +219,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-       {/* Map Embed Section */}
-      <section className="py-24 border-t border-border">
-         <div className="max-w-[1800px] mx-auto px-12">
+      {/* Map Embed Section */}
+      <section className="py-12 md:py-24 border-t border-border">
+         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
             <FadeIn>
-               <div className="aspect-[21/9] w-full bg-secondary/20 border border-border grayscale opacity-50 hover:opacity-100 transition-all duration-1000 overflow-hidden">
+               <div className="aspect-video md:aspect-[21/9] w-full bg-secondary/20 border border-border grayscale opacity-50 hover:opacity-100 transition-all duration-1000 overflow-hidden">
                   <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.8329615599024!2d72.88094977457787!3d19.07062228148902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c897f223fbad%3A0xe5db976d8dfced9d!2sBandra%20Kurla%20Complex!5e0!3m2!1sen!2sin!4v1709405400000!5m2!1sen!2sin" 
                     width="100%" 

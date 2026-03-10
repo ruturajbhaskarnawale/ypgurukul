@@ -119,15 +119,15 @@ export const QuickInquiry = () => {
   };
 
   return (
-    <section className="relative py-28 overflow-hidden border-b border-white/5">
+    <section className="relative py-20 md:py-28 overflow-hidden border-b border-white/5">
       <Starfield />
 
-      <div className="relative z-10 max-w-[1800px] mx-auto px-12">
-        <div className="grid lg:grid-cols-2 gap-32 items-center">
+      <div className="relative z-10 max-w-[1800px] mx-auto px-6 md:px-12">
+        <div className="grid lg:grid-cols-2 gap-16 md:gap-32 items-center">
 
           <FadeIn>
             <div className="flex flex-col items-start leading-tight">
-              <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter-editorial mb-12 text-foreground">
+              <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial mb-8 md:mb-12 text-foreground">
                 The <br /> <span className="text-muted/40">Journey</span>
               </h2>
               <p className="text-xl text-muted-foreground lowercase mb-12 max-w-md leading-relaxed">
@@ -141,7 +141,7 @@ export const QuickInquiry = () => {
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <div className="bg-secondary/40 backdrop-blur-3xl border border-border rounded-3xl p-12 md:p-16">
+            <div className="bg-secondary/40 backdrop-blur-3xl border border-border rounded-3xl p-8 md:p-16">
               {successMsg ? (
                 <div className="text-center py-16">
                   <h3 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-4">Confirmed</h3>

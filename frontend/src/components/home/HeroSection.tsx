@@ -57,7 +57,7 @@ export const HeroSection = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="text-8xl md:text-[12rem] font-black text-foreground tracking-tighter-editorial leading-[0.8] uppercase flex flex-wrap justify-center gap-x-4"
+            className="text-fluid-hero font-black text-foreground tracking-tighter-editorial leading-[0.8] uppercase flex flex-wrap justify-center gap-x-4 md:gap-x-8"
           >
             {title.split(" ").map((word, wIndex) => (
               <span key={wIndex} className="flex overflow-hidden py-4">
@@ -75,7 +75,7 @@ export const HeroSection = () => {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 1.5, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-block font-script text-6xl md:text-8xl text-foreground/40 lowercase"
+              className="inline-block font-script text-fluid-hero-sub text-foreground/40 lowercase"
             >
               {subtitle}
             </motion.span>
@@ -87,9 +87,9 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
-          className="mt-12 text-xl md:text-3xl text-muted-foreground/80 max-w-3xl mx-auto mb-20 font-medium tracking-tight lowercase"
+          className="mt-8 md:mt-12 text-lg md:text-3xl text-muted-foreground/80 max-w-3xl mx-auto mb-16 md:mb-20 font-medium tracking-tight lowercase px-4"
         >
-          premium coaching and foundational excellence reinvented <br /> for the modern scholar.
+          premium coaching and foundational excellence reinvented <br className="hidden md:block" /> for the modern scholar.
         </motion.p>
         
         {/* Actions */}
@@ -97,18 +97,18 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row justify-center gap-12 w-full"
+          className="flex flex-col sm:flex-row justify-center gap-6 md:gap-12 w-full max-w-md md:max-w-none"
         >
-          <Link href="/courses">
-            <Button size="lg" className="h-20 px-16 rounded-none bg-foreground text-background hover:bg-foreground/90 transition-all text-xs tracking-[0.4em] font-black uppercase border-none group relative overflow-hidden">
+          <Link href="/courses" className="w-full sm:w-auto">
+            <Button size="lg" className="h-16 md:h-20 w-full sm:px-16 rounded-none bg-foreground text-background hover:bg-foreground/90 transition-all text-[10px] md:text-xs tracking-[0.4em] font-black uppercase border-none group relative overflow-hidden">
               <span className="relative z-10">Explore Programs</span>
               <motion.div 
                 className="absolute inset-0 bg-primary/20 translate-y-full group-hover:translate-y-0 transition-transform duration-700"
               />
             </Button>
           </Link>
-          <Link href="/contact">
-            <Button variant="outline" size="lg" className="h-20 px-16 rounded-none text-foreground border-border/50 hover:bg-accent transition-all text-xs tracking-[0.4em] font-black uppercase overflow-hidden group">
+          <Link href="/contact" className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" className="h-16 md:h-20 w-full sm:px-16 rounded-none text-foreground border-border/50 hover:bg-accent transition-all text-[10px] md:text-xs tracking-[0.4em] font-black uppercase overflow-hidden group">
               <span className="relative z-10">Schedule Visit</span>
             </Button>
           </Link>

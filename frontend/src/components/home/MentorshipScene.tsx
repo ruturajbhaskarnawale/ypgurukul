@@ -32,10 +32,13 @@ const FacultyCard = ({ member, index }: { member: FacultyMember, index: number }
     const xTo = gsap.quickTo(card, "rotateY", { duration: 0.4, ease: "power3.out" });
     const yTo = gsap.quickTo(card, "rotateX", { duration: 0.4, ease: "power3.out" });
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent | TouchEvent) => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
       
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
@@ -54,6 +57,8 @@ const FacultyCard = ({ member, index }: { member: FacultyMember, index: number }
 
     card.addEventListener('mousemove', handleMouseMove);
     card.addEventListener('mouseleave', handleMouseLeave);
+    card.addEventListener('touchstart', handleMouseMove, { passive: true });
+    card.addEventListener('touchend', handleMouseLeave, { passive: true });
     
     // Portrait parallax scroll
     gsap.to(portraitRef.current, {
@@ -70,16 +75,18 @@ const FacultyCard = ({ member, index }: { member: FacultyMember, index: number }
     return () => {
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
+      card.removeEventListener('touchstart', handleMouseMove);
+      card.removeEventListener('touchend', handleMouseLeave);
     };
   }, [member.speed]);
 
   return (
     <div 
       ref={cardRef}
-      className="faculty-card group relative flex flex-col items-start cursor-pointer will-change-transform bg-secondary/50 backdrop-blur-2xl border border-border rounded-[2.5rem] p-6 overflow-hidden"
+      className="faculty-card group relative flex flex-col items-start cursor-pointer will-change-transform bg-secondary/50 backdrop-blur-2xl border border-border rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 overflow-hidden"
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
     >
-      <div className="h-[480px] w-full relative mb-10 rounded-3xl border border-border overflow-hidden shadow-2xl bg-muted" style={{ transform: 'translateZ(30px)' }}>
+      <div className="h-[350px] md:h-[480px] w-full relative mb-6 md:mb-10 rounded-2xl md:rounded-3xl border border-border overflow-hidden shadow-2xl bg-muted" style={{ transform: 'translateZ(30px)' }}>
         <div ref={portraitRef} className="absolute inset-x-0 w-full h-[120%] -top-[10%] will-change-transform">
           <Image 
             src={member.image} 
@@ -98,7 +105,7 @@ const FacultyCard = ({ member, index }: { member: FacultyMember, index: number }
         <span className="text-[10px] font-black px-5 py-2.5 bg-foreground text-background uppercase tracking-[0.25em] rounded-full inline-block shadow-xl mb-6">
           {member.subject}
         </span>
-        <h3 className="text-4xl font-black text-foreground mb-3 uppercase tracking-tighter hover:text-foreground transition-colors duration-300">
+        <h3 className="text-3xl md:text-4xl font-black text-foreground mb-3 uppercase tracking-tighter hover:text-foreground transition-colors duration-300">
           {member.name}
         </h3>
         <p className="text-sm font-medium text-muted-foreground lowercase tracking-widest leading-relaxed mb-8">
@@ -153,7 +160,7 @@ export const MentorshipScene = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="relative py-64 border-b border-border overflow-hidden min-h-screen"
+      className="relative py-32 md:py-64 border-b border-border overflow-hidden min-h-svh"
     >
       {/* Background Texture for Editorial Depth */}
       <SectionBackground 
@@ -165,15 +172,15 @@ export const MentorshipScene = () => {
       {/* Top Transition Gradient - Enhanced Visibility */}
       <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
 
-      <div className="relative z-20 max-w-[1800px] mx-auto px-12">
-        <div className="mentorship-title flex flex-col items-center mb-56">
-          <span className="font-script text-5xl text-muted-foreground lowercase mb-8 tracking-wider">the mentorship</span>
-          <h2 className="text-8xl md:text-[11rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.8] text-foreground">
+      <div className="relative z-20 max-w-[1800px] mx-auto px-6 md:px-12">
+        <div className="mentorship-title flex flex-col items-center mb-24 md:mb-56">
+          <span className="font-script text-4xl md:text-5xl text-muted-foreground lowercase mb-6 md:mb-8 tracking-wider">the mentorship</span>
+          <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial text-center leading-[0.8] text-foreground">
             Master <br /> <span className="text-foreground/10 outline-text">Faculty</span>
           </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {faculty.map((member, i) => (
             <FacultyCard key={i} member={member} index={i} />
           ))}

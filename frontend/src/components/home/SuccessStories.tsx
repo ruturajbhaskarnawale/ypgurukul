@@ -13,21 +13,21 @@ export const SuccessStories = () => {
   ];
 
   return (
-    <section className="py-20 bg-background border-b border-border">
-      <div className="max-w-[1800px] mx-auto px-12">
+    <section className="py-16 md:py-20 bg-background border-b border-border">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12">
         
-        <div className="flex flex-col items-center mb-32">
-          <span className="font-script text-4xl text-muted-foreground lowercase mb-6">our</span>
-          <h2 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.85]">
+        <div className="flex flex-col items-center mb-16 md:mb-32">
+          <span className="font-script text-3xl md:text-4xl text-muted-foreground lowercase mb-4 md:mb-6">our</span>
+          <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial text-center leading-[0.85]">
             Wall of <br /> <span className="text-foreground/30">Fame</span>
           </h2>
         </div>
 
-        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-4">
           {stories.map((story, i) => (
             <StaggerItem key={i}>
               <div className="text-center group flex flex-col items-center">
-                <div className="bg-muted/20 h-[400px] w-full relative overflow-hidden mb-8 border border-border">
+                <div className="bg-muted/20 h-[350px] md:h-[400px] w-full relative overflow-hidden mb-6 md:mb-8 border border-border">
                    <Image 
                      src={story.image} 
                      alt={story.name} 

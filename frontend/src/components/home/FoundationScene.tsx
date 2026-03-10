@@ -21,11 +21,14 @@ const StatItem = ({ label, value, trigger }: { label: string, value: string, tri
     const xTo = gsap.quickTo(elRef.current, "x", { duration: 0.6, ease: "power3.out" });
     const yTo = gsap.quickTo(elRef.current, "y", { duration: 0.6, ease: "power3.out" });
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMove = (e: MouseEvent | TouchEvent) => {
       if (!elRef.current) return;
       const rect = elRef.current.getBoundingClientRect();
-      const relX = e.clientX - rect.left - rect.width / 2;
-      const relY = e.clientY - rect.top - rect.height / 2;
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      
+      const relX = clientX - rect.left - rect.width / 2;
+      const relY = clientY - rect.top - rect.height / 2;
       
       const dist = Math.sqrt(relX * relX + relY * relY);
       if (dist < 150) {
@@ -36,15 +39,27 @@ const StatItem = ({ label, value, trigger }: { label: string, value: string, tri
          yTo(0);
       }
     };
+
+    const handleEnd = () => {
+        xTo(0);
+        yTo(0);
+    };
     
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchstart', handleMove, { passive: true });
+    window.addEventListener('touchend', handleEnd, { passive: true });
+
+    return () => {
+        window.removeEventListener('mousemove', handleMove);
+        window.removeEventListener('touchstart', handleMove);
+        window.removeEventListener('touchend', handleEnd);
+    };
   }, []);
 
   return (
     <div ref={elRef} className="stat-item flex flex-col items-center opacity-0 translate-y-[50px] scale-90 will-change-transform z-20 pointer-events-auto">
-      <span className="text-[12vw] md:text-[8vw] font-black tracking-tighter-editorial text-foreground leading-none mb-4 drop-shadow-md select-none">{count}</span>
-      <span className="text-sm md:text-xl font-bold text-muted-foreground/60 uppercase tracking-[0.3em]">{label}</span>
+      <span className="text-[12vw] md:text-[8vw] font-black tracking-tighter-editorial text-foreground leading-none mb-2 md:mb-4 drop-shadow-md select-none">{count}</span>
+      <span className="text-[10px] md:text-xl font-bold text-muted-foreground/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">{label}</span>
     </div>
   );
 };
@@ -150,7 +165,7 @@ export const FoundationScene = () => {
       <div className="absolute inset-x-0 top-0 h-px bg-foreground/10 z-10" />
       
       {/* SCENE CONTENT WRAPPER */}
-      <div className="relative h-screen w-full flex items-center justify-center will-change-transform z-10 pointer-events-none">
+      <div className="relative h-svh w-full flex items-center justify-center will-change-transform z-10 pointer-events-none">
         
         {/* 1. STATS LAYER */}
         <div className="absolute inset-0 flex items-center justify-center px-4 md:px-12 pointer-events-none">

@@ -27,17 +27,17 @@ export const WhyChooseUs = ({ isNested = false }: { isNested?: boolean }) => {
   ];
 
   return (
-    <section className={isNested ? "" : "py-32 bg-background border-b border-border"}>
-      <div className="max-w-[1800px] mx-auto px-12">
+    <section className={isNested ? "" : "py-16 md:py-32 bg-background border-b border-border"}>
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12">
         
-        <div className="flex flex-col items-start mb-32">
-          <span className="font-script text-4xl text-muted-foreground lowercase mb-6">the</span>
-          <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter-editorial leading-[0.85]">
+        <div className="flex flex-col items-start mb-16 md:mb-32">
+          <span className="font-script text-3xl md:text-4xl text-muted-foreground lowercase mb-4 md:mb-6">the</span>
+          <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial leading-[0.85]">
             YP Gurukul <br /> <span className="text-foreground/20">Advantage</span>
           </h2>
         </div>
 
-        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-4 gap-24">
+        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24">
           {features.map((feature, idx) => (
             <StaggerItem key={idx}>
               <div className="flex flex-col items-start">

@@ -56,12 +56,12 @@ export default function AboutPage() {
 
       <div className="relative z-10">
         {/* Editorial Header */}
-        <section className="pt-48 pb-32 border-b border-border transition-colors">
-          <div className="max-w-[1800px] mx-auto px-12">
+        <section className="pt-32 md:pt-48 pb-16 md:pb-32 border-b border-border transition-colors">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
             <div className="flex flex-col items-start leading-[0.85]">
               <FadeIn>
-                <span className="font-script text-4xl lowercase mb-8 block text-muted-foreground/60">the_heritage</span>
-                <h1 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-foreground">
+                <span className="font-script text-3xl md:text-4xl lowercase mb-6 md:mb-8 block text-muted-foreground/60">the_heritage</span>
+                <h1 className="text-fluid-hero font-black uppercase tracking-tighter-editorial text-foreground">
                   Heritage <br /> <span className="text-foreground/10">& Vision</span>
                 </h1>
                 <p className="text-xl lowercase mt-12 max-w-xl leading-relaxed text-muted-foreground">
@@ -73,9 +73,9 @@ export default function AboutPage() {
         </section>
 
         {/* Narrative Section - Bento Story Tiles */}
-        <section className="py-32 border-b border-border">
-          <div className="max-w-[1800px] mx-auto px-12">
-            <div className="grid md:grid-cols-2 gap-24 items-center">
+        <section className="py-16 md:py-32 border-b border-border">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+            <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
                <FadeIn>
                  <div className="space-y-12">
                    <span className="text-[10px] font-bold uppercase tracking-[0.4em] block text-muted-foreground/40">The Archival Philosophy</span>
@@ -108,10 +108,10 @@ export default function AboutPage() {
         </section>
 
         {/* The Architectural Blueprint (Methodology) */}
-        <section className="py-40 border-b border-border">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-24 block text-muted-foreground/40">The Architectural Blueprint</span>
-              <div className="grid md:grid-cols-3 gap-12">
+        <section className="py-20 md:py-40 border-b border-border">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">The Architectural Blueprint</span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:grid-cols-3 gap-12">
                  {methodology.map((m) => (
                    <FadeIn key={m.id}>
                       <div className="p-12 border border-border backdrop-blur-3xl rounded-[3rem] group transition-all duration-700 h-full bg-secondary/10 hover:bg-background">
@@ -126,11 +126,11 @@ export default function AboutPage() {
         </section>
 
         {/* Founder's Message - Cinematic Break */}
-        <section className="py-48 relative overflow-hidden transition-colors bg-secondary/10">
-           <div className="max-w-[1200px] mx-auto px-12 text-center relative z-10">
+        <section className="py-24 md:py-48 relative overflow-hidden transition-colors bg-secondary/10">
+           <div className="max-w-[1200px] mx-auto px-6 md:px-12 text-center relative z-10">
               <FadeIn>
-                 <span className="font-script text-4xl lowercase mb-12 block text-muted-foreground/30">from the_founder</span>
-                 <blockquote className="text-4xl md:text-6xl font-medium leading-tight tracking-tight lowercase text-foreground">
+                 <span className="font-script text-3xl md:text-4xl lowercase mb-8 md:mb-12 block text-muted-foreground/30">from the_founder</span>
+                 <blockquote className="text-2xl md:text-6xl font-medium leading-tight tracking-tight lowercase text-foreground">
                    "education is not the learning of facts, but the training of the mind to think. we engineer the environment where elite minds are forged for global impact."
                  </blockquote>
                  <div className="mt-16 flex flex-col items-center">
@@ -146,9 +146,9 @@ export default function AboutPage() {
         </section>
 
         {/* Temporal Index (Milestones) */}
-        <section className="py-40 border-y border-border bg-background">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-24 block text-muted-foreground/40">The Temporal Index (Milestones)</span>
+        <section className="py-20 md:py-40 border-y border-border bg-background">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">The Temporal Index (Milestones)</span>
               <div className="space-y-12">
                  {milestones.map((m, i) => (
                    <SlideUp key={i} delay={i * 0.1}>
@@ -165,10 +165,10 @@ export default function AboutPage() {
         </section>
 
         {/* Legacy Stats Grid */}
-        <section className="py-40 border-b border-border">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-24 block text-muted-foreground/40">Measurable Outcomes</span>
-              <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-24 text-center">
+        <section className="py-20 md:py-40 border-b border-border">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">Measurable Outcomes</span>
+              <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-24 text-center">
                  {stats.map((stat, i) => (
                    <StaggerItem key={i}>
                       <div className="flex flex-col items-center group">
@@ -183,16 +183,16 @@ export default function AboutPage() {
         </section>
 
         {/* Elite Leadership — Multi-Scale Layout */}
-        <section className="py-48">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <div className="flex flex-col items-start mb-32">
-                 <span className="font-script text-4xl lowercase mb-6 text-muted-foreground/40">the_elite</span>
-                 <h2 className="text-7xl md:text-[8.5rem] font-black uppercase tracking-tighter-editorial leading-[0.8] text-foreground">
+        <section className="py-24 md:py-48">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <div className="flex flex-col items-start mb-16 md:mb-32">
+                 <span className="font-script text-3xl md:text-4xl lowercase mb-4 md:mb-6 text-muted-foreground/40">the_elite</span>
+                 <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial leading-[0.8] text-foreground">
                    Institutional <br /> <span className="text-foreground/10">Architects</span>
                  </h2>
               </div>
     
-              <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                  {leadership.map((person, i) => (
                    <StaggerItem key={i}>
                       <div className="group border border-border p-12 transition-all duration-700 relative overflow-hidden rounded-[3rem] h-full bg-secondary/10 hover:bg-background">

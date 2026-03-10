@@ -92,17 +92,17 @@ export default function Home() {
           
           {/* Subtle line grid overlay like the reference site */}
           <div className="absolute inset-0 bg-[url('/images/backgrounds/Line_Grid.svg')] bg-[length:100px_100px] opacity-10 pointer-events-none" />
-          <div className="max-w-[1800px] mx-auto px-12" ref={programRef}>
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12" ref={programRef}>
              <FadeIn>
-               <div className="flex flex-col items-center mb-40">
-                 <span className="font-script text-4xl text-muted-foreground lowercase mb-6">the</span>
-                 <h2 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.85] text-foreground">
+               <div className="flex flex-col items-center mb-24 md:mb-40">
+                 <span className="font-script text-3xl md:text-4xl text-muted-foreground lowercase mb-4 md:mb-6">the</span>
+                 <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial text-center leading-[0.85] text-foreground">
                    Popular <br /> <span className="text-foreground/10">Programs</span>
                  </h2>
                </div>
              </FadeIn>
 
-             <div className="grid md:grid-cols-3 gap-8" style={{ perspective: '2000px' }}>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" style={{ perspective: '2000px' }}>
                {[
                  { 
                    title: "Class 11 Science Batches", 

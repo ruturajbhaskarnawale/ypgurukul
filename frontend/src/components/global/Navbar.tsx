@@ -41,12 +41,12 @@ export const Navbar = () => {
     <>
       {/* Corner Navigation - Logo (Top Left) */}
       <div
-        className={`fixed top-12 left-12 z-[100] transition-all duration-500 ${
+        className={`fixed top-6 left-6 md:top-12 md:left-12 z-[100] transition-all duration-500 ${
           scrolled ? 'opacity-100' : 'opacity-90'
         }`}
       >
-        <Link href="/" className="group flex items-center gap-4 leading-none">
-          <div className="relative w-12 h-12 overflow-hidden rounded-full border border-border shadow-2xl group-hover:scale-110 transition-transform duration-500">
+        <Link href="/" className="group flex items-center gap-3 md:gap-4 leading-none">
+          <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-full border border-border shadow-2xl group-hover:scale-110 transition-transform duration-500">
             <Image 
               src="/logo-icon.png" 
               alt="YP Gurukul Logo" 
@@ -55,11 +55,11 @@ export const Navbar = () => {
               priority
             />
           </div>
-          <div className="flex flex-col items-start">
-            <span className="text-2xl font-black uppercase tracking-tighter-editorial text-foreground">
+          <div className="flex flex-col items-start translate-y-1">
+            <span className="text-xl md:text-2xl font-black uppercase tracking-tighter-editorial text-foreground">
               YP Gurukul
             </span>
-            <span className="font-script text-muted-foreground text-xs">
+            <span className="font-script text-muted-foreground text-[10px] md:text-xs">
               institute
             </span>
           </div>
@@ -67,9 +67,10 @@ export const Navbar = () => {
       </div>
 
       {/* Corner Navigation - Portal/Access/Admin (Top Right) */}
-      <div className="fixed top-12 right-12 z-[100] hidden md:flex items-center gap-6">
+      <div className="fixed top-6 right-6 md:top-12 md:right-12 z-[100] flex items-center gap-4 md:gap-6">
         <ThemeToggle />
-        {user?.role === 'ADMIN' && (
+        <div className="hidden md:flex items-center gap-6">
+          {user?.role === 'ADMIN' && (
           <Link
             href="/admin"
             className="nav-btn text-[10px] font-bold uppercase tracking-[0.4em] text-foreground border border-border px-8 py-3 hover:bg-foreground hover:text-background transition-all"
@@ -83,10 +84,11 @@ export const Navbar = () => {
         >
           {user ? 'PORTAL' : 'ACCESS'}
         </Link>
+        </div>
       </div>
 
       {/* Corner Navigation - Menu Trigger (Bottom Right) */}
-      <div className="fixed bottom-12 right-12 z-[100]">
+      <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-[100]">
         <motion.button
           onClick={toggleMenu}
           whileHover={{ scale: 1.1 }}
@@ -153,17 +155,42 @@ export const Navbar = () => {
               ))}
             </div>
 
+            {/* Portal links for mobile (visible when standard top navigation is hidden) */}
+            <motion.div 
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.35 }}
+               className="flex md:hidden flex-col items-center gap-4 mb-12"
+            >
+                <Link
+                  href={user ? '/portal/dashboard' : '/login'}
+                  onClick={() => setIsOpen(false)}
+                  className="text-xs font-bold uppercase tracking-[0.4em] text-foreground border border-border px-12 py-4 hover:bg-foreground hover:text-background transition-all"
+                >
+                  {user ? 'PORTAL' : 'LOGIN ACCESS'}
+                </Link>
+                {user?.role === 'ADMIN' && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className="text-xs font-bold uppercase tracking-[0.4em] text-foreground border border-border px-12 py-4 hover:bg-foreground hover:text-background transition-all"
+                  >
+                    ADMIN VIEW
+                  </Link>
+                )}
+            </motion.div>
+
             {/* Contact info at bottom */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="absolute bottom-20 flex flex-col items-center gap-4"
+              transition={{ delay: 0.45, duration: 0.5 }}
+              className="absolute bottom-10 md:bottom-20 flex flex-col items-center gap-2 md:gap-4"
             >
               <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-muted-foreground">
                 Contact Us
               </span>
-              <p className="text-2xl font-black text-foreground">+91 123 456 7890</p>
+              <p className="text-xl md:text-2xl font-black text-foreground">+91 123 456 7890</p>
             </motion.div>
           </motion.div>
         )}

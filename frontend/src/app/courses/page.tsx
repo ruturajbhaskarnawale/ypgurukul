@@ -61,18 +61,18 @@ export default function CoursesPage() {
       </div>
 
       {/* Minimal Floating Header */}
-      <header className="fixed top-0 inset-x-0 pt-16 pb-8 z-40 flex flex-col items-center pointer-events-none">
+      <header className="fixed top-0 inset-x-0 pt-8 md:pt-16 pb-4 md:pb-8 z-40 flex flex-col items-center pointer-events-none">
         <FadeIn>
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter-editorial leading-none text-foreground">
+          <h1 className="text-3xl md:text-6xl font-black uppercase tracking-tighter-editorial leading-none text-foreground">
             Gurukul <span className="opacity-10 italic">Universe</span>
           </h1>
         </FadeIn>
       </header>
 
       {/* Floating Filter Bar */}
-      <nav className="fixed top-36 inset-x-0 z-40 pointer-events-none">
-        <div className="max-w-fit mx-auto px-8 py-4 backdrop-blur-2xl border border-border rounded-full pointer-events-auto shadow-xl bg-background/60">
-          <div className="flex gap-10 items-center">
+      <nav className="fixed top-28 md:top-36 inset-x-0 z-40">
+        <div className="max-w-[90vw] md:max-fit mx-auto overflow-x-auto no-scrollbar backdrop-blur-2xl border border-border rounded-full pointer-events-auto shadow-xl bg-background/60">
+          <div className="flex gap-6 md:gap-10 items-center px-6 md:px-8 py-3 md:py-4 min-w-max">
             {categories.map((cat, i) => (
               <button
                 key={i}
@@ -104,16 +104,16 @@ export default function CoursesPage() {
 
       {/* Course Detail Pop-up Overlay */}
       {selectedCourse && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 backdrop-blur-md bg-background/40">
-          <FadeIn className="max-w-4xl w-full">
-            <div className="relative backdrop-blur-3xl border border-border rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl bg-background/90">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 backdrop-blur-md bg-background/40 overflow-y-auto">
+          <FadeIn className="max-w-4xl w-full my-auto">
+            <div className="relative backdrop-blur-3xl border border-border rounded-[2rem] md:rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl bg-background/90">
               {/* Close Button */}
               <button 
                 onClick={() => setSelectedCourse(null)}
-                className="absolute top-8 right-8 w-12 h-12 rounded-full border border-border bg-background/20 flex items-center justify-center hover:bg-background transition-colors z-10"
+                className="absolute top-4 right-4 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 rounded-full border border-border bg-background/20 flex items-center justify-center hover:bg-background transition-colors z-20"
               >
-                <div className="w-4 h-[2px] rotate-45 absolute bg-foreground" />
-                <div className="w-4 h-[2px] -rotate-45 absolute bg-foreground" />
+                <div className="w-3 md:w-4 h-[2px] rotate-45 absolute bg-foreground" />
+                <div className="w-3 md:w-4 h-[2px] -rotate-45 absolute bg-foreground" />
               </button>
 
               {/* Image Section */}
@@ -129,14 +129,14 @@ export default function CoursesPage() {
               </div>
 
               {/* Content Section */}
-              <div className="w-full md:w-1/2 p-12 flex flex-col justify-center">
-                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/60 mb-4">
+              <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
+                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/60 mb-3 md:mb-4">
                   {selectedCourse.category}
                 </span>
-                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter-editorial mb-6 leading-none text-foreground">
+                <h2 className="text-2xl md:text-5xl font-black uppercase tracking-tighter-editorial mb-4 md:mb-6 leading-none text-foreground">
                   {selectedCourse.title}
                 </h2>
-                <p className="text-sm md:text-base mb-10 leading-relaxed font-bold lowercase text-muted-foreground">
+                <p className="text-xs md:text-base mb-8 md:mb-10 leading-relaxed font-bold lowercase text-muted-foreground">
                   {selectedCourse.description}
                 </p>
                 

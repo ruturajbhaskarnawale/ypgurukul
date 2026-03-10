@@ -119,15 +119,15 @@ export default function CareerPage() {
 
       <div className="relative z-10">
         {/* Archival Header */}
-        <section className="pt-48 pb-32 border-b border-border transition-colors">
-          <div className="max-w-[1800px] mx-auto px-12">
+        <section className="pt-32 md:pt-48 pb-16 md:pb-32 border-b border-border transition-colors">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
             <div className="flex flex-col items-start leading-[0.85]">
               <FadeIn>
-                <span className="font-script text-4xl lowercase mb-8 block text-muted-foreground/60">the_career</span>
-                <h1 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-foreground">
+                <span className="font-script text-3xl md:text-4xl lowercase mb-6 md:mb-8 block text-muted-foreground/60">the_career</span>
+                <h1 className="text-fluid-hero font-black uppercase tracking-tighter-editorial text-foreground">
                   Opportunities <br /> <span className="text-foreground/10">Archive</span>
                 </h1>
-                <p className="text-xl lowercase mt-12 max-w-xl leading-relaxed text-muted-foreground">
+                <p className="text-lg md:text-xl lowercase mt-8 md:mt-12 max-w-xl leading-relaxed text-muted-foreground">
                   a curated index of open roles within the YP Gurukul ecosystem. we are constantly seeking architects of excellence to shape the next era of academic engineering.
                 </p>
               </FadeIn>
@@ -136,10 +136,10 @@ export default function CareerPage() {
         </section>
 
         {/* Culture & Values — Values Orbit */}
-        <section className="py-40 border-b border-border">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-24 block text-muted-foreground/40">The Archival Standard</span>
-              <div className="grid md:grid-cols-3 gap-12">
+        <section className="py-20 md:py-40 border-b border-border">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">The Archival Standard</span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                  {values.map((v) => (
                    <FadeIn key={v.id}>
                      <div className="p-12 border border-border backdrop-blur-3xl rounded-[3rem] group transition-all duration-700 h-full bg-secondary/20 hover:bg-background">
@@ -154,9 +154,9 @@ export default function CareerPage() {
         </section>
 
         {/* Perks & Benefits Grid */}
-        <section className="py-40 border-b border-border">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+        <section className="py-20 md:py-40 border-b border-border">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8">
                  <div className="flex-1">
                     <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4 block text-muted-foreground/40">Professional Sovereignty</span>
                     <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-foreground">Recruitment <br /> Sovereignty</h2>
@@ -166,7 +166,7 @@ export default function CareerPage() {
                  </p>
               </div>
  
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                  {perks.map((p, i) => (
                    <SlideUp key={i}>
                       <div className="p-10 border border-border rounded-[2rem] h-full flex flex-col justify-between transition-colors bg-secondary/10 hover:bg-secondary/30">
@@ -180,9 +180,9 @@ export default function CareerPage() {
         </section>
 
         {/* The Job Index */}
-        <section className="py-40">
-          <div className="max-w-[1800px] mx-auto px-12">
-            <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 block text-muted-foreground/40">Active_Requisitions</span>
+        <section className="py-20 md:py-40">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+            <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-10 md:mb-12 block text-muted-foreground/40">Active_Requisitions</span>
             <StaggerContainer className="flex flex-col">
               {openings.map((job) => (
                 <StaggerItem key={job.id}>
@@ -193,10 +193,10 @@ export default function CareerPage() {
                     `}
                     onClick={() => setActiveJob(activeJob === job.id ? null : job.id)}
                   >
-                     <div className="flex justify-between items-center px-4">
-                        <div className="flex items-center gap-12">
+                     <div className="flex justify-between items-center px-2 md:px-4">
+                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-12">
                            <span className="text-[10px] font-bold font-black uppercase text-foreground/10">{job.id}</span>
-                           <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter group-hover:pl-6 transition-all duration-700 text-foreground">
+                           <h2 className="text-2xl md:text-6xl font-black uppercase tracking-tighter group-hover:pl-4 md:group-hover:pl-6 transition-all duration-700 text-foreground">
                              {job.title}
                            </h2>
                         </div>
@@ -217,18 +217,18 @@ export default function CareerPage() {
                            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
                            className="overflow-hidden"
                          >
-                           <div className="px-24 py-16 max-w-[900px]">
-                              <p className={`text-2xl lowercase leading-relaxed mb-16 font-light ${isLight ? 'text-slate-600' : 'text-white/60'}`}>
+                           <div className="px-6 md:px-24 py-12 md:py-16 max-w-[900px]">
+                              <p className={`text-lg md:text-2xl lowercase leading-relaxed mb-12 md:mb-16 font-light ${isLight ? 'text-slate-600' : 'text-white/60'}`}>
                                 {job.description}
                               </p>
-                              <div className="flex gap-8">
+                              <div className="flex flex-col sm:flex-row gap-6 md:gap-8">
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); openApply(job.title); }}
-                                  className="px-16 py-8 border text-[10px] font-black uppercase tracking-[0.5em] transition-all duration-700 shadow-xl bg-foreground text-background border-foreground hover:bg-foreground/80"
+                                  className="w-full sm:w-auto px-10 md:px-16 py-6 md:py-8 border text-[10px] font-black uppercase tracking-[0.5em] transition-all duration-700 shadow-xl bg-foreground text-background border-foreground hover:bg-foreground/80"
                                 >
                                   Begin Application
                                 </button>
-                                <button className="px-12 py-8 border text-[10px] font-bold uppercase tracking-[0.5em] transition-all duration-700 border-border text-muted-foreground/60 hover:text-foreground hover:bg-secondary/20">
+                                <button className="w-full sm:w-auto px-8 md:px-12 py-6 md:py-8 border text-[10px] font-bold uppercase tracking-[0.5em] transition-all duration-700 border-border text-muted-foreground/60 hover:text-foreground hover:bg-secondary/20">
                                    Full Role Specs
                                 </button>
                               </div>
@@ -241,7 +241,7 @@ export default function CareerPage() {
               ))}
             </StaggerContainer>
 
-            <div className="mt-32 p-20 text-center border rounded-[4rem] transition-colors border-border bg-secondary/10">
+            <div className="mt-20 md:mt-32 p-10 md:p-20 text-center border rounded-[2rem] md:rounded-[4rem] transition-colors border-border bg-secondary/10">
                <FadeIn>
                  <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-6 block text-foreground/10">General Submission</span>
                  <p className="text-2xl lowercase max-w-xl mx-auto mb-12 font-light text-muted-foreground/60">
@@ -259,10 +259,10 @@ export default function CareerPage() {
         </section>
 
         {/* Archival FAQ */}
-        <section className="py-40 bg-transparent">
-           <div className="max-w-[1800px] mx-auto px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-24 block text-muted-foreground/40">Clarification_Engine (FAQ)</span>
-              <div className="grid md:grid-cols-2 gap-24">
+        <section className="py-20 md:py-40 bg-transparent">
+           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">Clarification_Engine (FAQ)</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
                  {faq.map((item, i) => (
                    <FadeIn key={i}>
                       <div className="space-y-6 pb-12 border-b border-border">
@@ -283,18 +283,18 @@ export default function CareerPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] backdrop-blur-xl flex items-center justify-center p-6 md:p-12 overflow-y-auto bg-background/95"
+            className="fixed inset-0 z-[100] backdrop-blur-xl flex items-center justify-center p-4 md:p-12 overflow-y-auto bg-background/95"
           >
-            <div className="max-w-2xl w-full py-12">
+            <div className="max-w-2xl w-full py-12 my-auto">
               <FadeIn>
-                <div className="flex justify-between items-start mb-24">
+                <div className="flex flex-col md:flex-row justify-between items-start mb-12 md:mb-24 gap-8">
                    <div className="flex flex-col">
-                      <span className="font-script text-4xl lowercase mb-4 text-muted-foreground/40">applying for</span>
-                      <h2 className="text-4xl font-black uppercase tracking-tighter text-foreground">{formData.position}</h2>
+                      <span className="font-script text-3xl md:text-4xl lowercase mb-4 text-muted-foreground/40">applying for</span>
+                      <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-foreground leading-none">{formData.position}</h2>
                    </div>
                    <button 
                      onClick={() => setShowApplyModal(false)}
-                     className="text-[10px] font-bold uppercase tracking-[0.4em] p-4 transition-colors text-muted-foreground/40 hover:text-foreground"
+                     className="text-[10px] font-bold uppercase tracking-[0.4em] p-2 md:p-4 transition-colors text-muted-foreground/40 hover:text-foreground"
                    >
                      [ close ]
                    </button>
@@ -306,8 +306,8 @@ export default function CareerPage() {
                     <p className={`text-xs font-bold uppercase tracking-[0.5em] ${isLight ? 'text-slate-400' : 'text-white/40'}`}>{message}</p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-12">
-                    <div className="grid grid-cols-2 gap-12">
+                  <form onSubmit={handleSubmit} className="space-y-10 md:space-y-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
                        <div className="flex flex-col group">
                           <label className="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors mb-4 italic text-muted-foreground/30 group-focus-within:text-foreground">01. First_Name</label>
                           <input 

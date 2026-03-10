@@ -24,6 +24,12 @@
     --input: #e5e7eb;
     --ring: #000000;
     --radius: 0rem;
+
+    /* Fluid Typography Foundation (Mobile-first) */
+    --text-hero: clamp(3rem, 15vw, 12rem);
+    --text-hero-sub: clamp(2rem, 8vw, 6rem);
+    --text-section-title: clamp(2.5rem, 10vw, 9rem);
+    --text-card-title: clamp(1.25rem, 4vw, 2rem);
   }
 
   .dark {
@@ -46,6 +52,12 @@
     --border: #1f2937;
     --input: #1f2937;
     --ring: #ffffff;
+
+    /* Fluid Typography Foundation (Dark) */
+    --text-hero: clamp(3rem, 15vw, 12rem);
+    --text-hero-sub: clamp(2rem, 8vw, 6rem);
+    --text-section-title: clamp(2.5rem, 10vw, 9rem);
+    --text-card-title: clamp(1.25rem, 4vw, 2rem);
   }
 }
 
@@ -84,6 +96,15 @@
 
   .tracking-tight-editorial {
     letter-spacing: -0.02em;
+  }
+
+  /* Responsive Heights */
+  .h-svh {
+    height: 100svh;
+  }
+
+  .min-h-svh {
+    min-height: 100svh;
   }
 }
 
