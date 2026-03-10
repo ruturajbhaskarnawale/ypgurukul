@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  role          String    @default("STUDENT") // Using String instead of Enum for SQLite
+  name          String
+  mobileNumber  String?
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  studentProfile StudentProfile?
+  testResults    TestResult[]
+}
+
+model StudentProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  parentName     String?
+  parentMobile   String?
+  currentClass   String?
+  enrollments    Enrollment[]
+}
+
+model Course {
+  id             String   @id @default(uuid())
+  title          String
+  slug           String   @unique
+  category       String   // e.g., '11-12 Science', 'Foundation'
+  description    String
+  duration       String
+  feeStructure   String?
+  subjects       String?  // New: JSON strictly representing subjects
+  batchTimings   String?  // New: JSON strictly representing timings
+  createdAt      DateTime @default(now())
+  
+  enrollments    Enrollment[]
+  studyMaterials StudyMaterial[]
+}
+
+model Enrollment {
+  id             String         @id @default(uuid())
+  studentId      String
+  courseId       String
+  enrolledAt     DateTime       @default(now())
+  student        StudentProfile @relation(fields: [studentId], references: [id])
+  course         Course         @relation(fields: [courseId], references: [id])
+}
+
+model StudyMaterial {
+  id             String   @id @default(uuid())
+  title          String
+  fileUrl        String   // S3 Link
+  courseId       String
+  uploadedAt     DateTime @default(now())
+  course         Course   @relation(fields: [courseId], references: [id])
+}
+
+model TestResult {
+  id             String   @id @default(uuid())
+  userId         String
+  testName       String
+  marksObtained  Float
+  totalMarks     Float
+  testDate       DateTime
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model Application {
+  id             String   @id @default(uuid())
+  position       String
+  name           String
+  email          String
+  mobile         String
+  resumeUrl      String   // S3 Link
+  appliedAt      DateTime @default(now())
+}
