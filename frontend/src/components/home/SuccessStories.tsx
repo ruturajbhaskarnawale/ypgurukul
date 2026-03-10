@@ -3,6 +3,7 @@ import { FadeIn, StaggerContainer, StaggerItem } from '../animations/MotionUtils
 import { Button } from '../global/Button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Starfield } from './Starfield';
 
 export const SuccessStories = () => {
   const stories = [
@@ -13,8 +14,9 @@ export const SuccessStories = () => {
   ];
 
   return (
-    <section className="py-16 md:py-20 bg-background border-b border-border">
-      <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+    <section className="relative py-16 md:py-20 bg-background border-b border-white/5 overflow-hidden">
+      <Starfield opacity={0.6} />
+      <div className="relative z-10 max-w-[1800px] mx-auto px-6 md:px-12">
         
         <div className="flex flex-col items-center mb-16 md:mb-32">
           <span className="font-script text-3xl md:text-4xl text-muted-foreground lowercase mb-4 md:mb-6">our</span>

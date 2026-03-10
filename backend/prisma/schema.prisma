@@ -39,6 +39,7 @@ model Course {
   description    String
   duration       String
   feeStructure   String?
+  previewImage   String?  // New: Image to show on course cards
   subjects       String?  // New: JSON strictly representing subjects
   batchTimings   String?  // New: JSON strictly representing timings
   createdAt      DateTime @default(now())

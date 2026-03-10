@@ -1,130 +1,100 @@
-# Shopify Editions — Winter '26 Website Archive
+# YP Gurukul - Educational Platform
 
-> **Saved from:** [https://www.shopify.com/editions/winter2026](https://www.shopify.com/editions/winter2026)
-> **Theme:** *"The Renaissance Edition"* — 150+ Shopify product updates
-
-This folder is a **locally downloaded copy** of Shopify's **Winter 2026 Editions** marketing website — an immersive, scroll-driven single-page experience showcasing Shopify's latest product releases across AI, retail, B2B, checkout, and more.
+Welcome to the **YP Gurukul** repository! This is a state-of-the-art, immersive educational platform designed to provide a premium and engaging experience for students. Built with a focus on modern aesthetics, 3D interactive elements, and robust functionality, the platform serves as a central hub for learning, test series, and comprehensive educational resources.
 
 ---
 
-## 📂 What's Inside
+## ✨ Key Features
 
-```
-www.shopify.com/
-├── www.shopify.com/editions/winter2026.html   ← Main page (open this to view the site)
-├── cdn.shopify.com/oxygen-v2/.../assets/      ← JavaScript & CSS bundles
-├── cdn.shopify.com/s/files/                   ← Images and SVG icons
-├── cdn.shopify.com/b/                          ← Custom font files (WOFF2)
-├── _DataURI/                                   ← Inline data URI references
-├── unpkg.com/detect-gpu@5.0.34/               ← GPU tier detection library
-└── www.googletagmanager.com/                  ← Analytics script (Google Tag Manager)
-```
-
----
-
-## ▶️ How to View / Execute
-
-### Option 1 — Open Directly in Browser (Simplest, Recommended)
-
-1. Navigate to `www.shopify.com\editions\`
-2. Double-click **`winter2026.html`**
-3. It will open in your default browser
-
-> **Note:** With internet access, images, videos, animations, and fonts load from Shopify's live CDN. Without internet, only the core HTML structure will display (no images/videos).
-
----
-
-### Option 2 — Use a Local HTTP Server (Better for Offline/Dev)
-
-Using Python (built into most systems):
-
-```bash
-# Navigate to the root archive folder
-cd "c:\Users\rutur\Downloads\www.shopify.com"
-
-# Python 3
-python -m http.server 8080
-
-# Then open in browser:
-# http://localhost:8080/www.shopify.com/editions/winter2026.html
-```
-
-Using Node.js (`npx serve`):
-
-```bash
-cd "c:\Users\rutur\Downloads\www.shopify.com"
-npx serve .
-# Open: http://localhost:3000/www.shopify.com/editions/winter2026.html
-```
-
-Using VS Code **Live Server** extension:
-1. Open the folder in VS Code
-2. Right-click `winter2026.html` → **"Open with Live Server"**
-
----
-
-### Option 3 — Browse the Live Original
-
-Visit the real page online:
-
-👉 **[https://www.shopify.com/editions/winter2026](https://www.shopify.com/editions/winter2026)**
-
-This gives you the full interactive experience including Rive animations, video playback, and search.
-
----
-
-## ⚠️ Known Limitations (Local Archive)
-
-| Feature | Status |
-|---|---|
-| Core HTML layout | ✅ Works locally |
-| CSS styling (Tailwind) | ✅ Works (loads from CDN with internet) |
-| Images & Videos | ⚠️ Requires internet (CDN-hosted) |
-| Rive animations | ⚠️ Requires internet + compatible browser |
-| Search functionality | ❌ Requires Shopify backend API |
-| Cookie consent popup | ❌ Requires Shopify DUX session |
-| Smooth scroll (Lenis) | ⚠️ Depends on JS loading correctly |
+- **Immersive 3D Environments:** Discover "The Nexus of Excellence," a flight-through-knowledge-experience built with WebGL and React Three Fiber, providing a visually stunning landing page.
+- **Dynamic Interactions:** High-quality, editorial-style animations, smooth scroll-triggered reveals, and subtle hover-zoom effects powered by modern animation libraries.
+- **Interactive 3D Carousels:** Engaging and interactive course and feature presentation using robust 3D card carousels.
+- **Comprehensive Test Series & Courses:** Detailed previews, test taking interfaces, and course structures tailored for student success.
+- **Faculty Showcases:** Premium layouts to highlight the experienced faculty behind the platform.
+- **Secure Admin Panel:** Dedicated interfaces and secure workflows for administrators to manage content, users, and platform data.
+- **Fully Responsive & Optimized:** Ensuring a seamless experience across all devices, from desktop environments to mobile web browsers.
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Technology | Purpose |
-|---|---|
-| **Remix (React)** | Server-side rendered framework |
-| **Shopify Oxygen v2** | Shopify's edge hosting platform |
-| **TailwindCSS** | Utility-first CSS framework |
-| **Rive** | Interactive animations |
-| **PP Neue Montreal** | Custom brand typeface |
-| **detect-gpu** | GPU tier detection for performance |
-| **Lenis** | Smooth scroll library |
-| **Google Tag Manager** | Analytics & tracking |
+The platform leverages a modern, robust, and scalable tech stack:
+
+- **Frontend Framework:** [Next.js](https://nextjs.org/) (React)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS for fast, utility-first, and highly customizable UI design.
+- **3D & Graphics:** `@react-three/fiber` and `@react-three/drei` for rendering performant 3D scenes directly in the browser.
+- **Animations:** Framer Motion (or equivalent) for complex, layout-driven, and scroll-based animations.
+- **Package Management:** npm ecosystem
 
 ---
 
-## 📑 Page Sections
+## 📂 Project Structure
 
-The page covers 12 product categories navigable from the left sidebar:
+A brief overview of the core application structure:
 
-1. **Sidekick** — AI-powered commerce assistant
-2. **Agentic** — Autonomous AI workflows
-3. **Online** — Storefront & theme updates
-4. **Retail** — POS & in-store features
-5. **Marketing** — Campaigns & ads
-6. **Checkout** — Payment & conversion improvements
-7. **Operations** — Admin & workflow tools
-8. **Shop App** — Mobile shopping app
-9. **B2B** — Wholesale & enterprise features
-10. **Finance** — Shopify Balance, lending, payouts
-11. **Shipping** — Fulfillment & logistics
-12. **Developer** — APIs, CLI, Storefront updates
+```text
+frontend/
+├── src/
+│   ├── app/                 # Next.js App Router (Pages, Layouts, API routes)
+│   │   ├── contact/         # Contact forms and details
+│   │   ├── admin/           # Admin dashboard and authentication
+│   │   └── ...
+│   ├── components/          # Reusable UI components
+│   │   ├── home/            # Homepage specific components (Hero, FoundationScene, etc.)
+│   │   ├── admin/           # Admin-specific components
+│   │   └── shared/          # Buttons, Inputs, Navbars, etc.
+│   ├── lib/                 # Utility functions, helpers, and configurations
+│   ├── styles/              # Global CSS and Tailwind directives
+│   └── types/               # TypeScript interface and type definitions
+├── public/                  # Static assets (images, 3D models, fonts)
+├── package.json             # Project dependencies and scripts
+└── tailwind.config.ts       # Tailwind CSS configuration
+```
 
 ---
 
-## 📜 Legal
+## � Getting Started
 
-This is a personal offline copy of publicly accessible content. All content, trademarks, and assets belong to **Shopify Inc.**
+Follow these instructions to set up the project locally for development and testing.
 
-- [Terms of Service](https://www.shopify.com/legal/terms)
-- [Privacy Policy](https://www.shopify.com/legal/privacy)
-- © Shopify Inc.
+### Prerequisites
+
+- **Node.js**: Ensure you have Node.js (v18 or higher recommended) installed.
+- **npm**: The default package manager for Node.js.
+
+### Installation
+
+1. **Navigate to the frontend directory**:
+
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**:
+
+   Execute the following command to download and install all required packages:
+
+   ```bash
+   npm install
+   ```
+
+### Running the Development Server
+
+Start the Next.js development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000). You can now open your browser and interact with the platform.
+
+---
+
+## 🤝 Contributing
+
+When contributing to this project, please adhere to the following guidelines:
+- Ensure 3D components are dynamically imported and optimized to avoid client-side load errors (e.g., handling `ChunkLoadError`).
+- Maintain the premium design aesthetic using the predefined Tailwind configurations.
+- Verify responsiveness across various viewport sizes (mobile, tablet, desktop) before submitting any UI changes.
+- Ensure all new components are strictly typed using TypeScript.

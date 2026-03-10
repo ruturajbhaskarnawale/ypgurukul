@@ -10,6 +10,7 @@ const SECTIONS = [
   { id: 'path',        label: 'Programs',    numeral: 'III' },
   { id: 'mentorship',  label: 'Mentorship',  numeral: 'IV'  },
   { id: 'legacy',      label: 'Legacy',      numeral: 'V'   },
+  { id: 'gallery',     label: 'Gallery',     numeral: 'VI'  },
 ];
 
 export const SidebarNav = () => {
@@ -17,11 +18,11 @@ export const SidebarNav = () => {
   const [visible, setVisible] = useState(false);
   const pathname = usePathname();
 
-  // Hide on dashboard routes
-  const isDashboard = pathname?.startsWith('/portal') || pathname?.startsWith('/admin');
+  // Hide on all routes except the home page
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
-    if (isDashboard) return;
+    if (!isHomePage) return;
 
     // Show sidebar only after initial hero has been scrolled past a bit
     const onScroll = () => {
@@ -30,10 +31,10 @@ export const SidebarNav = () => {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, [isDashboard]);
+  }, [isHomePage]);
 
   useEffect(() => {
-    if (isDashboard) return;
+    if (!isHomePage) return;
 
     const sectionEls = SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean) as HTMLElement[];
     if (!sectionEls.length) return;
@@ -51,7 +52,7 @@ export const SidebarNav = () => {
 
     sectionEls.forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, [isDashboard]);
+  }, [isHomePage]);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -60,7 +61,7 @@ export const SidebarNav = () => {
     }
   };
 
-  if (isDashboard) return null;
+  if (!isHomePage) return null;
 
   return (
     <AnimatePresence>

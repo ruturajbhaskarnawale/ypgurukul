@@ -12,10 +12,12 @@ import { SectionThemeController } from '@/components/home/SectionThemeController
 // Redesigned Components
 import { TestSeriesPreview } from '@/components/home/TestSeriesPreview';
 import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { MentorshipScene } from '@/components/home/MentorshipScene';
 import { SuccessStories } from '@/components/home/SuccessStories';
 import { SceneContainer, Scene } from '@/components/home/SceneContainer';
 import { FoundationScene } from '@/components/home/FoundationScene';
+import { FacultyPreview } from '@/components/home/FacultyPreview';
+import { Testimonials } from '@/components/home/Testimonials';
+import { Gallery } from '@/components/home/Gallery';
 
 // GSAP Imports
 import gsap from 'gsap';
@@ -150,14 +152,19 @@ export default function Home() {
       </Scene>
 
 
-      {/* SCENE 3: MENTORSHIP (FACULTY & TESTIMONIALS) */}
       <Scene id="mentorship">
-        <MentorshipScene />
+        <FacultyPreview />
+        <Testimonials />
       </Scene>
 
-      {/* SCENE 4: LEGACY (SUCCESS STORIES, GALLERY, INQUIRY) */}
+      {/* SCENE 4: LEGACY & INFRASTRUCTURE */}
       <Scene id="legacy">
         <SuccessStories />
+      </Scene>
+      <Scene id="gallery">
+        <Gallery />
+      </Scene>
+      <Scene id="inquiry">
         <QuickInquiry />
       </Scene>
     </SceneContainer>

@@ -116,7 +116,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div 
+      {/* <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1.5 }}
@@ -130,7 +130,7 @@ export const HeroSection = () => {
             className="absolute top-0 left-0 w-full h-full bg-foreground/40"
           />
         </div>
-      </motion.div>
+      </motion.div> */}
     </section>
   );
 };

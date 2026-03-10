@@ -20,9 +20,10 @@ interface CourseCardProps {
   scrollRef: React.MutableRefObject<number>;
   spacing: number;
   onSelect: (id: string) => void;
+  dragDistanceRef?: React.MutableRefObject<number>;
 }
 
-function CourseCard({ course, index, isDark, scrollRef, spacing, onSelect }: CourseCardProps) {
+function CourseCard({ course, index, isDark, scrollRef, spacing, onSelect, dragDistanceRef }: CourseCardProps) {
   const meshRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   
@@ -53,7 +54,9 @@ function CourseCard({ course, index, isDark, scrollRef, spacing, onSelect }: Cou
       onPointerOut={() => setHovered(false)}
       onClick={(e) => {
         e.stopPropagation();
-        onSelect(course.id);
+        if (!dragDistanceRef || dragDistanceRef.current < 10) {
+          onSelect(course.id);
+        }
       }}
     >
       {/* Glass Card Background */}
@@ -101,25 +104,71 @@ function CourseCard({ course, index, isDark, scrollRef, spacing, onSelect }: Cou
         <meshBasicMaterial color={isDark ? "#ffffff" : "#000000"} opacity={isDark ? 0.05 : 0.15} transparent />
       </mesh>
 
-      {/* Text Overlay - Moved to Top/Middle */}
-      <Text
-        position={[0, 1.8, 0.15]}
-        fontSize={0.22}
-        color={isDark ? "white" : "black"}
-        maxWidth={2.8}
-        textAlign="center"
-      >
-        {course.title.toUpperCase()}
-      </Text>
-      
-      <Text
-        position={[0, 2.3, 0.1]}
-        fontSize={0.12}
-        color="#3b82f6"
-        letterSpacing={0.2}
-      >
-        {course.category.toUpperCase()}
-      </Text>
+      {/* Text Overlay - Enhanced Readability */}
+      <group position={[0, 1.9, 0.2]}>
+        {/* Curved Top Backdrop - Matches Card Width and Radius */}
+        <mesh position={[0, 0, -0.05]}>
+          <shapeGeometry args={[useMemo(() => {
+            const w = 3.4; // Matches card width
+            const h = 1.4; 
+            const r = 0.4; // Matches card corner radius
+            const s = new THREE.Shape();
+            // Start bottom-left
+            s.moveTo(-w/2, -h/2);
+            // Line to bottom-right (straight)
+            s.lineTo(w/2, -h/2);
+            // Line to top-right below curve
+            s.lineTo(w/2, h/2-r);
+            // Curve top-right
+            s.absarc(w/2-r, h/2-r, r, 0, Math.PI/2, false);
+            // Line to top-left below curve
+            s.lineTo(-w/2+r, h/2);
+            // Curve top-left
+            s.absarc(-w/2+r, h/2-r, r, Math.PI/2, Math.PI, false);
+            // Line back to start
+            s.lineTo(-w/2, -h/2);
+            return s;
+          }, [])]} />
+          <meshBasicMaterial color="black" opacity={0.65} transparent />
+        </mesh>
+
+        {/* Main Title */}
+        <Text
+          position={[0, -0.1, 0.02]}
+          fontSize={0.26}
+          color="white"
+          maxWidth={2.8}
+          textAlign="center"
+          anchorY="middle"
+          outlineWidth={0.015}
+          outlineColor="#3b82f6"
+        >
+          {course.title.toUpperCase()}
+        </Text>
+        
+        {/* Glow Layer */}
+        <Text
+          position={[0, -0.1, 0]}
+          fontSize={0.26}
+          color="#3b82f6"
+          maxWidth={2.8}
+          textAlign="center"
+          anchorY="middle"
+          opacity={0.8}
+        >
+          {course.title.toUpperCase()}
+        </Text>
+
+        <Text
+          position={[0, 0.45, 0.02]}
+          fontSize={0.14}
+          color="#60a5fa"
+          letterSpacing={0.2}
+          textAlign="center"
+        >
+          {course.category.toUpperCase()}
+        </Text>
+      </group>
     </group>
   );
 }
@@ -269,6 +318,7 @@ export function CourseGlobe({ courses, onSelect }: { courses: Course[], onSelect
             scrollRef={scrollXRef}
             spacing={spacing}
             onSelect={onSelect}
+            dragDistanceRef={dragDistance}
           />
         ))}
 

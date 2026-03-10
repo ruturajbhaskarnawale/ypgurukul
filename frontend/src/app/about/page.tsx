@@ -140,7 +140,7 @@ export default function AboutPage() {
                  </div>
               </FadeIn>
            </div>
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[30rem] font-black pointer-events-none select-none uppercase tracking-tighter text-foreground/[0.01]">
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10rem] md:text-[16rem] lg:text-[20rem] font-black pointer-events-none select-none uppercase tracking-tighter text-foreground opacity-5">
              Vision
            </div>
         </section>

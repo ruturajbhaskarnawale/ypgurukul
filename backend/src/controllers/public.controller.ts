@@ -12,6 +12,7 @@ export const getPublicCourses = async (req: Request, res: Response) => {
                 description: true,
                 duration: true,
                 feeStructure: true,
+                previewImage: true,
             }
         });
         res.json(courses);

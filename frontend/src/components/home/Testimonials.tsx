@@ -20,16 +20,16 @@ export const Testimonials = () => {
           </h2>
         </div>
 
-        <StaggerContainer className="grid md:grid-cols-3 gap-24">
+        <StaggerContainer className="grid md:grid-cols-3 gap-12 md:gap-24">
           {testimonials.map((t, i) => (
             <StaggerItem key={i}>
-              <div className="flex flex-col h-full items-start group">
-                <span className="text-5xl font-black text-foreground/10 group-hover:text-foreground/40 transition-colors mb-12">"</span>
-                <p className="text-2xl font-bold text-foreground mb-12 leading-relaxed lowercase tracking-tight italic">
+              <div className="flex flex-col h-full items-start group relative">
+                <span className="text-8xl font-black text-foreground/5 absolute -top-16 -left-8 pointer-events-none group-hover:text-foreground/10 transition-colors">"</span>
+                <p className="text-2xl font-bold text-foreground mb-12 leading-relaxed lowercase tracking-tight italic relative z-10">
                   {t.quote}
                 </p>
-                <div className="flex flex-col gap-2 mt-auto">
-                  <h4 className="font-black text-foreground text-lg uppercase tracking-tighter">{t.name}</h4>
+                <div className="flex flex-col gap-2 mt-auto border-l-2 border-border pl-6 group-hover:border-primary transition-colors duration-500">
+                  <h4 className="font-black text-foreground text-xl uppercase tracking-tighter">{t.name}</h4>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">{t.detail}</p>
                 </div>
               </div>

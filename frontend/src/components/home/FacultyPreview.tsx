@@ -5,6 +5,7 @@ import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
+import { Starfield } from './Starfield';
 import { SectionBackground } from './SectionBackground';
 
 if (typeof window !== 'undefined') {
@@ -81,8 +82,8 @@ export const FacultyPreview = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative py-48 border-b border-border bg-background overflow-hidden font-sans">
-      {/* SectionBackground removed for strict B&W theme */}
+    <section ref={containerRef} className="relative py-48 border-b border-white/5 overflow-hidden font-sans">
+      <Starfield opacity={0.6} />
       <div className="max-w-[1800px] mx-auto px-12 relative z-10">
           <div className="flex flex-col items-center mb-40">
             <span className="font-script text-4xl text-muted-foreground lowercase mb-6">the</span>
