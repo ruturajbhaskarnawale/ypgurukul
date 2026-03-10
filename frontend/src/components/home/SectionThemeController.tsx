@@ -9,11 +9,11 @@ interface SectionThemeDef {
 
 // Map section IDs to their visual theme. This drives global nav/sidebar color adaptation.
 const SECTION_THEMES: SectionThemeDef[] = [
-  { id: 'nexus',      theme: 'dark'  },
-  { id: 'foundation', theme: 'light' }, // Foundation section uses light parchment bg
-  { id: 'path',       theme: 'dark'  },
-  { id: 'mentorship', theme: 'light'  },
-  { id: 'legacy',     theme: 'dark'  },
+  { id: 'nexus',      theme: 'light' },
+  { id: 'foundation', theme: 'light' },
+  { id: 'path',       theme: 'light' },
+  { id: 'mentorship', theme: 'light' },
+  { id: 'legacy',     theme: 'light' },
 ];
 
 /**
@@ -32,8 +32,8 @@ export const SectionThemeController: React.FC = () => {
 
     if (!sectionEls.length) return;
 
-    // Default to dark (hero section is dark)
-    document.documentElement.setAttribute('data-section-theme', 'dark');
+    // Default to light (theme is now light-first)
+    document.documentElement.setAttribute('data-section-theme', 'light');
 
     const observer = new IntersectionObserver(
       (entries) => {

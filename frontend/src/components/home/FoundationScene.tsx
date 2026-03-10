@@ -22,7 +22,8 @@ const StatItem = ({ label, value, trigger }: { label: string, value: string, tri
     const yTo = gsap.quickTo(elRef.current, "y", { duration: 0.6, ease: "power3.out" });
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = elRef.current!.getBoundingClientRect();
+      if (!elRef.current) return;
+      const rect = elRef.current.getBoundingClientRect();
       const relX = e.clientX - rect.left - rect.width / 2;
       const relY = e.clientY - rect.top - rect.height / 2;
       
@@ -138,12 +139,12 @@ export const FoundationScene = () => {
   return (
     <div 
         ref={containerRef} 
-        className="relative w-full overflow-hidden text-foreground bg-[#0a0a0a]"
+        className="relative w-full overflow-hidden text-foreground bg-background"
         style={{ contain: 'content' }}
     >
-      {/* Background substance (Subtle Texture & Parallax Wrapper) */}
-      <div className="absolute inset-x-0 w-full h-[120%] -top-[10%] section-bg-parallax will-change-transform pointer-events-none z-0">
-          <SectionBackground src="/images/backgrounds/BG-Y.png" alt="Yellow Textured Background" />
+      {/* Background substance (Theme Background) */}
+      <div className="absolute inset-x-0 w-full h-[120%] -top-[10%] section-bg-parallax bg-background will-change-transform pointer-events-none z-0">
+          {/* SectionBackground removed for strict B&W */}
       </div>
 
       <div className="absolute inset-x-0 top-0 h-px bg-foreground/10 z-10" />
@@ -182,7 +183,7 @@ export const FoundationScene = () => {
         {/* DIGITAL SCAN LINE */}
         <div 
           ref={scanLineRef}
-          className="absolute inset-y-0 left-0 w-1 bg-primary/20 blur-[1px] z-50 pointer-events-none origin-top"
+          className="absolute inset-y-0 left-0 w-1 bg-foreground/20 blur-[1px] z-50 pointer-events-none origin-top"
           style={{ height: '100%' }}
         />
       </div>

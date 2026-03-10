@@ -32,7 +32,7 @@ export const PageTransition = ({ children }: { children: React.ReactNode }) => {
     <>
       <div 
         ref={overlayRef}
-        className="fixed inset-0 z-[9999] bg-black pointer-events-none"
+        className="fixed inset-0 z-[9999] bg-foreground pointer-events-none"
         style={{ transformOrigin: 'top', display: mounted ? 'block' : 'none' }}
       />
       {children}

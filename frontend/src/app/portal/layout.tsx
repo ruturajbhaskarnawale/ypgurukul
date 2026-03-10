@@ -9,7 +9,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden font-sans selection:bg-blue-500/30">
+    <div className="flex h-screen bg-background overflow-hidden font-sans selection:bg-primary/20">
       
       {/* Desktop & Mobile Sidebar */}
       <PortalSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -20,7 +20,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         {/* Mobile Header (Hidden on Desktop) */}
         <header className="md:hidden h-16 bg-muted border-b border-border flex items-center justify-between px-6 z-40">
           <div className="text-sm font-black text-foreground uppercase tracking-tighter flex items-center gap-2">
-            <span className="w-6 h-6 bg-gradient-to-br from-blue-500 to-teal-400 rounded-lg flex justify-center items-center text-[10px] text-white">YP</span>
+            <span className="w-6 h-6 bg-foreground rounded-lg flex justify-center items-center text-[10px] text-background">YP</span>
             YP Gurukul
           </div>
           <button 

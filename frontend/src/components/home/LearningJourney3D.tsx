@@ -18,7 +18,7 @@ function FloatingObjects() {
       <Float speed={2} rotationIntensity={1} floatIntensity={2} position={[-2, 1, -5]}>
         <mesh>
           <torusKnotGeometry args={[0.8, 0.2, 100, 16]} />
-          <meshStandardMaterial color="#ffffff" roughness={0} metalness={1} />
+          <meshStandardMaterial color="#111111" roughness={0} metalness={1} />
         </mesh>
       </Float>
       
@@ -92,16 +92,16 @@ export function LearningJourney3D() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="learning-journey-container relative h-[400vh] bg-black">
+    <section ref={sectionRef} className="learning-journey-container relative h-[400vh] bg-background">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         
         {/* Text Overlay synced with scroll */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-6 text-center">
-            <span className="font-script text-4xl text-[#888888] lowercase mb-8">the</span>
-            <h2 className="text-7xl md:text-[12rem] font-black text-white uppercase tracking-tighter-editorial leading-[0.8]">
-              Academic <br /> <span className="text-white/20">Genesis</span>
+            <span className="font-script text-4xl text-muted-foreground lowercase mb-8">the</span>
+            <h2 className="text-7xl md:text-[12rem] font-black text-foreground uppercase tracking-tighter-editorial leading-[0.8]">
+              Academic <br /> <span className="text-foreground/20">Genesis</span>
             </h2>
-            <p className="text-xl text-[#888888] max-w-xl mt-16 lowercase leading-relaxed font-medium">
+            <p className="text-xl text-muted-foreground max-w-xl mt-16 lowercase leading-relaxed font-medium">
               travel through the multidimensional layers of academic excellence. unlocking every facet of your potential.
             </p>
         </div>
@@ -110,7 +110,7 @@ export function LearningJourney3D() {
         <div className="absolute inset-0 z-0">
           {isInView && (
             <Canvas camera={{ position: [0, 0, 5], fov: 60 }} dpr={[1, 2]}>
-              <Environment preset="night">
+              <Environment preset="city">
                  <Lightformer intensity={10} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={[20, 20, 1]} />
               </Environment>
               <ambientLight intensity={0.2} />

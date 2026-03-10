@@ -5,7 +5,6 @@ import { FadeIn, StaggerContainer, StaggerItem } from '@/components/animations/M
 import { apiClient } from '@/lib/apiClient';
 import Link from 'next/link';
 import { CourseGlobe } from '@/components/courses/CourseGlobe';
-import { useTheme } from 'next-themes';
 import { SectionBackground } from '@/components/home/SectionBackground';
 
 interface Course {
@@ -51,59 +50,40 @@ export default function CoursesPage() {
   const categories = ['All', ...Array.from(new Set(courses.map((c) => c.category)))];
   const filtered = activeCategory === 'All' ? courses : courses.filter((c) => c.category === activeCategory);
 
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isLight = mounted && resolvedTheme === 'light';
-
   return (
-    <div className={`relative min-h-screen h-screen overflow-hidden flex flex-col transition-colors duration-700 ${isLight ? 'bg-[#fcfcfc] selection:bg-primary/20' : 'bg-[#050505] selection:bg-primary/30'}`}>
+    <div className="relative min-h-screen h-screen overflow-hidden flex flex-col bg-background selection:bg-primary/20">
       
-      {/* Dynamic Immersive Background */}
+      {/* Dynamic Immersive Background - Refined B&W */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {isLight ? (
-          <>
-            <SectionBackground src="/images/backgrounds/light_cinematic_ambient_bg.png" alt="Light Atmosphere" className="opacity-80 mix-blend-multiply" />
-            <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white/80" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
-          </>
-        ) : (
-          <>
-            <SectionBackground src="/images/backgrounds/BG-3.png" alt="Dark Universe" className="opacity-40 grayscale-[0.2]" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] mix-blend-overlay" />
-          </>
-        )}
+        <SectionBackground src="/images/backgrounds/light_cinematic_ambient_bg.png" alt="Light Atmosphere" className="opacity-40 mix-blend-multiply grayscale" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] mix-blend-overlay" />
       </div>
 
       {/* Minimal Floating Header */}
       <header className="fixed top-0 inset-x-0 pt-16 pb-8 z-40 flex flex-col items-center pointer-events-none">
         <FadeIn>
-          <h1 className={`text-4xl md:text-6xl font-black uppercase tracking-tighter-editorial leading-none ${isLight ? 'text-slate-900' : 'text-white'}`}>
-            Gurukul <span className="opacity-20 italic">Universe</span>
+          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter-editorial leading-none text-foreground">
+            Gurukul <span className="opacity-10 italic">Universe</span>
           </h1>
         </FadeIn>
       </header>
 
       {/* Floating Filter Bar */}
       <nav className="fixed top-36 inset-x-0 z-40 pointer-events-none">
-        <div className={`max-w-fit mx-auto px-6 py-3 backdrop-blur-2xl border rounded-full pointer-events-auto shadow-xl transition-all duration-700 ${isLight ? 'bg-white/60 border-slate-200' : 'bg-muted/40 border-border shadow-2xl'}`}>
+        <div className="max-w-fit mx-auto px-8 py-4 backdrop-blur-2xl border border-border rounded-full pointer-events-auto shadow-xl bg-background/60">
           <div className="flex gap-10 items-center">
             {categories.map((cat, i) => (
               <button
                 key={i}
                 onClick={() => setActiveCategory(cat)}
-                className={`text-[9px] font-bold uppercase tracking-[0.4em] transition-all relative py-1 ${
-                  activeCategory === cat ? (isLight ? 'text-slate-900' : 'text-foreground') : (isLight ? 'text-slate-400 hover:text-slate-900' : 'text-muted-foreground hover:text-foreground')
+                className={`text-[9px] font-black uppercase tracking-[0.4em] transition-all relative py-1 ${
+                  activeCategory === cat ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {cat}
                 {activeCategory === cat && (
-                  <div className="absolute -bottom-1 left-1.2 right-1.2 h-[2px] bg-primary" />
+                  <div className="absolute -bottom-1 left-0 right-0 h-[2px] bg-primary" />
                 )}
               </button>
             ))}
@@ -112,7 +92,7 @@ export default function CoursesPage() {
       </nav>
 
       {/* Hero 3D Section - Full Screen */}
-      <main className="flex-1 w-full relative z-10 transition-all duration-1000">
+      <main className="flex-1 w-full relative z-10">
         <CourseGlobe 
           courses={filtered} 
           onSelect={(id) => {
@@ -124,60 +104,60 @@ export default function CoursesPage() {
 
       {/* Course Detail Pop-up Overlay */}
       {selectedCourse && (
-        <div className={`fixed inset-0 z-50 flex items-center justify-center p-6 backdrop-blur-sm transition-all duration-300 ${isLight ? 'bg-slate-900/10' : 'bg-black/40'}`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 backdrop-blur-md bg-background/40">
           <FadeIn className="max-w-4xl w-full">
-            <div className={`relative backdrop-blur-3xl border rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.1)] transition-all duration-700 ${isLight ? 'bg-white/80 border-slate-200' : 'bg-background/60 border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)]'}`}>
+            <div className="relative backdrop-blur-3xl border border-border rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl bg-background/90">
               {/* Close Button */}
               <button 
                 onClick={() => setSelectedCourse(null)}
-                className={`absolute top-8 right-8 w-12 h-12 rounded-full border flex items-center justify-center transition-colors z-10 ${isLight ? 'bg-slate-900/5 border-slate-900/10 hover:bg-slate-900/10' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                className="absolute top-8 right-8 w-12 h-12 rounded-full border border-border bg-background/20 flex items-center justify-center hover:bg-background transition-colors z-10"
               >
-                <div className={`w-4 h-[2px] rotate-45 absolute ${isLight ? 'bg-slate-900' : 'bg-white'}`} />
-                <div className={`w-4 h-[2px] -rotate-45 absolute ${isLight ? 'bg-slate-900' : 'bg-white'}`} />
+                <div className="w-4 h-[2px] rotate-45 absolute bg-foreground" />
+                <div className="w-4 h-[2px] -rotate-45 absolute bg-foreground" />
               </button>
 
               {/* Image Section */}
-              <div className="w-full md:w-1/2 h-64 md:h-auto relative">
+              <div className="w-full md:w-1/2 h-64 md:h-auto relative bg-secondary">
                 {selectedCourse.previewImage && (
                   <img 
                     src={selectedCourse.previewImage} 
                     alt={selectedCourse.title}
-                    className={`w-full h-full object-cover ${isLight ? 'grayscale-[0.2]' : ''}`}
+                    className="w-full h-full object-cover grayscale opacity-80"
                   />
                 )}
-                <div className={`absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r to-transparent ${isLight ? 'from-white/90' : 'from-background/80'}`} />
+                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-background via-background/20 to-transparent" />
               </div>
 
               {/* Content Section */}
               <div className="w-full md:w-1/2 p-12 flex flex-col justify-center">
-                <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-primary mb-4">
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/60 mb-4">
                   {selectedCourse.category}
                 </span>
-                <h2 className={`text-3xl md:text-5xl font-black uppercase tracking-tighter-editorial mb-6 leading-none ${isLight ? 'text-slate-900' : 'text-foreground'}`}>
+                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter-editorial mb-6 leading-none text-foreground">
                   {selectedCourse.title}
                 </h2>
-                <p className={`text-sm md:text-base mb-10 leading-relaxed font-medium transition-colors ${isLight ? 'text-slate-600' : 'text-muted-foreground opacity-80'}`}>
+                <p className="text-sm md:text-base mb-10 leading-relaxed font-bold lowercase text-muted-foreground">
                   {selectedCourse.description}
                 </p>
                 
                 <div className="grid grid-cols-2 gap-8 mb-12">
                   <div>
-                    <span className={`block text-[8px] uppercase tracking-widest mb-1 ${isLight ? 'text-slate-400' : 'text-muted-foreground'}`}>Duration</span>
-                    <span className={`text-sm font-black ${isLight ? 'text-slate-900' : 'text-foreground'}`}>{selectedCourse.duration}</span>
+                    <span className="block text-[8px] font-black uppercase tracking-widest text-muted-foreground/40 mb-1">Duration</span>
+                    <span className="text-sm font-black uppercase text-foreground">{selectedCourse.duration}</span>
                   </div>
                   <div>
-                    <span className={`block text-[8px] uppercase tracking-widest mb-1 ${isLight ? 'text-slate-400' : 'text-muted-foreground'}`}>Investment</span>
-                    <span className={`text-sm font-black ${isLight ? 'text-slate-900' : 'text-foreground'}`}>{selectedCourse.feeStructure}</span>
+                    <span className="block text-[8px] font-black uppercase tracking-widest text-muted-foreground/40 mb-1">Investment</span>
+                    <span className="text-sm font-black uppercase text-foreground">{selectedCourse.feeStructure}</span>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
                    <Link href={`/courses/${selectedCourse.slug}`} className="flex-1">
-                    <button className={`w-full py-5 rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl ${isLight ? 'bg-slate-900 text-white shadow-slate-900/10' : 'bg-primary text-primary-foreground shadow-primary/20'}`}>
+                    <button className="w-full py-5 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl">
                       Explore Blueprint
                     </button>
                   </Link>
-                  <button className={`px-10 py-5 border rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${isLight ? 'border-slate-200 hover:bg-slate-50 text-slate-900' : 'border-foreground/10 bg-foreground/5 hover:bg-foreground/10 text-foreground'}`}>
+                  <button className="px-10 py-5 border border-border rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-secondary">
                     Inquire
                   </button>
                 </div>

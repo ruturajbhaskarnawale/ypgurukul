@@ -24,7 +24,7 @@ export const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="group flex items-center gap-6 mb-12">
-              <div className="relative w-24 h-24 overflow-hidden rounded-full border border-white/5 shadow-2xl group-hover:scale-105 transition-transform duration-700">
+              <div className="relative w-24 h-24 overflow-hidden rounded-full border border-border shadow-2xl group-hover:scale-105 transition-transform duration-700">
                 <Image 
                   src="/logo-icon.png" 
                   alt="YP Gurukul Logo" 

@@ -51,12 +51,12 @@ export const AdminSidebar = ({ isOpen = false, onClose }: SidebarProps) => {
         
         <div className="h-20 flex items-center justify-between px-8 border-b border-border">
           <Link href="/" className="group flex items-center gap-3" onClick={onClose}>
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.2)]">
-              <span className="text-white text-xs font-black">YP</span>
+            <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center">
+              <span className="text-background text-xs font-black">YP</span>
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-xs font-black text-foreground tracking-[0.2em] uppercase">Governance</span>
-              <span className="text-[10px] font-bold text-orange-400/60 uppercase tracking-widest mt-0.5 italic">Terminal</span>
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5 italic">Terminal</span>
             </div>
           </Link>
           
@@ -77,16 +77,16 @@ export const AdminSidebar = ({ isOpen = false, onClose }: SidebarProps) => {
                 onClick={onClose}
                 className={`
                   relative flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 group
-                  ${isActive ? 'bg-muted/60 text-foreground shadow-md' : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground'}
+                  ${isActive ? 'bg-muted/60 text-foreground shadow-sm' : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground'}
                 `}
               >
                 {isActive && (
                   <motion.div 
                     layoutId="activeAdminNav"
-                    className="absolute left-0 w-1 h-6 bg-orange-500 rounded-r-full shadow-[0_0_10px_rgba(249,115,22,0.5)]"
+                    className="absolute left-0 w-1 h-6 bg-foreground rounded-r-full"
                   />
                 )}
-                <svg className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'scale-110 text-orange-400' : 'opacity-40 group-hover:scale-110 group-hover:opacity-100 group-hover:text-foreground'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'scale-110 text-foreground' : 'opacity-40 group-hover:scale-110 group-hover:opacity-100 group-hover:text-foreground'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                 </svg>
                 <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isActive ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>

@@ -45,9 +45,9 @@ export const DashboardHeader = ({ title }: { title: string }) => {
               <span className="text-[10px] font-black uppercase tracking-widest text-foreground">{user?.name}</span>
               <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-[0.2em]">{user?.role}</span>
            </div>
-           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-teal-400 p-px">
-              <div className="w-full h-full rounded-xl bg-background flex items-center justify-center">
-                 <span className="text-xs font-black text-white">{user?.name?.charAt(0)}</span>
+           <div className="w-10 h-10 rounded-xl bg-primary p-px">
+              <div className="w-full h-full rounded-xl bg-primary flex items-center justify-center">
+                 <span className="text-xs font-black text-primary-foreground">{user?.name?.charAt(0)}</span>
               </div>
            </div>
         </div>

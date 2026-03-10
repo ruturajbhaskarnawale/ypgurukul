@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { FadeIn } from '../animations/MotionUtils';
 import { apiClient, ApiError } from '@/lib/apiClient';
 import gsap from 'gsap';
@@ -21,19 +22,29 @@ const Starfield = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <SectionBackground src="/images/backgrounds/BG-G.png" alt="Teal Textured Background" />
-      {/* Twinkling Stars Layer on top of the texture */}
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-background">
+      {/* Requested Background Image */}
+      <div className="absolute inset-0 opacity-60 grayscale mix-blend-multiply transition-opacity duration-1000">
+        <Image 
+          src="/images/backgrounds/BG-G.png" 
+          alt="" 
+          fill 
+          className="object-cover"
+          priority
+        />
+      </div>
+      
+      {/* Twinkling Stars Layer (Dark) */}
       <div className="absolute inset-0">
          {stars.map((style, i) => (
            <div 
              key={i} 
-             className="absolute rounded-full bg-white transition-opacity duration-1000"
+             className="absolute rounded-full bg-foreground transition-opacity duration-1000"
              style={style}
            />
          ))}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
       <style jsx>{`
         @keyframes twinkle {
           0%, 100% { opacity: 0.2; }
@@ -116,43 +127,42 @@ export const QuickInquiry = () => {
 
           <FadeIn>
             <div className="flex flex-col items-start leading-tight">
-              <span className="font-script text-4xl text-muted-foreground lowercase mb-8">embark</span>
-              <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter-editorial mb-12 text-white">
-                The <br /> <span className="text-white/20">Journey</span>
+              <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter-editorial mb-12 text-foreground">
+                The <br /> <span className="text-muted/40">Journey</span>
               </h2>
               <p className="text-xl text-muted-foreground lowercase mb-12 max-w-md leading-relaxed">
                 request a consultation with our academic architects to design your path to excellence.
               </p>
-              <div className="flex gap-8 items-center pt-8 border-t border-white/10 w-full">
-                <div className="text-[12px] font-bold uppercase tracking-[0.4em] text-white/10">Support Line</div>
-                <p className="text-2xl font-black uppercase tracking-tighter text-white">+91 123 456 7890</p>
+              <div className="flex gap-8 items-center pt-8 border-t border-border w-full">
+                <div className="text-[12px] font-bold uppercase tracking-[0.4em] text-muted-foreground/30">Support Line</div>
+                <p className="text-2xl font-black uppercase tracking-tighter text-foreground">+91 123 456 7890</p>
               </div>
             </div>
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl p-12 md:p-16">
+            <div className="bg-secondary/40 backdrop-blur-3xl border border-border rounded-3xl p-12 md:p-16">
               {successMsg ? (
                 <div className="text-center py-16">
-                  <h3 className="text-4xl font-black uppercase tracking-tighter text-white mb-4">Confirmed</h3>
-                  <p className="text-[#888888] lowercase">{successMsg}</p>
+                  <h3 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-4">Confirmed</h3>
+                  <p className="text-muted-foreground lowercase italic">{successMsg}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-12">
                   <div className="grid md:grid-cols-2 gap-12">
                     <div className="flex flex-col gap-4">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">First Name</label>
+                      <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/40">First Name</label>
                       <input 
-                        className="bg-transparent border-b border-white/10 py-4 focus:border-white focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-white placeholder:text-white/10"
+                        className="bg-transparent border-b border-border py-4 focus:border-foreground focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-foreground placeholder:text-foreground/10"
                         placeholder="NAME"
                         value={firstName} 
                         onChange={(e) => setFirstName(e.target.value)} required 
                       />
                     </div>
                     <div className="flex flex-col gap-4">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Last Name</label>
+                      <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/40">Last Name</label>
                       <input 
-                        className="bg-transparent border-b border-white/10 py-4 focus:border-white focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-white placeholder:text-white/10"
+                        className="bg-transparent border-b border-border py-4 focus:border-foreground focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-foreground placeholder:text-foreground/10"
                         placeholder="SURNAME"
                         value={lastName} 
                         onChange={(e) => setLastName(e.target.value)} 
@@ -161,10 +171,10 @@ export const QuickInquiry = () => {
                   </div>
                   
                   <div className="flex flex-col gap-4">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Phone Number</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/40">Phone Number</label>
                     <input 
                       type="tel"
-                      className="bg-transparent border-b border-white/10 py-4 focus:border-white focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-white placeholder:text-white/10"
+                      className="bg-transparent border-b border-border py-4 focus:border-foreground focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-foreground placeholder:text-foreground/10"
                       placeholder="+91 000 000 0000"
                       value={phone} 
                       onChange={(e) => setPhone(e.target.value)} required 
@@ -172,9 +182,9 @@ export const QuickInquiry = () => {
                   </div>
 
                   <div className="flex flex-col gap-4">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Selected Course</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/40">Selected Course</label>
                     <input 
-                      className="bg-transparent border-b border-white/10 py-4 focus:border-white focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-white placeholder:text-white/10"
+                      className="bg-transparent border-b border-border py-4 focus:border-foreground focus:outline-none transition-colors text-xl font-bold uppercase tracking-tight text-foreground placeholder:text-foreground/10"
                       placeholder="e.g. 11TH SCIENCE"
                       value={course} 
                       onChange={(e) => setCourse(e.target.value)} 
@@ -182,12 +192,12 @@ export const QuickInquiry = () => {
                   </div>
 
                   {errorMsg && (
-                    <p className="text-red-500 text-xs font-bold uppercase tracking-widest">{errorMsg}</p>
+                    <p className="text-foreground text-[10px] font-black uppercase tracking-widest">[ error ] {errorMsg}</p>
                   )}
 
                   <button 
                     ref={buttonRef}
-                    className="w-full py-6 bg-white text-black font-bold uppercase tracking-[0.4em] text-[12px] hover:scale-105 transition-transform disabled:opacity-50 relative z-20 rounded-full"
+                    className="w-full py-6 bg-primary text-primary-foreground font-black uppercase tracking-[0.4em] text-[12px] hover:scale-105 transition-transform disabled:opacity-50 relative z-20 rounded-full shadow-xl shadow-primary/10"
                     type="submit" 
                     disabled={submitting}
                   >

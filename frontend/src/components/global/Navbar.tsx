@@ -22,6 +22,7 @@ export const Navbar = () => {
     { label: 'COURSES', href: '/courses' },
     { label: 'ABOUT', href: '/about' },
     { label: 'CAREER', href: '/career' },
+    { label: 'CONTACT', href: '/contact' },
   ];
 
   const isDashboard = pathname?.startsWith('/portal') || pathname?.startsWith('/admin');
@@ -45,7 +46,7 @@ export const Navbar = () => {
         }`}
       >
         <Link href="/" className="group flex items-center gap-4 leading-none">
-          <div className="relative w-12 h-12 overflow-hidden rounded-full border border-white/10 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+          <div className="relative w-12 h-12 overflow-hidden rounded-full border border-border shadow-2xl group-hover:scale-110 transition-transform duration-500">
             <Image 
               src="/logo-icon.png" 
               alt="YP Gurukul Logo" 
@@ -55,10 +56,10 @@ export const Navbar = () => {
             />
           </div>
           <div className="flex flex-col items-start">
-            <span className="text-2xl font-black uppercase tracking-tighter-editorial text-foreground nav-text-adaptive">
+            <span className="text-2xl font-black uppercase tracking-tighter-editorial text-foreground">
               YP Gurukul
             </span>
-            <span className="font-script text-muted-foreground text-xs nav-text-adaptive-muted">
+            <span className="font-script text-muted-foreground text-xs">
               institute
             </span>
           </div>

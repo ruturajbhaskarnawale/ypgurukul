@@ -5,12 +5,12 @@ import { Preload, Environment, Lightformer, Float } from "@react-three/drei";
 
 export function GlobalCanvas() {
   return (
-    <div className="fixed inset-0 z-[-1] pointer-events-none bg-black">
+    <div className="fixed inset-0 z-[-1] pointer-events-none bg-background transition-colors duration-1000">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <color attach="background" args={["#000000"]} />
+        <color attach="background" args={["#ffffff"]} />
         <Environment preset="night">
           <Lightformer intensity={2} rotation-x={Math.PI / 2} position={[0, 10, -10]} scale={[20, 20, 1]} />
           <Lightformer intensity={0.5} rotation-y={Math.PI / 2} position={[-10, 0, -5]} scale={[10, 10, 1]} />

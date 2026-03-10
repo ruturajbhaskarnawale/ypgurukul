@@ -32,17 +32,17 @@ export const DashboardCard = ({
   variant = 'blue' 
 }: DashboardCardProps) => {
   const glowColors = {
-    blue: 'from-blue-500/20 to-transparent',
-    teal: 'from-teal-500/20 to-transparent',
-    purple: 'from-purple-500/20 to-transparent',
-    orange: 'from-orange-500/20 to-transparent',
+    blue: 'from-foreground/5 to-transparent',
+    teal: 'from-foreground/10 to-transparent',
+    purple: 'from-foreground/5 to-transparent',
+    orange: 'from-foreground/10 to-transparent',
   };
 
   const iconColors = {
-    blue: 'text-blue-400 bg-blue-400/10',
-    teal: 'text-teal-400 bg-teal-400/10',
-    purple: 'text-purple-400 bg-purple-400/10',
-    orange: 'text-orange-400 bg-orange-400/10',
+    blue: 'text-foreground bg-foreground/5',
+    teal: 'text-foreground/80 bg-foreground/5',
+    purple: 'text-foreground/60 bg-foreground/5',
+    orange: 'text-foreground/40 bg-foreground/5',
   };
 
   return (
@@ -75,8 +75,8 @@ export const DashboardCard = ({
       {trend && (
         <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border">
           <span className={cn(
-            "text-[9px] font-bold uppercase tracking-widest",
-            trend.isUp ? "text-teal-400" : "text-orange-400"
+            "text-[9px] font-black uppercase tracking-widest",
+            trend.isUp ? "text-foreground" : "text-muted-foreground/60"
           )}>
             {trend.isUp ? '↑' : '↓'} {trend.value}
           </span>
@@ -100,7 +100,7 @@ interface DashboardChartProps {
   color?: string;
 }
 
-export const DashboardChart = ({ title, subtitle, data, className, color = "#3B82F6" }: DashboardChartProps) => {
+export const DashboardChart = ({ title, subtitle, data, className, color = "#000000" }: DashboardChartProps) => {
   return (
     <div className={cn("rounded-2xl border border-border bg-muted p-8", className)}>
       <div className="flex justify-between items-start mb-12">
@@ -143,9 +143,9 @@ export const DashboardChart = ({ title, subtitle, data, className, color = "#3B8
         ))}
       </div>
 
-      <div className="mt-12 p-4 rounded-xl border border-border bg-muted/10 flex items-center justify-center gap-4">
-         <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)] animate-pulse" />
-         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+      <div className="mt-12 p-4 rounded-xl border border-border bg-secondary/20 flex items-center justify-center gap-4">
+         <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
             Optimal performance detected between <span className="text-foreground">9—11 AM</span>
          </p>
       </div>

@@ -13,7 +13,7 @@ interface TornPaperDividerProps {
  * Maintains the fibrous organic edge via SVG filters but removes all motion effects.
  */
 export const TornPaperDivider: React.FC<TornPaperDividerProps> = ({
-  fill = '#f5f0e8',
+  fill = '#000000',
   invertY = false,
   className = '',
 }) => {

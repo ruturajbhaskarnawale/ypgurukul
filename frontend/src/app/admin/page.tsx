@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
           <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
             Governance
           </h1>
-          <p className="text-xs text-muted-foreground tracking-widest uppercase font-bold">
+          <p className="text-[10px] text-muted-foreground tracking-widest uppercase font-black">
             SYSTEM_STATUS: OPERATIONAL_LEVEL_01
           </p>
         </div>
@@ -143,63 +143,63 @@ export default function AdminDashboardPage() {
             title="Application Inflow"
             subtitle="Visualizing candidate interest over the current archival cycle"
             data={chartData}
-            color="#F97316"
+            color="#000000"
           />
         </FadeIn>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-8">
          <FadeIn>
-            <div className="rounded-2xl border border-border bg-muted p-8">
-               <div className="flex justify-between items-center mb-8">
+            <div className="rounded-3xl border border-border bg-secondary/10 p-10">
+               <div className="flex justify-between items-center mb-10">
                   <h3 className="text-xl font-black text-foreground tracking-tight uppercase">Quick Actions</h3>
-                  <span className="text-[10px] font-bold text-orange-400/40 uppercase tracking-widest">Administrative_Access</span>
+                  <span className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.4em]">Administrative_Access</span>
                </div>
-               <div className="grid grid-cols-2 gap-4">
-                  <button className="p-6 rounded-xl border border-border bg-muted/20 hover:bg-muted/40 transition-all text-left group">
-                     <span className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest block mb-2">01. DEPLOY</span>
-                     <p className="text-xs font-black text-foreground group-hover:text-orange-400 transition-colors">NEW_COURSE</p>
+               <div className="grid grid-cols-2 gap-6">
+                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">01. DEPLOY</span>
+                     <p className="text-xs font-black uppercase tracking-widest">NEW_COURSE</p>
                   </button>
-                  <button className="p-6 rounded-xl border border-border bg-muted/20 hover:bg-muted/40 transition-all text-left group">
-                     <span className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest block mb-2">02. APPEND</span>
-                     <p className="text-xs font-black text-foreground group-hover:text-orange-400 transition-colors">STUDY_MATERIAL</p>
+                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">02. APPEND</span>
+                     <p className="text-xs font-black uppercase tracking-widest">STUDY_MATERIAL</p>
                   </button>
-                  <button className="p-6 rounded-xl border border-border bg-muted/20 hover:bg-muted/40 transition-all text-left group">
-                     <span className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest block mb-2">03. OVERSEE</span>
-                     <p className="text-xs font-black text-foreground group-hover:text-orange-400 transition-colors">ALL_APPLICATIONS</p>
+                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">03. OVERSEE</span>
+                     <p className="text-xs font-black uppercase tracking-widest">ALL_APPLICATIONS</p>
                   </button>
-                  <button className="p-6 rounded-xl border border-border bg-muted/20 hover:bg-muted/40 transition-all text-left group">
-                     <span className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest block mb-2">04. ANALYZE</span>
-                     <p className="text-xs font-black text-foreground group-hover:text-orange-400 transition-colors">RESULT_MATRICS</p>
+                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">04. ANALYZE</span>
+                     <p className="text-xs font-black uppercase tracking-widest">RESULT_MATRICS</p>
                   </button>
                </div>
             </div>
          </FadeIn>
 
          <FadeIn>
-            <div className="rounded-2xl border border-border bg-gradient-to-br from-orange-500/10 to-transparent p-8 h-full">
-               <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-8">System Health</h3>
-               <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-muted/20 border border-border">
-                     <div className="flex items-center gap-4">
-                        <div className="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_10px_rgba(45,212,191,0.5)]" />
-                        <span className="text-[10px] font-bold text-foreground uppercase tracking-widest">Database_Sync</span>
+            <div className="rounded-3xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-10 h-full">
+               <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-10">System Health</h3>
+               <div className="space-y-8">
+                  <div className="flex items-center justify-between p-6 rounded-2xl bg-background border border-border shadow-sm">
+                     <div className="flex items-center gap-6">
+                        <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(0,0,0,0.5)]" />
+                        <span className="text-[10px] font-black text-foreground uppercase tracking-widest">Database_Sync</span>
                      </div>
-                     <span className="text-[9px] font-bold text-teal-400 uppercase tracking-widest">ACTIVE</span>
+                     <span className="text-[9px] font-black text-primary uppercase tracking-widest">ACTIVE</span>
                   </div>
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-muted/20 border border-border">
-                     <div className="flex items-center gap-4">
-                        <div className="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_10px_rgba(45,212,191,0.5)]" />
-                        <span className="text-[10px] font-bold text-foreground uppercase tracking-widest">Auth_Protocol</span>
+                  <div className="flex items-center justify-between p-6 rounded-2xl bg-background border border-border shadow-sm">
+                     <div className="flex items-center gap-6">
+                        <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(0,0,0,0.5)]" />
+                        <span className="text-[10px] font-black text-foreground uppercase tracking-widest">Auth_Protocol</span>
                      </div>
-                     <span className="text-[9px] font-bold text-teal-400 uppercase tracking-widest">SECURE</span>
+                     <span className="text-[9px] font-black text-primary uppercase tracking-widest">SECURE</span>
                   </div>
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-muted/20 border border-border">
-                     <div className="flex items-center gap-4">
-                        <div className="w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
-                        <span className="text-[10px] font-bold text-foreground uppercase tracking-widest">Resource_Load</span>
+                  <div className="flex items-center justify-between p-6 rounded-2xl bg-background border border-border shadow-sm">
+                     <div className="flex items-center gap-6">
+                        <div className="w-2 h-2 rounded-full bg-primary/40" />
+                        <span className="text-[10px] font-black text-foreground uppercase tracking-widest">Resource_Load</span>
                      </div>
-                     <span className="text-[9px] font-bold text-orange-400 uppercase tracking-widest">NOMINAL</span>
+                     <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">NOMINAL</span>
                   </div>
                </div>
             </div>

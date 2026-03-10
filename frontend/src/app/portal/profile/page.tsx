@@ -22,7 +22,7 @@ interface UserProfile {
 }
 
 const Skeleton = ({ className = '' }: { className?: string }) => (
-  <div className={`animate-pulse bg-slate-200 dark:bg-slate-700 rounded ${className}`} />
+  <div className={`animate-pulse bg-muted rounded ${className}`} />
 );
 
 export default function ProfilePage() {
@@ -130,30 +130,30 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto w-full">
       <FadeIn>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-black uppercase tracking-tighter-editorial text-foreground mb-2">
           Profile Settings
         </h1>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-muted-foreground">
           Manage your account details and security preferences.
         </p>
       </FadeIn>
 
       <SlideUp>
-        <Card>
+        <Card className="border-border shadow-sm">
           <CardContent className="p-8">
-            <div className="flex items-center gap-6 mb-8 pb-8 border-b border-slate-100 dark:border-slate-800">
-              <div className="w-20 h-20 rounded-full bg-primary/20 flex justify-center items-center text-primary text-2xl font-bold">
+            <div className="flex items-center gap-6 mb-8 pb-8 border-b border-border">
+              <div className="w-20 h-20 rounded-xl bg-primary flex justify-center items-center text-primary-foreground text-3xl font-black">
                 {initials}
               </div>
               <div>
-                <h2 className="text-xl font-bold">{profile?.name}</h2>
-                <p className="text-slate-500">{profile?.email}</p>
+                <h2 className="text-xl font-black uppercase tracking-tighter text-foreground">{profile?.name}</h2>
+                <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest">{profile?.email}</p>
               </div>
             </div>
 
             <form onSubmit={handleSaveProfile} className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
+                <h3 className="text-sm font-black uppercase tracking-[0.3em] text-muted-foreground mb-6">Personal Information</h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Input label="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
                   <Input label="Email Address" type="email" value={profile?.email ?? ''} disabled />
@@ -163,8 +163,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
-                <h3 className="text-lg font-semibold mb-4">Guardian Details</h3>
+              <div className="pt-8 border-t border-border">
+                <h3 className="text-sm font-black uppercase tracking-[0.3em] text-muted-foreground mb-6">Guardian Details</h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Input label="Parent/Guardian Name" value={parentName} onChange={(e) => setParentName(e.target.value)} />
                   <Input label="Parent/Guardian Mobile" type="tel" value={parentMobile} onChange={(e) => setParentMobile(e.target.value)} />
@@ -172,13 +172,13 @@ export default function ProfilePage() {
               </div>
 
               {successMsg && (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm rounded-md px-4 py-3">
-                  {successMsg}
+                <div className="bg-secondary border border-border text-foreground text-[10px] font-black uppercase tracking-widest rounded-sm px-4 py-3">
+                  [ success ] {successMsg}
                 </div>
               )}
               {errorMsg && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
-                  {errorMsg}
+                <div className="bg-background border border-foreground text-foreground text-[10px] font-black uppercase tracking-widest rounded-sm px-4 py-3">
+                  [ error ] {errorMsg}
                 </div>
               )}
 
@@ -199,11 +199,11 @@ export default function ProfilePage() {
       </SlideUp>
 
       <SlideUp delay={0.2}>
-        <Card className="border-red-500/20">
+        <Card className="border-border shadow-sm">
           <CardContent className="p-8">
-            <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-4">Security</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-              Ensure your account is using a long, random password to stay secure.
+            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-muted-foreground mb-4">Security</h3>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-6 max-w-md">
+              Ensure your account is using a high-entropy password to maintain academic integrity.
             </p>
             <form onSubmit={handleChangePassword} className="max-w-md space-y-4">
               <Input label="Current Password" type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} required />
@@ -211,13 +211,13 @@ export default function ProfilePage() {
               <Input label="Confirm New Password" type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} required />
 
               {pwError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
-                  {pwError}
+                <div className="bg-background border border-foreground text-foreground text-[10px] font-black uppercase tracking-widest rounded-sm px-4 py-3">
+                  [ error ] {pwError}
                 </div>
               )}
               {pwSuccess && (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3">
-                  {pwSuccess}
+                <div className="bg-secondary border border-border text-foreground text-[10px] font-black uppercase tracking-widest rounded-sm px-4 py-3">
+                  [ success ] {pwSuccess}
                 </div>
               )}
 
@@ -225,9 +225,9 @@ export default function ProfilePage() {
                 variant="outline"
                 type="submit"
                 isLoading={changingPw}
-                className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400"
+                className="mt-6 font-black uppercase tracking-widest text-[10px]"
               >
-                Update Password
+                Update Security Credentials
               </Button>
             </form>
           </CardContent>

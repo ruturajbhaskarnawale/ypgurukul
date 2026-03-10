@@ -76,40 +76,40 @@ const FacultyCard = ({ member, index }: { member: FacultyMember, index: number }
   return (
     <div 
       ref={cardRef}
-      className="faculty-card group relative flex flex-col items-start cursor-pointer will-change-transform bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 overflow-hidden"
+      className="faculty-card group relative flex flex-col items-start cursor-pointer will-change-transform bg-secondary/50 backdrop-blur-2xl border border-border rounded-[2.5rem] p-6 overflow-hidden"
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
     >
-      <div className="h-[480px] w-full relative mb-10 rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-black/20" style={{ transform: 'translateZ(30px)' }}>
+      <div className="h-[480px] w-full relative mb-10 rounded-3xl border border-border overflow-hidden shadow-2xl bg-muted" style={{ transform: 'translateZ(30px)' }}>
         <div ref={portraitRef} className="absolute inset-x-0 w-full h-[120%] -top-[10%] will-change-transform">
           <Image 
             src={member.image} 
             alt={member.name} 
             fill 
-            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-expo scale-105 group-hover:scale-100"
+            className="object-cover grayscale transition-all duration-1000 ease-expo scale-105 group-hover:scale-100"
           />
         </div>
         
         {/* Cinematic Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-700" />
-        <div className="absolute inset-0 border border-white/5 group-hover:border-white/20 transition-colors duration-700 rounded-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-700" />
+        <div className="absolute inset-0 border border-border/50 group-hover:border-border transition-colors duration-700 rounded-3xl pointer-events-none" />
       </div>
 
       <div className="relative z-10 w-full px-4" style={{ transform: 'translateZ(50px)' }}>
-        <span className="text-[10px] font-black px-5 py-2.5 bg-white text-black uppercase tracking-[0.25em] rounded-full inline-block shadow-xl mb-6">
+        <span className="text-[10px] font-black px-5 py-2.5 bg-foreground text-background uppercase tracking-[0.25em] rounded-full inline-block shadow-xl mb-6">
           {member.subject}
         </span>
-        <h3 className="text-4xl font-black text-white mb-3 uppercase tracking-tighter group-hover:text-primary transition-colors duration-300">
+        <h3 className="text-4xl font-black text-foreground mb-3 uppercase tracking-tighter hover:text-foreground transition-colors duration-300">
           {member.name}
         </h3>
-        <p className="text-sm font-medium text-white/40 lowercase tracking-widest leading-relaxed mb-8">
+        <p className="text-sm font-medium text-muted-foreground lowercase tracking-widest leading-relaxed mb-8">
           {member.exp}
         </p>
         
-        <div className="h-px w-12 bg-white/10 group-hover:w-full transition-all duration-700 ease-expo" />
+        <div className="h-px w-12 bg-border group-hover:w-full transition-all duration-700 ease-expo" />
       </div>
 
       {/* Background Accent Glow */}
-      <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-teal-500/5 blur-[100px] rounded-full group-hover:bg-teal-500/15 transition-colors duration-700" />
+      {/* Background Accent Glow Removed for strict B&W */}
     </div>
   );
 };
@@ -153,19 +153,23 @@ export const MentorshipScene = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="relative py-64 border-b border-white/5 overflow-hidden min-h-screen bg-[#050505]"
+      className="relative py-64 border-b border-border overflow-hidden min-h-screen"
     >
-      <SectionBackground src="/images/backgrounds/BG-G.png" alt="Teal Deep Horizon" className="opacity-80" />
-      
-      {/* Decorative Blur Accents */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-teal-500/5 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2" />
+      {/* Background Texture for Editorial Depth */}
+      <SectionBackground 
+        src="/images/backgrounds/BG-G.png" 
+        alt="Texture" 
+        className="opacity-40 grayscale mix-blend-multiply transition-opacity duration-1000"
+      />
+
+      {/* Top Transition Gradient - Enhanced Visibility */}
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
 
       <div className="relative z-20 max-w-[1800px] mx-auto px-12">
         <div className="mentorship-title flex flex-col items-center mb-56">
-          <span className="font-script text-5xl text-teal-400/60 lowercase mb-8 tracking-wider">the mentorship</span>
-          <h2 className="text-8xl md:text-[11rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.8] text-white">
-            Master <br /> <span className="text-white/10 outline-text">Faculty</span>
+          <span className="font-script text-5xl text-muted-foreground lowercase mb-8 tracking-wider">the mentorship</span>
+          <h2 className="text-8xl md:text-[11rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.8] text-foreground">
+            Master <br /> <span className="text-foreground/10 outline-text">Faculty</span>
           </h2>
         </div>
 

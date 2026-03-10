@@ -172,7 +172,7 @@ export default function DashboardPage() {
             title="Academic Rhythm"
             subtitle="Visualizing peak conceptual engagement across cycle"
             data={chartData}
-            color="#3B82F6"
+            color="#000000"
           />
         </FadeIn>
       </div>
@@ -183,18 +183,18 @@ export default function DashboardPage() {
                <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-8">Recent Results</h3>
                <div className="space-y-6">
                  {testResults.slice(0, 4).map((test) => (
-                   <div key={test.id} className="flex justify-between items-center group cursor-pointer">
+                   <div key={test.id} className="flex justify-between items-center group cursor-pointer border-b border-border/40 pb-4 last:border-0 last:pb-0">
                       <div className="flex flex-col">
                          <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest mb-1">{test.testDate.split('T')[0]}</span>
-                         <span className="text-sm font-black text-foreground group-hover:text-blue-400 transition-colors uppercase tracking-tight">{test.testName}</span>
+                         <span className="text-sm font-black text-foreground group-hover:text-muted-foreground transition-colors uppercase tracking-tight">{test.testName}</span>
                       </div>
                       <div className="text-right">
                          <span className="text-lg font-black text-foreground tracking-tighter">{test.marksObtained}/{test.totalMarks}</span>
-                         <div className="w-24 h-1 bg-muted/60 rounded-full mt-2 overflow-hidden">
+                         <div className="w-24 h-1 bg-muted rounded-full mt-2 overflow-hidden">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${(test.marksObtained / test.totalMarks) * 100}%` }}
-                              className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                              className="h-full bg-primary"
                             />
                          </div>
                       </div>
@@ -205,11 +205,14 @@ export default function DashboardPage() {
          </FadeIn>
 
          <FadeIn>
-            <div className="rounded-2xl border border-border bg-gradient-to-br from-blue-500/10 to-transparent p-8 h-full">
+            <div className="rounded-2xl border border-border bg-secondary/10 p-8 h-full">
                <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-8">Announcements</h3>
                <div className="space-y-6">
-                  <div className="p-4 rounded-xl bg-muted/20 border border-border">
-                     <span className="text-[9px] font-black text-blue-400 uppercase tracking-[0.3em] mb-2 block">CRITICAL_NOTICE</span>
+                  <div className="p-4 rounded-sm bg-background border border-foreground shadow-sm relative overflow-hidden">
+                     <div className="absolute top-0 right-0 w-8 h-8 bg-foreground text-background flex items-center justify-center">
+                        <span className="text-[8px] font-black italic">!</span>
+                     </div>
+                     <span className="text-[9px] font-black text-foreground uppercase tracking-[0.3em] mb-2 block">CRITICAL_NOTICE</span>
                      <p className="text-xs text-muted-foreground leading-relaxed">JEE Advanced practice modules for Thermodynamics have been pushed to the Study Materials repository. Verify checksum before download.</p>
                   </div>
                   <div className="p-4 rounded-xl bg-muted/10 border border-border">

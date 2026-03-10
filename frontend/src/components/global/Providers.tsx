@@ -8,7 +8,7 @@ import { AuthProvider } from "@/lib/authContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <SmoothScrollProvider>
         <PageTransition>
           <AuthProvider>

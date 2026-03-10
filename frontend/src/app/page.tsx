@@ -70,8 +70,6 @@ export default function Home() {
 
   return (
     <SceneContainer>
-      {/* Section theme observer — writes data-section-theme to <html> */}
-      <SectionThemeController />
 
       {/* SCENE 0: THE NEXUS (HERO) */}
       <Scene id="nexus">
@@ -80,30 +78,26 @@ export default function Home() {
       
       {/* SECTION DIVIDER: Hero (Dark fading) -> Foundation (Golden) */}
       <div className="relative z-30 w-full translate-y-2 pointer-events-none">
-        <TornPaperDivider fill="#000000" invertY={true} />
+        <TornPaperDivider fill="#f9fafb" invertY={true} />
       </div>
 
       {/* SCENE 1: FOUNDATION (STATS, WHY CHOOSE US, TEST SERIES) */}
-      <div id="foundation" className="relative z-10 -mt-10">
+      <div id="foundation" className="relative z-10 -mt-10 bg-background">
         <FoundationScene />
       </div>
 
       {/* SCENE 2: THE PATH (PROGRAMS) */}
       <Scene id="path">
-        <section className="relative py-48 border-b border-white/5 overflow-hidden min-h-screen">
-          <SectionBackground src="/images/backgrounds/BG-3.png" alt="Dark Blue Texture" className="blur-sm scale-110" />
-          
-          {/* Cinematic Entrance Gradient */}
-          <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent z-10 pointer-events-none" />
+        <section className="relative py-48 border-b border-border overflow-hidden min-h-screen bg-background">
           
           {/* Subtle line grid overlay like the reference site */}
-          <div className="absolute inset-0 bg-[url('/images/backgrounds/Line_Grid.svg')] bg-[length:100px_100px] opacity-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-[url('/images/backgrounds/Line_Grid.svg')] bg-[length:100px_100px] opacity-10 pointer-events-none" />
           <div className="max-w-[1800px] mx-auto px-12" ref={programRef}>
              <FadeIn>
                <div className="flex flex-col items-center mb-40">
-                 <span className="font-script text-4xl text-muted-foreground lowercase mb-6 text-white/40">the</span>
-                 <h2 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.85] text-white">
-                   Popular <br /> <span className="text-white/20">Programs</span>
+                 <span className="font-script text-4xl text-muted-foreground lowercase mb-6">the</span>
+                 <h2 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.85] text-foreground">
+                   Popular <br /> <span className="text-foreground/10">Programs</span>
                  </h2>
                </div>
              </FadeIn>
@@ -129,21 +123,21 @@ export default function Home() {
                    img: "/images/programs/test_series.png"
                  }
                ].map((program, i) => (
-                 <div key={i} className="program-card-3d group flex flex-col items-start cursor-pointer origin-left will-change-transform bg-white/[0.02] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 overflow-hidden relative">
-                   <div className="h-[400px] bg-white/5 w-full relative mb-8 rounded-2xl border border-white/5 overflow-hidden">
+                 <div key={i} className="program-card-3d group flex flex-col items-start cursor-pointer origin-left will-change-transform bg-secondary/20 border border-border rounded-3xl p-6 overflow-hidden relative">
+                   <div className="h-[400px] bg-muted w-full relative mb-8 rounded-2xl border border-border overflow-hidden">
                      <Image 
                        src={program.img} 
                        alt={program.title} 
                        fill 
                        className="object-cover group-hover:scale-110 transition-transform duration-700 blur-[2px] group-hover:blur-none opacity-60 group-hover:opacity-100"
                      />
-                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-700 pointer-events-none" />
+                     <div className="absolute inset-0 bg-background/40 group-hover:bg-transparent transition-colors duration-700 pointer-events-none" />
                    </div>
                    <div className="relative z-10 p-2">
-                     <span className="text-[10px] font-bold px-4 py-2 bg-white text-black uppercase tracking-[0.2em] mb-6 rounded-full inline-block">{program.tag}</span>
-                     <h3 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter">{program.title}</h3>
-                     <p className="text-sm font-medium text-white/50 lowercase tracking-wide max-w-sm mb-8">{program.desc}</p>
-                     <div className="h-px w-12 bg-white/20 group-hover:w-full transition-all duration-500" />
+                     <span className="text-[10px] font-bold px-4 py-2 bg-foreground text-background uppercase tracking-[0.2em] mb-6 rounded-full inline-block">{program.tag}</span>
+                     <h3 className="text-4xl font-black text-foreground mb-4 uppercase tracking-tighter">{program.title}</h3>
+                     <p className="text-sm font-medium text-muted-foreground lowercase tracking-wide max-w-sm mb-8">{program.desc}</p>
+                     <div className="h-px w-12 bg-border group-hover:w-full transition-all duration-500" />
                    </div>
                  </div>
                ))}
@@ -151,7 +145,7 @@ export default function Home() {
           </div>
 
           {/* Cinematic Exit Gradient */}
-          <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
         </section>
       </Scene>
 

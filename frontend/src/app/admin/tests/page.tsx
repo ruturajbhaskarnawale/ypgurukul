@@ -87,34 +87,41 @@ export default function AdminTestsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="space-y-8 pb-20">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Test Results</h1>
-          <p className="text-sm text-muted-foreground">Record and monitor student performance.</p>
+          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase">Test Results</h1>
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">RECORD_SYSTEM: PERFORMANCE_LOG_v2</p>
         </div>
-        <Button onClick={() => setIsAdding(!isAdding)}>
-          {isAdding ? 'Cancel' : '+ Add Test Result'}
+        <Button 
+          onClick={() => setIsAdding(!isAdding)}
+          className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[10px] px-8 py-6 rounded-full"
+        >
+          {isAdding ? 'CANCEL_OPERATION' : '+ ADD_TEST_RESULT'}
         </Button>
       </div>
 
       {isAdding && (
         <SlideUp>
-          <Card className="border-l-4 border-primary border-t-0 border-r-0 border-b-0 shadow-lg mb-8">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Enter Test Marks</h2>
-              {errorMsg && <div className="text-sm text-destructive bg-destructive/10 p-3 rounded mb-4 border border-destructive/20">{errorMsg}</div>}
+          <Card className="border border-border bg-secondary/5 shadow-2xl mb-12 rounded-3xl overflow-hidden">
+            <CardContent className="p-10">
+              <h2 className="text-xl font-black uppercase tracking-tight mb-8">Enter Test Marks</h2>
+              {errorMsg && (
+                <div className="text-[10px] font-black uppercase tracking-widest text-foreground bg-secondary/20 p-6 rounded-xl mb-8 border border-border">
+                  [ error ] {errorMsg}
+                </div>
+              )}
               
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
                   <div className="w-full">
-                    <label className="block text-sm font-medium text-foreground mb-1.5">Select Student</label>
+                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">01. Select_Student</label>
                     <select 
                       name="userId" 
                       value={formData.userId} 
                       onChange={handleChange} 
                       required
-                      className="flex h-11 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="flex h-14 w-full rounded-2xl border border-border bg-background px-4 py-2 text-sm font-bold focus:outline-none focus:border-foreground transition-all appearance-none"
                     >
                       {students.length === 0 && <option disabled value="">No students available.</option>}
                       {students.map(s => (
@@ -122,18 +129,37 @@ export default function AdminTestsPage() {
                       ))}
                     </select>
                   </div>
-                  <Input label="Test Name" name="testName" value={formData.testName} onChange={handleChange} placeholder="e.g. Weekly Mock Test 4" required />
+                  <div className="w-full">
+                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">02. Test_Identity</label>
+                    <Input 
+                      name="testName" 
+                      value={formData.testName} 
+                      onChange={handleChange} 
+                      placeholder="e.g. WEEKLY_MOCK_TEST_4" 
+                      required 
+                      className="h-14 rounded-2xl border-border bg-background px-4 font-bold"
+                    />
+                  </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-4">
-                  <Input label="Marks Obtained" type="number" name="marksObtained" value={formData.marksObtained} onChange={handleChange} placeholder="e.g. 85" required />
-                  <Input label="Total Marks" type="number" name="totalMarks" value={formData.totalMarks} onChange={handleChange} placeholder="e.g. 100" required />
-                  <Input label="Date of Test" type="date" name="testDate" value={formData.testDate} onChange={handleChange} required />
+                <div className="grid md:grid-cols-3 gap-8">
+                  <div>
+                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">03. Marks_Obtained</label>
+                    <Input type="number" name="marksObtained" value={formData.marksObtained} onChange={handleChange} placeholder="85" required className="h-14 rounded-2xl" />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">04. Total_Marks</label>
+                    <Input type="number" name="totalMarks" value={formData.totalMarks} onChange={handleChange} placeholder="100" required className="h-14 rounded-2xl" />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">05. Test_Date</label>
+                    <Input type="date" name="testDate" value={formData.testDate} onChange={handleChange} required className="h-14 rounded-2xl" />
+                  </div>
                 </div>
 
-                <div className="pt-2 flex justify-end gap-3">
-                  <Button type="button" variant="outline" onClick={() => setIsAdding(false)}>Cancel</Button>
-                  <Button type="submit" isLoading={submitting} disabled={students.length === 0}>Save Result</Button>
+                <div className="pt-4 flex justify-end gap-4">
+                  <Button type="button" variant="outline" onClick={() => setIsAdding(false)} className="px-8 py-6 rounded-full font-black uppercase tracking-widest text-[10px]">DISCARD</Button>
+                  <Button type="submit" isLoading={submitting} disabled={students.length === 0} className="px-12 py-6 rounded-full font-black uppercase tracking-widest text-[10px] bg-foreground text-background">SAVE_RESULT</Button>
                 </div>
               </form>
             </CardContent>
@@ -142,54 +168,50 @@ export default function AdminTestsPage() {
       )}
 
       <FadeIn>
-        <Card>
+        <div className="border border-border rounded-3xl bg-background overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border bg-muted/40">
-                  <th className="py-4 px-6 font-semibold text-sm text-muted-foreground">Student</th>
-                  <th className="py-4 px-6 font-semibold text-sm text-muted-foreground">Test Name</th>
-                  <th className="py-4 px-6 font-semibold text-sm text-muted-foreground">Score</th>
-                  <th className="py-4 px-6 font-semibold text-sm text-muted-foreground">Date</th>
-                  <th className="py-4 px-6 font-semibold text-sm text-muted-foreground text-right">Performance</th>
+                <tr className="border-b border-border bg-secondary/10">
+                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Student_Entity</th>
+                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Test_Module</th>
+                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Payload_Score</th>
+                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Temporal_Stamp</th>
+                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 text-right">Performance_Metric</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-muted-foreground">Loading tests...</td>
+                    <td colSpan={5} className="py-20 text-center font-black text-[10px] uppercase tracking-widest text-muted-foreground/40">SYNCHRONIZING_DATA...</td>
                   </tr>
                 ) : results.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-muted-foreground">
-                      No test results found. {students.length === 0 ? 'Wait for students to register.' : 'Click add test result.'}
+                    <td colSpan={5} className="py-20 text-center font-black text-[10px] uppercase tracking-widest text-muted-foreground/40">
+                      NO_RECORDS_AVAILABLE.
                     </td>
                   </tr>
                 ) : (
                   results.map((res) => {
                     const percentage = (res.marksObtained / res.totalMarks) * 100;
                     return (
-                      <tr key={res.id} className="border-b border-border hover:bg-muted/40 transition-colors">
-                        <td className="py-4 px-6">
-                          <p className="font-medium text-foreground">{res.user.name}</p>
-                          <p className="text-xs text-muted-foreground">{res.user.email}</p>
+                      <tr key={res.id} className="border-b border-border hover:bg-secondary/5 transition-all group">
+                        <td className="py-6 px-8">
+                          <p className="font-black text-foreground uppercase tracking-tight text-sm">{res.user.name}</p>
+                          <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest mt-1 lowercase">{res.user.email}</p>
                         </td>
-                        <td className="py-4 px-6 text-sm text-muted-foreground">
+                        <td className="py-6 px-8 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                           {res.testName}
                         </td>
-                        <td className="py-4 px-6 font-medium">
-                          {res.marksObtained} <span className="text-muted-foreground/40 text-sm font-normal">/ {res.totalMarks}</span>
+                        <td className="py-6 px-8 font-black text-foreground tracking-tighter">
+                          {res.marksObtained} <span className="text-muted-foreground/20 text-[10px] font-bold tracking-widest">/ {res.totalMarks}</span>
                         </td>
-                        <td className="py-4 px-6 text-sm text-muted-foreground/60">
-                          {new Date(res.testDate).toLocaleDateString()}
+                        <td className="py-6 px-8 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+                          {new Date(res.testDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                         </td>
-                        <td className="py-4 px-6 text-right">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            percentage >= 80 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                            percentage >= 50 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                          }`}>
-                            {percentage.toFixed(1)}%
+                        <td className="py-6 px-8 text-right">
+                          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-secondary text-foreground border border-border">
+                            [ {percentage.toFixed(1)}% ]
                           </span>
                         </td>
                       </tr>
@@ -199,7 +221,7 @@ export default function AdminTestsPage() {
               </tbody>
             </table>
           </div>
-        </Card>
+        </div>
       </FadeIn>
     </div>
   );

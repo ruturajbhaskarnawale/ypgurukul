@@ -6,7 +6,6 @@ import { Button } from '../global/Button';
 import Link from 'next/link';
 import { HeroBackground } from './HeroBackground';
 import { DaVinciLines } from './DaVinciLines';
-import { MathParticles } from './MathParticles';
 
 export const HeroSection = () => {
   // useScroll + useSpring removed: they were creating a second scroll listener
@@ -39,7 +38,6 @@ export const HeroSection = () => {
       {/* IMMERSIVE BACKGROUND LAYERS */}
       <HeroBackground />
       <DaVinciLines />
-      <MathParticles />
 
       <div className="relative z-20 max-w-[1800px] mx-auto px-12 text-center flex flex-col items-center pt-20">
         
