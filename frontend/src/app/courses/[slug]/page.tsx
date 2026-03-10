@@ -94,17 +94,17 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
 
       <div className="relative z-10">
         {/* Course Header — Cinematic Style */}
-        <section className="pt-48 pb-32 border-b border-border relative">
-          <div className="max-w-[1800px] mx-auto px-12">
+        <section className="pt-32 pb-20 md:pt-48 md:pb-32 border-b border-border relative">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
             <FadeIn>
               <div className="flex flex-col items-start leading-[0.85]">
                 <Link href="/courses" className="text-[10px] font-black uppercase tracking-[0.5em] transition-all mb-12 block group text-muted-foreground/40 hover:text-foreground">
                   <span className="inline-block group-hover:-translate-x-2 transition-transform">←</span> [ archival index ]
                 </Link>
-                <div className="flex flex-col md:flex-row gap-20 items-end w-full">
+                <div className="flex flex-col md:flex-row gap-8 md:gap-20 items-start md:items-end w-full">
                   <div className="flex-1">
-                    <span className="font-script text-4xl lowercase mb-8 block text-muted-foreground/40">course_manifest</span>
-                    <h1 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter-editorial mb-12 text-foreground">
+                    <span className="font-script text-2xl md:text-4xl lowercase mb-8 block text-muted-foreground/40">course_manifest</span>
+                    <h1 className="text-4xl sm:text-6xl md:text-[8rem] font-black uppercase tracking-tighter-editorial mb-12 text-foreground">
                       {course?.title.split(' ').map((word, i) => (
                         <React.Fragment key={i}>
                           {i === 2 ? <br /> : null}
@@ -114,7 +114,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                     </h1>
                   </div>
                   {/* Hero Course Image Preview */}
-                  <div className="w-full md:w-96 aspect-square rounded-[3rem] overflow-hidden border border-border relative group shadow-2xl bg-secondary">
+                  <div className="w-full md:w-96 aspect-square rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-border relative group shadow-2xl bg-secondary">
                      {course?.previewImage && (
                        <Image 
                          src={course.previewImage} 
@@ -127,16 +127,16 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-12 w-full pt-16 border-t border-border mt-20">
-                   <div className="flex flex-col group/stat border-l border-border pl-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full pt-16 border-t border-border mt-20">
+                   <div className="flex flex-col group/stat border-l border-border pl-6 md:pl-8">
                      <span className="text-[10px] font-bold uppercase tracking-[0.4em] mb-2 italic text-muted-foreground/30">Classification</span>
                      <span className="text-2xl font-black group-hover:translate-x-2 transition-transform duration-500 text-foreground">{course?.category}</span>
                    </div>
-                   <div className="flex flex-col group/stat border-l border-border pl-8">
+                   <div className="flex flex-col group/stat border-l border-border pl-6 md:pl-8">
                      <span className="text-[10px] font-bold uppercase tracking-[0.4em] mb-2 italic text-muted-foreground/30">Temporal_Span</span>
                      <span className="text-2xl font-black group-hover:translate-x-2 transition-transform duration-500 text-foreground">{course?.duration}</span>
                    </div>
-                   <div className="flex flex-col group/stat border-l border-border pl-8">
+                   <div className="flex flex-col group/stat border-l border-border pl-6 md:pl-8">
                      <span className="text-[10px] font-bold uppercase tracking-[0.4em] mb-2 italic text-muted-foreground/30">Institutional_Investment</span>
                      <span className="text-2xl font-black group-hover:translate-x-2 transition-transform duration-500 text-foreground">{course?.feeStructure || 'N/A'}</span>
                    </div>
@@ -147,19 +147,19 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
         </section>
 
         {/* Deep Dive Content — Multi-Section Layout */}
-        <section className="py-40">
-          <div className="max-w-[1800px] mx-auto px-12">
-            <div className="grid lg:grid-cols-12 gap-24">
+        <section className="py-20 md:py-40">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+            <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
               
               {/* Primary Content (Overview & Modules) */}
               <div className="lg:col-span-8 space-y-48">
                 <FadeIn>
-                  <div className="backdrop-blur-3xl border border-border p-16 rounded-[4rem] shadow-sm bg-secondary/20">
+                  <div className="backdrop-blur-3xl border border-border p-8 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-sm bg-secondary/20">
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] mb-12 block text-muted-foreground/40">Program_Methodology</span>
-                    <p className="text-3xl md:text-5xl font-light leading-tight tracking-tight lowercase mb-12 text-foreground/90">
+                    <p className="text-xl sm:text-3xl md:text-5xl font-light leading-tight tracking-tight lowercase mb-12 text-foreground/90">
                       {course?.description}
                     </p>
-                    <div className="grid md:grid-cols-2 gap-12 pt-12 border-t border-border">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-border">
                         <div className="space-y-4">
                            <h4 className="font-black uppercase tracking-wider text-sm italic text-foreground">Elite Architectural Feedback</h4>
                            <p className="text-xs leading-relaxed lowercase text-muted-foreground/60">Continuous assessment loops with analytics to identify and patch conceptual gaps in real-time.</p>
@@ -175,10 +175,10 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                 {subjectsList.length > 0 && (
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] mb-12 block text-muted-foreground/40">Curriculum_Architecture</span>
-                    <StaggerContainer className="grid md:grid-cols-2 gap-8">
+                    <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                       {subjectsList.map((item, i) => (
                         <StaggerItem key={i}>
-                          <div className="border border-border backdrop-blur-3xl group transition-all duration-700 rounded-[3rem] overflow-hidden relative shadow-sm hover:shadow-xl p-10 bg-background/40 hover:bg-background">
+                          <div className="border border-border backdrop-blur-3xl group transition-all duration-700 rounded-[2rem] md:rounded-[3rem] overflow-hidden relative shadow-sm hover:shadow-xl p-8 md:p-10 bg-background/40 hover:bg-background">
                              <div className="absolute top-0 right-0 p-8 text-[8px] font-black uppercase tracking-[0.5em] text-muted-foreground/10">Module_0{i+1}</div>
                              <div className="flex flex-col">
                                 <span className="text-2xl font-black uppercase tracking-tighter mb-4 transition-transform duration-500 group-hover:translate-x-2 text-foreground">{item}</span>
@@ -195,29 +195,29 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                 {/* Success Metrics */}
                 <div className="pt-24 border-t border-border">
                    <SlideUp>
-                      <div className="grid md:grid-cols-3 gap-12">
-                         <div className="text-center">
-                            <span className="text-7xl font-black block mb-4 uppercase tracking-tighter text-muted-foreground/10">98.2%</span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">Success_Rate</span>
-                         </div>
-                         <div className="text-center">
-                            <span className="text-7xl font-black block mb-4 uppercase tracking-tighter text-muted-foreground/10">12:1</span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">Mentor_Ratio</span>
-                         </div>
-                         <div className="text-center">
-                            <span className="text-7xl font-black block mb-4 uppercase tracking-tighter text-muted-foreground/10">5K+</span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">Archived_Alumni</span>
-                         </div>
-                      </div>
+                       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                          <div className="text-center">
+                             <span className="text-5xl md:text-7xl font-black block mb-4 uppercase tracking-tighter text-muted-foreground/10">98.2%</span>
+                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">Success_Rate</span>
+                          </div>
+                          <div className="text-center">
+                             <span className="text-5xl md:text-7xl font-black block mb-4 uppercase tracking-tighter text-muted-foreground/10">12:1</span>
+                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">Mentor_Ratio</span>
+                          </div>
+                          <div className="text-center">
+                             <span className="text-5xl md:text-7xl font-black block mb-4 uppercase tracking-tighter text-muted-foreground/10">5K+</span>
+                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">Archived_Alumni</span>
+                          </div>
+                       </div>
                    </SlideUp>
                 </div>
               </div>
 
               {/* Sidebar — Schedule & Enrollment */}
               <div className="lg:col-span-4">
-                <div className="sticky top-48 space-y-12">
+                <div className="lg:sticky lg:top-48 space-y-12">
                   <FadeIn>
-                     <div className="border border-border backdrop-blur-3xl rounded-[4rem] relative overflow-hidden group/side shadow-2xl p-12 bg-background/60">
+                     <div className="border border-border backdrop-blur-3xl rounded-[2.5rem] md:rounded-[4rem] relative overflow-hidden group/side shadow-2xl p-8 md:p-12 bg-background/60">
                         <div className="absolute -bottom-24 -right-24 w-64 h-64 blur-[100px] rounded-full transition-colors duration-1000 bg-secondary group-hover/side:bg-muted" />
                         
                         <span className="text-[10px] font-black uppercase tracking-[0.4em] mb-8 block text-muted-foreground/20">Operational_Windows</span>
