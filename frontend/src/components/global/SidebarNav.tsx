@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLenis } from '@studio-freight/react-lenis';
 
 const SECTIONS = [
   { id: 'nexus',       label: 'The Nexus',   numeral: 'I'   },
@@ -17,6 +18,7 @@ export const SidebarNav = () => {
   const [activeSection, setActiveSection] = useState<string>('nexus');
   const [visible, setVisible] = useState(false);
   const pathname = usePathname();
+  const lenis = useLenis();
 
   // Hide on all routes except the home page
   const isHomePage = pathname === '/';
@@ -55,9 +57,16 @@ export const SidebarNav = () => {
   }, [isHomePage]);
 
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (lenis) {
+      lenis.scrollTo(`#${id}`, {
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 

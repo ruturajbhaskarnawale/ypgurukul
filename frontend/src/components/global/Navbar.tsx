@@ -94,6 +94,7 @@ export const Navbar = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           className="w-16 h-16 rounded-full border border-border flex items-center justify-center text-foreground bg-background/50 backdrop-blur-md shadow-lg transition-colors duration-300"
+          style={{ WebkitBackdropFilter: 'blur(12px)' }}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
           <AnimatePresence mode="wait" initial={false}>

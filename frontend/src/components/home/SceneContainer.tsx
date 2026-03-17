@@ -5,10 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import dynamic from 'next/dynamic';
 
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-}
+// Register GSAP plugins (handled globally in SmoothScrollProvider)
 
 // --- GLOBAL SCROLL STATE (via module-level ref to avoid React re-renders) ---
 // This is THE critical optimization: scroll progress is shared via plain JS ref,

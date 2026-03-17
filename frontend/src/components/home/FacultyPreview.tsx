@@ -8,9 +8,7 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { Starfield } from './Starfield';
 import { SectionBackground } from './SectionBackground';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// GSAP ScrollTrigger registration handled globally in SmoothScrollProvider
 
 export const FacultyPreview = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -94,7 +92,7 @@ export const FacultyPreview = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {faculty.map((member, idx) => (
-            <div key={idx} className="faculty-card group flex flex-col items-start opacity-0 translate-y-[100px] will-change-transform bg-secondary/20 backdrop-blur-2xl border border-border rounded-3xl p-6 relative">
+            <div key={idx} className="faculty-card group flex flex-col items-start opacity-0 translate-y-[100px] will-change-transform bg-secondary/20 backdrop-blur-2xl border border-border rounded-3xl p-6 relative" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
               <div className="h-[450px] bg-muted w-full relative mb-8 border border-border overflow-hidden rounded-2xl group/img">
                 <div className="parallax-img w-full h-[120%] absolute top-[-10%] left-0 will-change-transform">
                   <Image 

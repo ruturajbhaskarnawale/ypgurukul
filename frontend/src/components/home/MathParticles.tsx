@@ -4,9 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// GSAP ScrollTrigger registration handled globally in SmoothScrollProvider
 
 const SYMBOLS = ['∑', 'π', '∫', '∂', 'Δ', '√', '∞', 'Ω', 'μ', 'φ'];
 

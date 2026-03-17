@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+// GSAP ScrollTrigger registration handled globally in SmoothScrollProvider
 
 // 3D Abstract Learning Objects
 function FloatingObjects() {

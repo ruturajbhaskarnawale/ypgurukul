@@ -6,6 +6,10 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 // Inner component: useLenis() is valid here because this renders INSIDE <ReactLenis>
 function LenisGsapSync() {
   const lenis = useLenis();

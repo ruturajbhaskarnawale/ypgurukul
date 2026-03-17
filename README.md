@@ -1,7 +1,6 @@
 # YP Gurukul - Educational Platform
 
 Welcome to the **YP Gurukul** repository! This is a state-of-the-art, immersive educational platform designed to provide a premium and engaging experience for students. Built with a focus on modern aesthetics, 3D interactive elements, and robust functionality, the platform serves as a central hub for learning, test series, and comprehensive educational resources.
-
 ---
 
 ## ✨ Key Features

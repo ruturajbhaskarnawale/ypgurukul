@@ -24,7 +24,7 @@ export const TestSeriesPreview = ({ isNested = false }: { isNested?: boolean }) 
             { tag: "JEE Main", title: "Major Revision Test", date: "Next Month", topics: "Full 11th Syllabus" },
             { tag: "Board", title: "Term 1 Mock Exam", date: "Next Friday", topics: "Chemistry, Biology" },
           ].map((test, index) => (
-            <div key={index} className="test-series-card border border-foreground/10 bg-background/5 backdrop-blur-md p-6 md:p-8 group hover:bg-foreground/5 transition-all cursor-pointer flex flex-col items-start origin-bottom">
+            <div key={index} className="test-series-card border border-foreground/10 bg-background/5 backdrop-blur-md p-6 md:p-8 group hover:bg-foreground/5 transition-all cursor-pointer flex flex-col items-start origin-bottom" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
               <div className="flex justify-between w-full mb-6 md:mb-8">
                 <span className="text-[10px] font-bold text-foreground uppercase tracking-[0.2em]">{test.tag}</span>
                 <span className="text-[10px] font-bold text-foreground/50 uppercase tracking-[0.2em]">{test.date}</span>

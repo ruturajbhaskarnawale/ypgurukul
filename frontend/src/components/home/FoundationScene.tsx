@@ -58,8 +58,8 @@ const StatItem = ({ label, value, trigger }: { label: string, value: string, tri
 
   return (
     <div ref={elRef} className="stat-item flex flex-col items-center opacity-0 translate-y-[50px] scale-90 will-change-transform z-20 pointer-events-auto">
-      <span className="text-[12vw] md:text-[8vw] font-black tracking-tighter-editorial text-foreground leading-none mb-2 md:mb-4 drop-shadow-md select-none">{count}</span>
-      <span className="text-[10px] md:text-xl font-bold text-muted-foreground/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">{label}</span>
+      <span className="text-[14vw] sm:text-[10vw] md:text-[8vw] font-black tracking-tighter-editorial text-foreground leading-none mb-2 md:mb-4 drop-shadow-md select-none">{count}</span>
+      <span className="text-[9px] sm:text-[11px] md:text-xl font-bold text-muted-foreground/60 uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em]">{label}</span>
     </div>
   );
 };
@@ -82,9 +82,9 @@ export const FoundationScene = () => {
               trigger: containerRef.current,
               start: "top top",
               end: "+=300%",
-              scrub: 1.5,
+              scrub: 1, // Reduced scrub for more responsive feedback
               pin: true,
-              anticipatePin: 1,
+              // anticipatePin removed to prevent initial jump
             }
           });
 
