@@ -59,6 +59,7 @@ Follow these instructions to set up the project locally for development and test
 
 ### Prerequisites
 
+
 - **Node.js**: Ensure you have Node.js (v18 or higher recommended) installed.
 - **npm**: The default package manager for Node.js.
 
@@ -97,3 +98,8 @@ When contributing to this project, please adhere to the following guidelines:
 - Maintain the premium design aesthetic using the predefined Tailwind configurations.
 - Verify responsiveness across various viewport sizes (mobile, tablet, desktop) before submitting any UI changes.
 - Ensure all new components are strictly typed using TypeScript.
+
+## admin credentials
+
+- Admin email: admin@ypgurukul.com
+Admin password (seeded): password123
