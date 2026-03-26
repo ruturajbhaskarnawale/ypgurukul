@@ -3,7 +3,6 @@ import { Manrope, Meddon } from "next/font/google";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
 import { Providers } from "@/components/global/Providers";
-import { GlobalCanvasWrapper } from "@/components/global/GlobalCanvasWrapper";
 import { SidebarNav } from "@/components/global/SidebarNav";
 import "./globals.css";
 
@@ -35,7 +34,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${meddon.variable} flex flex-col min-h-screen relative font-sans`}>
         <Providers>
-          <GlobalCanvasWrapper />
           {/* Fixed sidebar spine navigation — appears after hero scroll */}
           <SidebarNav />
           <Navbar />

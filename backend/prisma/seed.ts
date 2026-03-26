@@ -4,15 +4,26 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log('Clearing old data...');
-    // Delete in reverse order of relationships
-    await prisma.application.deleteMany();
-    await prisma.testResult.deleteMany();
-    await prisma.studyMaterial.deleteMany();
-    await prisma.enrollment.deleteMany();
-    await prisma.course.deleteMany();
-    await prisma.studentProfile.deleteMany();
-    await prisma.user.deleteMany();
+    console.log('Clearing old data (if tables exist)...');
+    // Delete in reverse order of relationships. Ignore errors if a table doesn't exist.
+    const deletions = [
+        prisma.application,
+        prisma.testResult,
+        prisma.studyMaterial,
+        prisma.enrollment,
+        prisma.course,
+        prisma.studentProfile,
+        prisma.user,
+    ];
+
+    for (const model of deletions) {
+        try {
+            // @ts-ignore
+            await model.deleteMany();
+        } catch (e) {
+            console.warn('Warning while deleting (may not exist):', (e as Error).message || e);
+        }
+    }
 
     const passwordHash = await bcrypt.hash('password123', 10);
 
