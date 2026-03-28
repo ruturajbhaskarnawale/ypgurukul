@@ -103,3 +103,4 @@ When contributing to this project, please adhere to the following guidelines:
 
 - Admin email: admin@ypgurukul.com
 Admin password (seeded): password123
+

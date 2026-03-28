@@ -97,13 +97,32 @@ export const PortalSidebar = ({ isOpen = false, onClose }: SidebarProps) => {
         </nav>
 
         <div className="p-8 border-t border-border space-y-6">
+          {user?.role === 'ADMIN' && (
+            <Link 
+              href="/admin"
+              className="w-full group flex items-center justify-between px-6 py-5 rounded-2xl bg-foreground text-background hover:bg-muted-foreground transition-all duration-300 shadow-lg active:scale-95 mb-4"
+            >
+              <div className="flex flex-col items-start leading-none">
+                <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1 font-sans">Switch_Access</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  To Admin View
+                </span>
+              </div>
+              <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
+                 <svg className="w-4 h-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                 </svg>
+              </div>
+            </Link>
+          )}
+
           <div className="flex items-center gap-4 px-2">
-            <div className="w-8 h-8 rounded-lg bg-muted/40 flex items-center justify-center border border-border">
-              <span className="text-[10px] font-black text-foreground">{user?.name?.charAt(0)}</span>
+            <div className="w-10 h-10 rounded-xl bg-muted/40 flex items-center justify-center border border-border">
+              <span className="text-xs font-black text-foreground">{user?.name?.charAt(0)}</span>
             </div>
             <div className="flex flex-col min-w-0">
-               <span className="text-[9px] font-black text-foreground uppercase tracking-widest truncate">{user?.name}</span>
-               <button onClick={logout} className="text-[8px] font-bold text-muted-foreground hover:text-foreground uppercase tracking-widest mt-0.5 text-left transition-colors font-sans">
+               <span className="text-[10px] font-black text-foreground uppercase tracking-widest truncate">{user?.name}</span>
+               <button onClick={logout} className="text-[9px] font-bold text-muted-foreground hover:text-foreground uppercase tracking-[0.2em] mt-0.5 text-left transition-colors font-sans">
                   [ sign_out ]
                </button>
             </div>

@@ -21,6 +21,27 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [dashboardMode, setDashboardMode] = useState<'governance' | 'admin'>('governance');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('ypg_admin_mode') as 'governance' | 'admin';
+    if (saved) setDashboardMode(saved);
+
+    const handleModeChange = (e: any) => {
+      setDashboardMode((e as CustomEvent).detail);
+    };
+
+    window.addEventListener('ypg_admin_mode_change', handleModeChange);
+    return () => window.removeEventListener('ypg_admin_mode_change', handleModeChange);
+  }, []);
+
+  const toggleMode = () => {
+    const next = dashboardMode === 'governance' ? 'admin' : 'governance';
+    setDashboardMode(next);
+    localStorage.setItem('ypg_admin_mode', next);
+    window.dispatchEvent(new CustomEvent('ypg_admin_mode_change', { detail: next }));
+  };
+
   useEffect(() => {
     if (!authLoading && (!authUser || authUser.role !== 'ADMIN')) {
       router.push('/login');
@@ -69,13 +90,32 @@ export default function AdminDashboardPage() {
     <div className="space-y-12 pb-24">
       
       <FadeIn>
-        <div className="flex flex-col gap-2">
-          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
-            Governance
-          </h1>
-          <p className="text-[10px] text-muted-foreground tracking-widest uppercase font-black">
-            SYSTEM_STATUS: OPERATIONAL_LEVEL_01
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
+              {dashboardMode === 'governance' ? 'Governance' : 'Operational Admin'}
+            </h1>
+            <p className="text-[10px] text-muted-foreground tracking-widest uppercase font-black italic">
+              SYSTEM_STATUS: {dashboardMode === 'governance' ? 'TERMINAL_ACTIVE' : 'OPERATION_MODE_REPOSITORY'}
+            </p>
+          </div>
+
+          <button
+            onClick={toggleMode}
+            className="flex items-center gap-4 bg-foreground text-background px-6 py-4 rounded-2xl hover:bg-muted-foreground transition-all duration-300 shadow-xl active:scale-95 group"
+          >
+            <div className="flex flex-col items-start leading-none">
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-1">Switch_View</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                To {dashboardMode === 'governance' ? 'Admin' : 'Governance'}
+              </span>
+            </div>
+            <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center group-hover:rotate-180 transition-transform duration-500">
+              <svg className="w-4 h-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+            </div>
+          </button>
         </div>
       </FadeIn>
 
