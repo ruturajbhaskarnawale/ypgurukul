@@ -39,6 +39,20 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
   // Disable root smooth scroll on internal dashboards to prevent conflicts with local layouts
   const isDashboard = pathname?.startsWith("/admin") || pathname?.startsWith("/portal");
 
+  // Global ScrollTrigger cleanup on route change
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Kill all existing ScrollTriggers to prevent "jumping" from old page markers
+      ScrollTrigger.getAll().forEach(st => st.kill());
+      
+      // Force a refresh after layout settles
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname]);
+
   if (isDashboard) {
     return <>{children}</>;
   }
@@ -47,8 +61,8 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     <ReactLenis
       root
       options={{
-        lerp: 0.1,
-        duration: 1.0,
+        lerp: 0.12, // Slightly increased for better perceived responsiveness
+        duration: 1.2,
         smoothWheel: true,
         wheelMultiplier: 1,
         touchMultiplier: 1.5,

@@ -106,7 +106,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-svh bg-background text-foreground">
 
       {/* ── Page header ────────────────────────────────────────── */}
       <section className="border-b border-border bg-secondary py-14 md:py-20">

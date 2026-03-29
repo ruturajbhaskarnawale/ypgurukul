@@ -63,6 +63,8 @@ export const SceneContainer: React.FC<SceneContainerProps> = ({ children }) => {
             window.removeEventListener('resize', checkMobile);
             clearTimeout(timeoutId);
             clearTimeout(timer);
+            // Reset global scroll progress to prevent state leaking between page transitions
+            _scrollProgress.value = 0;
         };
     }, []);
 

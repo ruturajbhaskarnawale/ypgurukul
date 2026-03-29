@@ -55,24 +55,27 @@ const FacultyCard = ({ member, index }: { member: FacultyMember, index: number }
       yTo(0);
     };
 
-    card.addEventListener('mousemove', handleMouseMove);
-    card.addEventListener('mouseleave', handleMouseLeave);
-    card.addEventListener('touchstart', handleMouseMove, { passive: true });
-    card.addEventListener('touchend', handleMouseLeave, { passive: true });
-    
-    // Portrait parallax scroll
-    gsap.to(portraitRef.current, {
-      y: (member.speed - 1) * 150,
-      ease: "none",
-      scrollTrigger: {
-        trigger: card,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
-      }
+    const ctx = gsap.context(() => {
+      card.addEventListener('mousemove', handleMouseMove);
+      card.addEventListener('mouseleave', handleMouseLeave);
+      card.addEventListener('touchstart', handleMouseMove, { passive: true });
+      card.addEventListener('touchend', handleMouseLeave, { passive: true });
+      
+      // Portrait parallax scroll
+      gsap.to(portraitRef.current, {
+        y: (member.speed - 1) * 150,
+        ease: "none",
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        }
+      });
     });
 
     return () => {
+      ctx.revert();
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
       card.removeEventListener('touchstart', handleMouseMove);

@@ -2,30 +2,32 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FadeIn, SlideUp } from '@/components/animations/MotionUtils';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/lib/authContext';
 import { ApiError } from '@/lib/apiClient';
 import { AnimatePresence, motion } from 'framer-motion';
+import { FaEye, FaEyeSlash, FaArrowRight } from 'react-icons/fa';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, register } = useAuth();
 
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin]     = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg]   = useState('');
+  const [showPwd, setShowPwd]     = useState(false);
 
-  // Form field state
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  // Form fields
+  const [name,     setName]     = useState('');
+  const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [mobile,   setMobile]   = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setIsLoading(true);
-
     try {
       if (isLogin) {
         await login(email, password);
@@ -35,9 +37,9 @@ export default function LoginPage() {
       router.push('/portal/dashboard');
     } catch (err) {
       if (err instanceof ApiError) {
-        setErrorMsg(err.message.toUpperCase());
+        setErrorMsg(err.message);
       } else {
-        setErrorMsg('SECURE_ACCESS_FAILURE. RE-ENTRY_REQUIRED.');
+        setErrorMsg('Something went wrong. Please try again.');
       }
     } finally {
       setIsLoading(false);
@@ -50,142 +52,228 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-background min-h-screen relative overflow-hidden flex items-center justify-center pt-24">
-      
-      {/* Security Grid Backdrop */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-      </div>
+    <div className="min-h-screen bg-background flex">
 
-      <div className="max-w-xl w-full px-12 z-10">
-        
-        {/* Terminal Header */}
-        <div className="mb-24">
-          <FadeIn>
-            <div className="flex flex-col items-start leading-[0.8]">
-              <span className="font-script text-4xl text-muted-foreground lowercase mb-8 block">the</span>
-              <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter-editorial text-foreground mb-6">
-                Access <br /> <span className="text-foreground/20">Guard</span>
-              </h1>
-              <p className="text-sm font-bold uppercase tracking-[0.4em] text-muted-foreground">
-                {isLogin ? 'NODE_ID: SECURE_ENTRY_ACTIVE' : 'NODE_ID: ACCOUNT_REGISTRATION'}
-              </p>
-            </div>
-          </FadeIn>
+      {/* ── Left panel — branding (hidden on mobile) ─────────── */}
+      <div className="hidden lg:flex lg:w-1/2 bg-primary flex-col justify-center gap-10 p-12 relative overflow-hidden">
+        {/* Subtle blob */}
+        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/10 blur-[80px] pointer-events-none" />
+        <div className="absolute -bottom-32 -left-16 w-96 h-96 rounded-full bg-white/5  blur-[80px] pointer-events-none" />
+
+
+        {/* Center quote */}
+        <div className="relative z-10 flex flex-col gap-6">
+          <blockquote className="text-2xl md:text-3xl font-bold text-white leading-snug">
+            "Every top rank starts with the right mentor and the right system."
+          </blockquote>
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold text-white/80">YP Gurukul Institute</span>
+            <span className="text-xs text-white/50">Est. 2010 · 10,000+ Students Placed</span>
+          </div>
         </div>
 
-        <SlideUp delay={0.1}>
-          <div className="border border-border bg-muted/40 backdrop-blur-3xl p-12 md:p-16 relative overflow-hidden">
-             
-             {/* Security Scan Line */}
-             <motion.div 
-               animate={{ top: ['-10%', '110%'] }}
-               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-               className="absolute left-0 right-0 h-px bg-foreground/10 blur-sm z-20 pointer-events-none"
-             />
+        {/* Bottom stats */}
+        <div className="relative z-10 grid grid-cols-3 gap-4">
+          {[
+            { v: '500+',  l: 'JEE Selections' },
+            { v: '850+',  l: 'NEET Qualifiers' },
+            { v: '95%',   l: 'Success Rate'    },
+          ].map((s) => (
+            <div key={s.l} className="flex flex-col gap-1">
+              <span className="text-2xl font-black text-white">{s.v}</span>
+              <span className="text-[11px] text-white/60 font-medium">{s.l}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-             <form onSubmit={handleSubmit} className="space-y-12">
-               
-               <AnimatePresence mode="wait">
-                 {!isLogin && (
-                   <motion.div 
-                     key="name-field"
-                     initial={{ height: 0, opacity: 0 }}
-                     animate={{ height: 'auto', opacity: 1 }}
-                     exit={{ height: 0, opacity: 0 }}
-                     className="overflow-hidden"
-                   >
-                     <div className="flex flex-col group pb-4">
-                        <label className="text-[9px] font-bold uppercase tracking-[0.4em] text-foreground/30 group-focus-within:text-foreground transition-colors mb-4 italic">01. Identity_Name</label>
-                        <input 
-                          name="name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          required={!isLogin}
-                          className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl"
-                          placeholder="..."
-                        />
-                     </div>
-                   </motion.div>
-                 )}
-               </AnimatePresence>
+      {/* ── Right panel — form ───────────────────────────────── */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 md:px-12">
 
-               <div className="flex flex-col group">
-                  <label className="text-[9px] font-bold uppercase tracking-[0.4em] text-foreground/30 group-focus-within:text-foreground transition-colors mb-4 italic">
-                    {isLogin ? '01. Electronic_Channel' : '02. Electronic_Channel'}
-                  </label>
-                  <input 
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl"
-                    placeholder="USER@ARCHIVE.SYS"
-                  />
-               </div>
+        {/* Mobile logo */}
+        <Link href="/" className="flex lg:hidden items-center gap-2 mb-10">
+          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-border shrink-0">
+            <Image src="/logo-icon.png" alt="YP Gurukul" fill className="object-cover" />
+          </div>
+          <span className="text-base font-black tracking-tight text-foreground">YP Gurukul</span>
+        </Link>
 
-               <div className="flex flex-col group">
-                  <label className="text-[9px] font-bold uppercase tracking-[0.4em] text-foreground/30 group-focus-within:text-foreground transition-colors mb-4 italic">
-                    {isLogin ? '02. Security_Cipher' : '03. Security_Cipher'}
-                  </label>
-                  <input 
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl"
-                    placeholder="••••••••"
-                  />
-               </div>
+        <div className="w-full max-w-md">
 
-               {!isLogin && (
-                  <div className="flex flex-col group">
-                    <label className="text-[9px] font-bold uppercase tracking-[0.4em] text-foreground/30 group-focus-within:text-foreground transition-colors mb-4 italic">04. Neural_Contact</label>
-                    <input 
-                      type="tel"
-                      name="mobile"
-                      value={mobile}
-                      onChange={(e) => setMobile(e.target.value)}
-                      className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl"
-                      placeholder="+91 (0) 000 000"
+          {/* Heading */}
+          <div className="mb-8">
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mb-2">
+              {isLogin ? 'Welcome back!' : 'Create your account'}
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {isLogin
+                ? 'Sign in to access your student portal and study materials.'
+                : 'Register to get access to your courses, notes, and test series.'}
+            </p>
+          </div>
+
+          {/* Tab switcher */}
+          <div className="flex gap-1 p-1 rounded-lg bg-secondary border border-border mb-7">
+            {[
+              { label: 'Sign In',   mode: true  },
+              { label: 'Register',  mode: false },
+            ].map(({ label, mode }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => { setIsLogin(mode); setErrorMsg(''); }}
+                className={`flex-1 py-2 rounded-md text-sm font-semibold transition-colors ${
+                  isLogin === mode
+                    ? 'bg-background text-foreground shadow-sm border border-border'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+            {/* Name — register only */}
+            <AnimatePresence>
+              {!isLogin && (
+                <motion.div
+                  key="name-field"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex flex-col gap-1.5 pb-1">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Full Name
+                    </label>
+                    <input
+                      name="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required={!isLogin}
+                      placeholder="Rahul Sharma"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
-               )}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-               {errorMsg && (
-                 <div className="p-6 border border-destructive/20 bg-destructive/5 text-[10px] font-bold uppercase tracking-[0.3em] text-destructive">
-                    ERR: {errorMsg}
-                 </div>
-               )}
+            {/* Email */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="rahul@example.com"
+                autoComplete="email"
+                className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+              />
+            </div>
 
-               <div className="pt-8 space-y-8">
-                 <button 
-                   type="submit"
-                   disabled={isLoading}
-                   className="w-full py-8 bg-primary text-primary-foreground font-black uppercase tracking-[0.8em] text-[10px] hover:opacity-90 transition-opacity"
-                 >
-                   {isLoading ? 'PROCESSING...' : isLogin ? 'BYPASS_SECURITY' : 'REGISTER_NODE'}
-                 </button>
+            {/* Password */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Password
+                </label>
+                {isLogin && (
+                  <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+                    Forgot password?
+                  </Link>
+                )}
+              </div>
+              <div className="relative">
+                <input
+                  type={showPwd ? 'text' : 'password'}
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  autoComplete={isLogin ? 'current-password' : 'new-password'}
+                  className="w-full px-3 py-2.5 pr-10 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPwd((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={showPwd ? 'Hide password' : 'Show password'}
+                >
+                  {showPwd ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+                </button>
+              </div>
+            </div>
 
-                 <div className="flex flex-col items-center gap-4">
-                    <button
-                      type="button"
-                      onClick={switchMode}
-                      className="text-[9px] font-bold uppercase tracking-[0.4em] text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {isLogin ? '[ REQUEST_NEW_NODE ]' : '[ ACCESS_EXISTING_NODE ]'}
-                    </button>
-                 </div>
-               </div>
+            {/* Mobile — register only */}
+            {!isLogin && (
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Phone Number <span className="text-muted-foreground/50 normal-case font-normal">(optional)</span>
+                </label>
+                <input
+                  type="tel"
+                  name="mobile"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  placeholder="+91 98765 43210"
+                  className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                />
+              </div>
+            )}
 
-             </form>
-          </div>
-        </SlideUp>
+            {/* Error */}
+            {errorMsg && (
+              <div className="px-4 py-3 rounded-lg bg-destructive/10 border border-destructive/20 text-sm text-destructive font-medium">
+                {errorMsg}
+              </div>
+            )}
 
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 disabled:opacity-50 transition-opacity mt-1"
+            >
+              {isLoading
+                ? 'Please wait…'
+                : isLogin ? 'Sign In' : 'Create Account'}
+              {!isLoading && <FaArrowRight size={12} />}
+            </button>
+          </form>
+
+          {/* Switch mode link */}
+          <p className="text-sm text-center text-muted-foreground mt-6">
+            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+            <button
+              type="button"
+              onClick={switchMode}
+              className="font-semibold text-primary hover:underline underline-offset-4"
+            >
+              {isLogin ? 'Register here' : 'Sign in'}
+            </button>
+          </p>
+
+          {/* Back to site */}
+          <p className="text-xs text-center text-muted-foreground mt-8">
+            <Link href="/" className="hover:text-primary transition-colors">
+              ← Back to YP Gurukul website
+            </Link>
+          </p>
+
+        </div>
       </div>
+
     </div>
   );
 }
