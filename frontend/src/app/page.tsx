@@ -1,170 +1,135 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import React from 'react';
+import Image from 'next/image';
 import { HeroSection } from '@/components/home/HeroSection';
 import { QuickInquiry } from '@/components/home/QuickInquiry';
-import { FadeIn, StaggerContainer, StaggerItem } from '@/components/animations/MotionUtils';
-import Image from 'next/image';
-import { SectionThemeController } from '@/components/home/SectionThemeController';
 
-
-// Redesigned Components
-import { TestSeriesPreview } from '@/components/home/TestSeriesPreview';
-import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { SuccessStories } from '@/components/home/SuccessStories';
-import { SceneContainer, Scene } from '@/components/home/SceneContainer';
 import { FoundationScene } from '@/components/home/FoundationScene';
+import { LearningJourney3D } from '@/components/home/LearningJourney3D';
+import { TestSeriesPreview } from '@/components/home/TestSeriesPreview';
+import { SuccessStories } from '@/components/home/SuccessStories';
 import { FacultyPreview } from '@/components/home/FacultyPreview';
 import { Testimonials } from '@/components/home/Testimonials';
 import { Gallery } from '@/components/home/Gallery';
+import Link from 'next/link';
+import { FaArrowRight } from 'react-icons/fa';
 
-// GSAP Imports
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-
-import { TornPaperDivider } from '@/components/home/TornPaperDivider';
-import { SectionBackground } from '@/components/home/SectionBackground';
+const programs = [
+  {
+    title: 'Class 11 Science Batches',
+    tag: 'Foundation',
+    desc: 'Comprehensive 2-year classroom program building a strong conceptual foundation.',
+    img: '/images/programs/foundation.png',
+    href: '/courses',
+  },
+  {
+    title: 'Target Batch',
+    tag: 'Premium',
+    desc: 'Intensive 1-year droppers batch focused on speed, accuracy, and problem-solving.',
+    img: '/images/programs/target.png',
+    href: '/courses',
+  },
+  {
+    title: 'Weekend Test Series',
+    tag: 'Specialized',
+    desc: 'All-India mock tests with detailed analytics to track your real exam readiness.',
+    img: '/images/programs/test_series.png',
+    href: '/courses',
+  },
+];
 
 export default function Home() {
-  const programRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // 3D Fan-in for Program Cards
-        if (programRef.current) {
-          const cards = programRef.current.querySelectorAll('.program-card-3d');
-          gsap.set(cards, { rotateY: 45, opacity: 0, x: 50 });
-
-          ScrollTrigger.batch(cards, {
-            onEnter: (batch) => {
-              gsap.to(batch, {
-                rotateY: 0,
-                opacity: 1,
-                x: 0,
-                stagger: 0.15,
-                duration: 1.2,
-                ease: "power3.out",
-                overwrite: true
-              });
-            },
-            start: "top 85%",
-          });
-        }
-      });
-
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-         // Fallback: static visibility
-         if (programRef.current) {
-           const cards = programRef.current.querySelectorAll('.program-card-3d');
-           gsap.set(cards, { rotateY: 0, opacity: 1, x: 0 });
-         }
-      });
-
-      return () => mm.revert();
-    }
-  }, []);
-
   return (
-    <SceneContainer>
+    <main className="flex flex-col">
 
-      {/* SCENE 0: THE NEXUS (HERO) */}
-      <Scene id="nexus">
-        <HeroSection />
-      </Scene>
-      
-      {/* SECTION DIVIDER: Hero (Dark fading) -> Foundation (Golden) */}
-      <div className="relative z-30 w-full translate-y-2 pointer-events-none">
-        <TornPaperDivider fill="#f9fafb" invertY={true} />
-      </div>
+      {/* ── HERO ──────────────────────────────────────────────── */}
+      <HeroSection />
 
-      {/* SCENE 1: FOUNDATION (STATS, WHY CHOOSE US, TEST SERIES) */}
-      <div id="foundation" className="relative z-10 -mt-10 bg-background">
-        <FoundationScene />
-      </div>
+      {/* ── STATS + WHY CHOOSE US (FoundationScene) ───────────── */}
+      <FoundationScene />
 
-      {/* SCENE 2: THE PATH (PROGRAMS) */}
-      <Scene id="path">
-        <section className="relative py-48 border-b border-border overflow-hidden min-h-screen bg-background">
-          
-          {/* Subtle line grid overlay like the reference site */}
-          <div className="absolute inset-0 bg-[url('/images/backgrounds/Line_Grid.svg')] bg-[length:100px_100px] opacity-10 pointer-events-none" />
-          <div className="max-w-[1800px] mx-auto px-6 md:px-12" ref={programRef}>
-             <FadeIn>
-               <div className="flex flex-col items-center mb-24 md:mb-40">
-                 <span className="font-script text-3xl md:text-4xl text-muted-foreground lowercase mb-4 md:mb-6">the</span>
-                 <h2 className="text-fluid-title font-black uppercase tracking-tighter-editorial text-center leading-[0.85] text-foreground">
-                   Popular <br /> <span className="text-foreground/10">Programs</span>
-                 </h2>
-               </div>
-             </FadeIn>
+      {/* ── LEARNING JOURNEY ──────────────────────────────────── */}
+      <LearningJourney3D />
 
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" style={{ perspective: '2000px' }}>
-               {[
-                 { 
-                   title: "Class 11 Science Batches", 
-                   tag: "Foundation", 
-                   desc: "Comprehensive 2-year classroom program building strong foundation.",
-                   img: "/images/programs/foundation.png"
-                 },
-                 { 
-                   title: "Target Batch", 
-                   tag: "Premium", 
-                   desc: "Intensive 1-year droppers batch focusing on problem-solving.",
-                   img: "/images/programs/target.png"
-                 },
-                 { 
-                   title: "Weekend Test Series", 
-                   tag: "Specialized", 
-                   desc: "All-India test series with detailed performance analytics.",
-                   img: "/images/programs/test_series.png"
-                 }
-               ].map((program, i) => (
-                 <div key={i} className="program-card-3d group flex flex-col items-start cursor-pointer origin-left will-change-transform bg-secondary/20 border border-border rounded-3xl p-6 overflow-hidden relative">
-                   <div className="h-[400px] bg-muted w-full relative mb-8 rounded-2xl border border-border overflow-hidden">
-                     <Image 
-                       src={program.img} 
-                       alt={program.title} 
-                       fill 
-                       className="object-cover group-hover:scale-110 transition-transform duration-700 blur-[2px] group-hover:blur-none opacity-60 group-hover:opacity-100"
-                     />
-                     <div className="absolute inset-0 bg-background/40 group-hover:bg-transparent transition-colors duration-700 pointer-events-none" />
-                   </div>
-                   <div className="relative z-10 p-2">
-                     <span className="text-[10px] font-bold px-4 py-2 bg-foreground text-background uppercase tracking-[0.2em] mb-6 rounded-full inline-block">{program.tag}</span>
-                     <h3 className="text-4xl font-black text-foreground mb-4 uppercase tracking-tighter">{program.title}</h3>
-                     <p className="text-sm font-medium text-muted-foreground lowercase tracking-wide max-w-sm mb-8">{program.desc}</p>
-                     <div className="h-px w-12 bg-border group-hover:w-full transition-all duration-500" />
-                   </div>
-                 </div>
-               ))}
-             </div>
+      {/* ── POPULAR PROGRAMS ──────────────────────────────────── */}
+      <section className="py-20 md:py-32 bg-background border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+
+          {/* Section heading */}
+          <div className="mb-12 md:mb-16">
+            <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+              Our Programs
+            </p>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground max-w-md leading-tight">
+                Popular Programs
+              </h2>
+              <Link
+                href="/courses"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:gap-4 transition-all duration-300 shrink-0"
+              >
+                View All Courses <FaArrowRight size={14} />
+              </Link>
+            </div>
           </div>
 
-          {/* Cinematic Exit Gradient */}
-          <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
-        </section>
-      </Scene>
+          {/* Program cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {programs.map((program, i) => (
+              <Link
+                key={i}
+                href={program.href}
+                className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-md hover:border-primary/30 transition-all duration-300"
+              >
+                {/* Image */}
+                <div className="relative h-52 md:h-60 w-full bg-muted overflow-hidden">
+                  <Image
+                    src={program.img}
+                    alt={program.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                  />
+                </div>
 
+                {/* Content */}
+                <div className="p-6 flex flex-col flex-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-accent px-2.5 py-1 rounded-full inline-block mb-4 w-fit">
+                    {program.tag}
+                  </span>
+                  <h3 className="text-lg font-bold text-foreground mb-2 leading-snug">
+                    {program.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                    {program.desc}
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-primary mt-5 group-hover:gap-4 transition-all duration-300">
+                    Learn More <FaArrowRight size={12} />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
 
-      <Scene id="mentorship">
-        <FacultyPreview />
-        <Testimonials />
-      </Scene>
+        </div>
+      </section>
 
-      {/* SCENE 4: LEGACY & INFRASTRUCTURE */}
-      <Scene id="legacy">
-        <SuccessStories />
-      </Scene>
-      <Scene id="gallery">
-        <Gallery />
-      </Scene>
-      <Scene id="inquiry">
-        <QuickInquiry />
-      </Scene>
-    </SceneContainer>
+      {/* ── TEST SERIES PREVIEW ───────────────────────────────── */}
+      <TestSeriesPreview />
+
+      {/* ── FACULTY + TESTIMONIALS ────────────────────────────── */}
+      <FacultyPreview />
+      <Testimonials />
+
+      {/* ── SUCCESS STORIES ───────────────────────────────────── */}
+      <SuccessStories />
+
+      {/* ── GALLERY ───────────────────────────────────────────── */}
+      <Gallery />
+
+      {/* ── QUICK INQUIRY ─────────────────────────────────────── */}
+      <QuickInquiry />
+
+    </main>
   );
 }

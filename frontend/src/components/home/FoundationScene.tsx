@@ -1,208 +1,148 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { Scene } from './SceneContainer';
-import { TestSeriesPreview } from './TestSeriesPreview';
-import { WhyChooseUs } from './WhyChooseUs';
+import { FaChalkboardTeacher, FaBookOpen, FaTrophy, FaGraduationCap } from 'react-icons/fa';
 import { useCountUp } from '@/lib/hooks/useCountUp';
-import { SectionBackground } from './SectionBackground';
 
-const StatItem = ({ label, value, trigger }: { label: string, value: string, trigger: boolean }) => {
+// ─── Stat Counter Card ───────────────────────────────────────────────────────
+const StatCard = ({
+  label,
+  value,
+  trigger,
+}: {
+  label: string;
+  value: string;
+  trigger: boolean;
+}) => {
   const numericValue = parseInt(value, 10);
-  const suffix = value.replace(numericValue.toString(), "");
-  const count = useCountUp(numericValue, 2.5, suffix, trigger);
-  
-  const elRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!elRef.current) return;
-    const xTo = gsap.quickTo(elRef.current, "x", { duration: 0.6, ease: "power3.out" });
-    const yTo = gsap.quickTo(elRef.current, "y", { duration: 0.6, ease: "power3.out" });
-
-    const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!elRef.current) return;
-      const rect = elRef.current.getBoundingClientRect();
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      
-      const relX = clientX - rect.left - rect.width / 2;
-      const relY = clientY - rect.top - rect.height / 2;
-      
-      const dist = Math.sqrt(relX * relX + relY * relY);
-      if (dist < 150) {
-         xTo(relX * 0.2);
-         yTo(relY * 0.2);
-      } else {
-         xTo(0);
-         yTo(0);
-      }
-    };
-
-    const handleEnd = () => {
-        xTo(0);
-        yTo(0);
-    };
-    
-    window.addEventListener('mousemove', handleMove);
-    window.addEventListener('touchstart', handleMove, { passive: true });
-    window.addEventListener('touchend', handleEnd, { passive: true });
-
-    return () => {
-        window.removeEventListener('mousemove', handleMove);
-        window.removeEventListener('touchstart', handleMove);
-        window.removeEventListener('touchend', handleEnd);
-    };
-  }, []);
+  const suffix = value.replace(numericValue.toString(), '');
+  const count = useCountUp(numericValue, 2, suffix, trigger);
 
   return (
-    <div ref={elRef} className="stat-item flex flex-col items-center opacity-0 translate-y-[50px] scale-90 will-change-transform z-20 pointer-events-auto">
-      <span className="text-[14vw] sm:text-[10vw] md:text-[8vw] font-black tracking-tighter-editorial text-foreground leading-none mb-2 md:mb-4 drop-shadow-md select-none">{count}</span>
-      <span className="text-[9px] sm:text-[11px] md:text-xl font-bold text-muted-foreground/60 uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em]">{label}</span>
+    <div className="flex flex-col items-center text-center p-6 md:p-8 rounded-2xl bg-card border border-border">
+      <span className="text-4xl md:text-6xl font-black tracking-tight text-primary leading-none mb-3">
+        {count}
+      </span>
+      <span className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+        {label}
+      </span>
     </div>
   );
 };
 
+// ─── Why Choose Us Feature Card ───────────────────────────────────────────────
+const features = [
+  {
+    icon: <FaChalkboardTeacher size={22} />,
+    title: 'Expert Faculty',
+    desc: 'Learn from IITians and doctors with proven teaching records and years of mentoring experience.',
+  },
+  {
+    icon: <FaBookOpen size={22} />,
+    title: 'Rich Study Material',
+    desc: 'Comprehensive modules, DPPs, and updated question banks crafted for board and competitive exams.',
+  },
+  {
+    icon: <FaTrophy size={22} />,
+    title: 'Proven Results',
+    desc: 'Highest selection ratio in the region with consistent top AIR holders every academic year.',
+  },
+  {
+    icon: <FaGraduationCap size={22} />,
+    title: 'Personal Mentorship',
+    desc: 'One-on-one doubt sessions and regular parent-teacher reviews to keep every student on track.',
+  },
+];
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 export const FoundationScene = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scanLineRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
   const [statsActive, setStatsActive] = useState(false);
 
+  // Trigger count-up when stats section scrolls into view
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const rafId = requestAnimationFrame(() => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const ctx = gsap.context(() => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top top",
-              end: "+=300%",
-              scrub: 1, // Reduced scrub for more responsive feedback
-              pin: true,
-              // anticipatePin removed to prevent initial jump
-            }
-          });
-
-          // Background Parallax Layering
-          tl.to(".section-bg-parallax", { y: -100, ease: "none", duration: 4 }, 0);
-
-          tl.fromTo(".stat-item", 
-            { opacity: 0, y: 50, scale: 0.9 },
-            { 
-              opacity: 1, 
-              y: 0, 
-              scale: 1, 
-              stagger: 0.1, 
-              duration: 1,
-              onStart: () => setStatsActive(true)
-            },
-            0 // Starts at timeline 0
-          );
-          
-          tl.to({}, { duration: 0.5 });
-          tl.to(".stat-item", { opacity: 0, y: -50, stagger: 0.05, duration: 0.5 });
-
-          tl.fromTo(".why-choose-content",
-            { opacity: 0, scale: 1.1 },
-            { opacity: 1, scale: 1, duration: 1 }
-          );
-          tl.to({}, { duration: 0.5 });
-
-          tl.to(".why-choose-content", { opacity: 0, x: -50, duration: 0.5 });
-          
-          // Test Series container fade in
-          tl.fromTo(".test-series-content",
-            { opacity: 0 },
-            { opacity: 1, duration: 0.5 }
-          );
-          // Test Series 3D cards stagger in
-          tl.fromTo(".test-series-card",
-            { opacity: 0, y: 150, rotateX: 30 },
-            { opacity: 1, y: 0, rotateX: 0, stagger: 0.15, duration: 1, ease: "power3.out" },
-            "<0.2"
-          );
-
-          tl.fromTo(scanLineRef.current,
-            { scaleY: 0, opacity: 0 },
-            { scaleY: 1, opacity: 1, duration: 0.5, ease: "power4.inOut" },
-            0
-          );
-          tl.to(scanLineRef.current, { xPercent: 100, duration: 4, ease: "none" }, 0);
-          tl.to(scanLineRef.current, { opacity: 0, duration: 0.3 });
-
-        }, containerRef);
-        return () => ctx.revert();
-      });
-
-      // Fallback for reduced motion: show everything static
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        setStatsActive(true);
-        gsap.set(".stat-item, .why-choose-content, .test-series-content, .test-series-card", { opacity: 1, y: 0, scale: 1, x: 0, rotateX: 0 });
-      });
-
-      return () => mm.revert();
-    });
-
-    return () => cancelAnimationFrame(rafId);
+    const el = statsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStatsActive(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div 
-        ref={containerRef} 
-        className="relative w-full overflow-hidden text-foreground bg-background"
-        style={{ contain: 'content' }}
-    >
-      {/* Background substance (Theme Background) */}
-      <div className="absolute inset-x-0 w-full h-[120%] -top-[10%] section-bg-parallax bg-background will-change-transform pointer-events-none z-0">
-          {/* SectionBackground removed for strict B&W */}
-      </div>
+    <>
+      {/* ── SECTION 1: Stats ─────────────────────────────────────── */}
+      <section
+        ref={statsRef}
+        className="py-20 md:py-32 bg-background border-b border-border"
+      >
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          {/* Heading */}
+          <div className="text-center mb-14 md:mb-20">
+            <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+              Our Impact
+            </p>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground">
+              Numbers That Speak
+            </h2>
+          </div>
 
-      <div className="absolute inset-x-0 top-0 h-px bg-foreground/10 z-10" />
-      
-      {/* SCENE CONTENT WRAPPER */}
-      <div className="relative h-svh w-full flex items-center justify-center will-change-transform z-10 pointer-events-none">
-        
-        {/* 1. STATS LAYER */}
-        <div className="absolute inset-0 flex items-center justify-center px-4 md:px-12 pointer-events-none">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12 text-center w-full max-w-[1800px] will-change-transform">
+          {/* Stat grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {[
-              { label: "Students Taught", value: "10000+" },
-              { label: "Selection Rate", value: "95%" },
-              { label: "Expert Faculty", value: "50+" },
-              { label: "Resource Access", value: "24/7" },
+              { label: 'Students Taught', value: '10000+' },
+              { label: 'Selection Rate', value: '95%' },
+              { label: 'Expert Faculty', value: '50+' },
+              { label: 'Resource Access', value: '24/7' },
             ].map((stat, i) => (
-              <StatItem key={i} label={stat.label} value={stat.value} trigger={statsActive} />
+              <StatCard key={i} label={stat.label} value={stat.value} trigger={statsActive} />
             ))}
           </div>
         </div>
+      </section>
 
-        {/* 2. WHY CHOOSE US LAYER */}
-        <div className="why-choose-content absolute inset-0 flex items-center justify-center opacity-0 p-4 md:p-12 pointer-events-none will-change-transform">
-           <div className="w-full h-full pointer-events-auto">
-                <WhyChooseUs isNested />
-           </div>
+      {/* ── SECTION 2: Why Choose Us ──────────────────────────────── */}
+      <section className="py-20 md:py-32 bg-secondary border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          {/* Heading */}
+          <div className="mb-14 md:mb-20">
+            <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+              Why YP Gurukul
+            </p>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground max-w-xl leading-tight">
+              The Advantage That Makes the Difference
+            </h2>
+          </div>
+
+          {/* Feature cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {features.map((feature, idx) => (
+              <div
+                key={idx}
+                className="group flex flex-col p-6 md:p-8 rounded-2xl bg-card border border-border hover:border-primary/40 hover:shadow-md transition-all duration-300"
+              >
+                {/* Icon */}
+                <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-3 leading-snug">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {feature.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-
-        {/* 3. TEST SERIES LAYER */}
-        <div className="test-series-content absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none will-change-transform">
-            <div className="w-full h-full pointer-events-auto flex flex-col">
-                <TestSeriesPreview isNested />
-            </div>
-        </div>
-
-        {/* DIGITAL SCAN LINE */}
-        <div 
-          ref={scanLineRef}
-          className="absolute inset-y-0 left-0 w-1 bg-foreground/20 blur-[1px] z-50 pointer-events-none origin-top"
-          style={{ height: '100%' }}
-        />
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
-

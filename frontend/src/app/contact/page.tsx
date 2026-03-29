@@ -1,246 +1,378 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from '@/components/animations/MotionUtils';
 import { apiClient, ApiError } from '@/lib/apiClient';
-import { SectionBackground } from '@/components/home/SectionBackground';
+import {
+  FaPhoneAlt, FaEnvelope, FaMapMarkerAlt,
+  FaClock, FaCheckCircle, FaWhatsapp,
+} from 'react-icons/fa';
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const contactInfo = [
+  {
+    icon: <FaPhoneAlt size={16} />,
+    label: 'Call Us',
+    value: '+91 123 456 7890',
+    href: 'tel:+911234567890',
+    sub: 'Mon – Sat, 9 AM – 7 PM',
+  },
+  {
+    icon: <FaWhatsapp size={16} />,
+    label: 'WhatsApp',
+    value: '+91 123 456 7890',
+    href: 'https://wa.me/911234567890',
+    sub: 'Quick replies during office hours',
+  },
+  {
+    icon: <FaEnvelope size={16} />,
+    label: 'Email Us',
+    value: 'contact@ypgurukul.com',
+    href: 'mailto:contact@ypgurukul.com',
+    sub: 'We reply within 24 hours',
+  },
+  {
+    icon: <FaClock size={16} />,
+    label: 'Office Hours',
+    value: 'Mon – Sat: 9 AM – 7 PM',
+    href: null,
+    sub: 'Sunday: Closed',
+  },
+];
+
+const locations = [
+  {
+    name: 'Main Campus',
+    type: 'Headquarters',
+    address: '123 Education Lane, Knowledge City, Mumbai – 400001',
+    mapSrc:
+      'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.8329615599024!2d72.88094977457787!3d19.07062228148902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c897f223fbad%3A0xe5db976d8dfced9d!2sBandra%20Kurla%20Complex!5e0!3m2!1sen!2sin!4v1709405400000!5m2!1sen!2sin',
+  },
+  {
+    name: 'West Wing Campus',
+    type: 'Learning Centre',
+    address: '456 Scholar Square, Bandra Kurla Complex, Mumbai – 400051',
+    mapSrc: null,
+  },
+];
+
+const courses = [
+  'JEE Main & Advanced',
+  'NEET',
+  'MHT-CET',
+  'Board Exam Prep (10th)',
+  'Board Exam Prep (12th)',
+  'NDA Mathematics',
+  'Scholarship / Olympiad',
+  'Other / Not Sure',
+];
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    message: '',
+  const [form, setForm] = useState({
+    name: '', email: '', mobile: '', course: '', message: '',
   });
   const [submitting, setSubmitting] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
+  const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccessMsg('');
-    setErrorMsg('');
     setSubmitting(true);
+    setErrorMsg('');
     try {
-      await apiClient.post('/public/inquiries', formData);
-      setSuccessMsg('INQUIRY LOGGED. OUR ARCHIVES WILL REVIEW YOUR REQUEST.');
-      setFormData({ name: '', email: '', mobile: '', message: '' });
+      await apiClient.post('/public/inquiries', {
+        name: form.name,
+        email: form.email,
+        mobile: form.mobile,
+        message: `[${form.course}] ${form.message}`,
+      });
+      setSuccess(true);
+      setForm({ name: '', email: '', mobile: '', course: '', message: '' });
     } catch (err) {
-      if (err instanceof ApiError) {
-        setErrorMsg(err.message);
-      } else {
-        setErrorMsg('TRANSMISSION FAILURE. TRY AGAIN.');
-      }
+      setErrorMsg(
+        err instanceof ApiError
+          ? err.message
+          : 'Something went wrong. Please try again or call us directly.'
+      );
     } finally {
       setSubmitting(false);
     }
   };
 
-  const locations = [
-    {
-      id: "HUB_01",
-      name: "MAIN CAMPUS",
-      address: "123 EDUCATION LANE, KNOWLEDGE CITY, IN 400001",
-      type: "HEADQUARTERS"
-    },
-    {
-      id: "HUB_02",
-      name: "WEST WING",
-      address: "456 SCHOLAR SQUARE, BANDRA KURLA COMPLEX, IN 400051",
-      type: "LEARNING CENTER"
-    }
-  ];
-
   return (
-    <div className="bg-background min-h-screen pb-32 relative overflow-hidden">
-      {/* Cinematic Background Layer */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <SectionBackground 
-          src="/images/backgrounds/Rectangle_240657548.jpg" 
-          alt="Inquiry Background" 
-          className="opacity-40 grayscale" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] mix-blend-overlay" />
-      </div>
+    <div className="min-h-screen bg-background text-foreground">
 
-      <div className="relative z-10">
-        {/* Terminal Header */}
-        <section className="pt-32 md:pt-48 pb-16 md:pb-32 border-b border-border">
-        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-          <div className="flex flex-col items-start leading-[0.85]">
-            <FadeIn>
-              <span className="font-script text-3xl md:text-4xl text-muted-foreground/40 lowercase mb-6 md:mb-8 block">the</span>
-              <h1 className="text-fluid-hero font-black uppercase tracking-tighter-editorial text-foreground">
-                Inquiry <br /> <span className="text-foreground/10">Terminal</span>
-              </h1>
-              <p className="text-xl text-muted-foreground/60 lowercase mt-12 max-w-xl leading-relaxed">
-                open a direct channel with the YP Gurukul mission. we prioritize precision in institutional communication.
-              </p>
-            </FadeIn>
+      {/* ── Page header ────────────────────────────────────────── */}
+      <section className="border-b border-border bg-secondary py-14 md:py-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            Get in Touch
+          </p>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-foreground leading-tight max-w-2xl mb-4">
+            We'd Love to Hear From You
+          </h1>
+          <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
+            Whether you have a question about our courses, want to book a free counselling
+            session, or need help choosing the right program — our team is here to help.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Contact info cards ──────────────────────────────────── */}
+      <section className="border-b border-border py-12 md:py-14">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            {contactInfo.map((c, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-3 p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-sm transition-all duration-300"
+              >
+                <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center text-primary shrink-0">
+                  {c.icon}
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    {c.label}
+                  </span>
+                  {c.href ? (
+                    <a
+                      href={c.href}
+                      target={c.href.startsWith('http') ? '_blank' : undefined}
+                      rel="noreferrer"
+                      className="text-sm font-bold text-foreground hover:text-primary transition-colors"
+                    >
+                      {c.value}
+                    </a>
+                  ) : (
+                    <span className="text-sm font-bold text-foreground">{c.value}</span>
+                  )}
+                  <span className="text-xs text-muted-foreground">{c.sub}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16 md:py-32">
-        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-          <div className="grid lg:grid-cols-12 gap-16 md:gap-24">
-            
-            {/* The Terminal Form */}
-            <div className="lg:col-span-8">
-              <FadeIn>
-                <div className="bg-secondary/20 backdrop-blur-3xl border border-border rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative group/form">
-                  {/* Subtle Glow Accent */}
-                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[100px] rounded-full pointer-events-none group-hover/form:bg-primary/10 transition-colors duration-1000" />
-                  
-                  <div className="mb-12 md:mb-24 relative z-10">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-8 block">Transmission Form</span>
-                    {successMsg && (
-                      <div className="p-8 border border-border bg-background text-[10px] font-black uppercase tracking-[0.5em] text-foreground animate-pulse mb-8 rounded-xl backdrop-blur-sm shadow-xl">
-                        [ success ] {successMsg}
-                      </div>
-                    )}
-                    {errorMsg && (
-                      <div className="p-8 border border-border bg-background text-[10px] font-black uppercase tracking-[0.5em] text-foreground mb-8 rounded-xl backdrop-blur-sm shadow-xl">
-                        [ failure ] {errorMsg}
-                      </div>
-                    )}
-                  </div>
-  
-                  <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16 relative z-10">
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-                        <div className="flex flex-col group">
-                           <label className="text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 group-focus-within:text-foreground transition-colors mb-4 italic">01. Identity_Name</label>
-                           <input 
-                             name="name"
-                             value={formData.name}
-                             onChange={handleChange}
-                             required
-                             className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl placeholder:text-muted-foreground/20"
-                             placeholder="..."
-                           />
-                        </div>
-                        <div className="flex flex-col group">
-                           <label className="text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 group-focus-within:text-foreground transition-colors mb-4 italic">02. Electronic_Channel</label>
-                           <input 
-                             type="email"
-                             name="email"
-                             value={formData.email}
-                             onChange={handleChange}
-                             required
-                             className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl placeholder:text-muted-foreground/20"
-                             placeholder="COMM@MAIL.TER"
-                           />
-                        </div>
-                     </div>
-  
-                     <div className="flex flex-col group">
-                        <label className="text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 group-focus-within:text-foreground transition-colors mb-4 italic">03. Neural_Mobile</label>
-                        <input 
-                          type="tel"
-                          name="mobile"
-                          value={formData.mobile}
-                          onChange={handleChange}
-                          className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl placeholder:text-muted-foreground/20"
-                          placeholder="+00 (0) 000 000"
-                        />
-                     </div>
-  
-                     <div className="flex flex-col group">
-                        <label className="text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 group-focus-within:text-foreground transition-colors mb-4 italic">04. Inquiry_Payload</label>
-                        <textarea 
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="bg-transparent border-b border-border py-4 text-foreground font-black uppercase tracking-tighter focus:outline-none focus:border-foreground transition-all text-2xl resize-none placeholder:text-muted-foreground/20"
-                          placeholder="DESCRIBE_REQUISITION..."
-                        />
-                     </div>
-  
-                      <div className="pt-8 text-center md:text-left">
-                         <button 
-                           type="submit"
-                           disabled={submitting}
-                           className="w-full md:w-auto px-24 py-8 bg-primary text-primary-foreground font-black uppercase tracking-[0.8em] text-[10px] hover:scale-105 active:scale-95 rounded-full shadow-2xl transition-all"
-                         >
-                           {submitting ? 'TRANSMITTING...' : 'LOG INQUIRY'}
-                         </button>
-                      </div>
-                   </form>
+      {/* ── Form + Locations ───────────────────────────────────── */}
+      <section className="py-12 md:py-16 border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
+
+            {/* ── Contact form (3 cols) ── */}
+            <div className="lg:col-span-3">
+              <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground mb-6">
+                Send Us a Message
+              </h2>
+
+              {success ? (
+                <div className="rounded-2xl border border-primary/20 bg-accent/30 p-8 flex flex-col items-center gap-4 text-center">
+                  <FaCheckCircle size={36} className="text-primary" />
+                  <h3 className="text-lg font-bold text-foreground">Message Sent!</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+                    Thank you for reaching out. Our team will get back to you within
+                    24 hours. You can also call us directly on{' '}
+                    <a href="tel:+911234567890" className="text-primary font-semibold">
+                      +91 123 456 7890
+                    </a>
+                    .
+                  </p>
+                  <button
+                    onClick={() => setSuccess(false)}
+                    className="mt-2 text-sm font-semibold text-primary hover:underline"
+                  >
+                    Send Another Message
+                  </button>
                 </div>
-              </FadeIn>
-            </div>
-  
-            {/* Sidebar Locations */}
-            <div className="lg:col-span-4 lg:pl-12 mt-16 lg:mt-0">
-               <div className="sticky top-48 space-y-16 md:space-y-24">
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-12 block">Physical Hubs</span>
-                    <StaggerContainer className="space-y-8">
-                      {locations.map((loc) => (
-                        <StaggerItem key={loc.id}>
-                          <div className="p-8 border border-border bg-secondary/10 backdrop-blur-3xl group hover:bg-secondary/20 transition-all duration-700 rounded-2xl">
-                             <div className="flex justify-between items-start mb-6">
-                                <span className="text-[9px] font-black text-muted-foreground/20 uppercase tracking-[0.3em] italic">{loc.id}</span>
-                                <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">{loc.type}</span>
-                             </div>
-                             <h3 className="text-xl font-black text-foreground uppercase tracking-tighter mb-4">{loc.name}</h3>
-                             <p className="text-xs font-bold text-muted-foreground lowercase leading-relaxed tracking-wide group-hover:text-foreground/60 transition-colors">
-                               {loc.address}
-                             </p>
-                             <div className="h-px w-0 bg-primary group-hover:w-full transition-all duration-700 ease-in-out mt-8" />
-                          </div>
-                        </StaggerItem>
-                      ))}
-                    </StaggerContainer>
+              ) : (
+                <form
+                  onSubmit={handleSubmit}
+                  className="rounded-2xl border border-border bg-card p-6 md:p-8 flex flex-col gap-5"
+                >
+                  {/* Name + Email */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      { name: 'name',  label: 'Full Name',     type: 'text',  placeholder: 'Rahul Sharma' },
+                      { name: 'email', label: 'Email Address', type: 'email', placeholder: 'rahul@example.com' },
+                    ].map((f) => (
+                      <div key={f.name} className="flex flex-col gap-1.5">
+                        <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          {f.label}
+                        </label>
+                        <input
+                          required
+                          type={f.type}
+                          name={f.name}
+                          value={form[f.name as keyof typeof form]}
+                          onChange={handleChange}
+                          placeholder={f.placeholder}
+                          className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                        />
+                      </div>
+                    ))}
                   </div>
-  
-                  <div className="pt-12 border-t border-border">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-8 block">Rapid Channels</span>
-                    <div className="space-y-4">
-                       <a href="mailto:contact@ypgurukul.com" className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors">
-                         [ contact@ypgurukul.com ]
-                       </a>
-                       <a href="tel:+911234567890" className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors">
-                         [ +91 123 456 7890 ]
-                       </a>
+
+                  {/* Phone */}
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="mobile"
+                      value={form.mobile}
+                      onChange={handleChange}
+                      placeholder="+91 98765 43210"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    />
+                  </div>
+
+                  {/* Course Interest */}
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      I'm Interested In
+                    </label>
+                    <select
+                      name="course"
+                      value={form.course}
+                      onChange={handleChange}
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    >
+                      <option value="">Select a program…</option>
+                      {courses.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Message */}
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Your Message
+                    </label>
+                    <textarea
+                      required
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      rows={4}
+                      placeholder="Tell us about your goals, which exam you're preparing for, or any questions you have…"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
+                    />
+                  </div>
+
+                  {errorMsg && (
+                    <p className="text-sm text-destructive font-medium">{errorMsg}</p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 disabled:opacity-50 transition-opacity"
+                  >
+                    {submitting ? 'Sending…' : 'Send Message'}
+                  </button>
+
+                  <p className="text-xs text-center text-muted-foreground">
+                    We typically respond within 24 hours. For urgent queries, please call us directly.
+                  </p>
+                </form>
+              )}
+            </div>
+
+            {/* ── Locations sidebar (2 cols) ── */}
+            <div className="lg:col-span-2 lg:sticky lg:top-24 flex flex-col gap-5">
+              <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground">
+                Our Locations
+              </h2>
+              {locations.map((loc, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-border bg-card p-5 flex flex-col gap-3"
+                >
+                  <div className="flex items-start gap-2 justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                        {loc.type}
+                      </span>
+                      <h3 className="text-base font-bold text-foreground mt-0.5">{loc.name}</h3>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-primary shrink-0">
+                      <FaMapMarkerAlt size={13} />
                     </div>
                   </div>
-               </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{loc.address}</p>
+                  {loc.mapSrc && (
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(loc.address)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-semibold text-primary hover:underline"
+                    >
+                      Open in Google Maps →
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
-  
+
           </div>
         </div>
       </section>
 
-      {/* Map Embed Section */}
-      <section className="py-12 md:py-24 border-t border-border">
-         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-            <FadeIn>
-               <div className="aspect-video md:aspect-[21/9] w-full bg-secondary/20 border border-border grayscale opacity-50 hover:opacity-100 transition-all duration-1000 overflow-hidden">
-                  <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.8329615599024!2d72.88094977457787!3d19.07062228148902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c897f223fbad%3A0xe5db976d8dfced9d!2sBandra%20Kurla%20Complex!5e0!3m2!1sen!2sin!4v1709405400000!5m2!1sen!2sin" 
-                    width="100%" 
-                    height="100%" 
-                    style={{ border: 0 }} 
-                    allowFullScreen 
-                    loading="lazy" 
-                  ></iframe>
-               </div>
-               <p className="text-[8px] font-black text-muted-foreground/20 uppercase tracking-[0.5em] text-center mt-8">
-                 geospatial_node: 19.0706N, 72.8809E
-               </p>
-            </FadeIn>
-         </div>
+      {/* ── Map embed ──────────────────────────────────────────── */}
+      <section className="border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-10 md:py-12">
+          <h2 className="text-base font-bold text-foreground mb-4">Find Us on the Map</h2>
+          <div className="w-full h-72 md:h-96 rounded-2xl overflow-hidden border border-border">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.8329615599024!2d72.88094977457787!3d19.07062228148902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c897f223fbad%3A0xe5db976d8dfced9d!2sBandra%20Kurla%20Complex!5e0!3m2!1sen!2sin!4v1709405400000!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              title="YP Gurukul Location Map"
+            />
+          </div>
+        </div>
       </section>
 
-      </div>
+      {/* ── Bottom reassurance ─────────────────────────────────── */}
+      <section className="py-12 md:py-16 bg-accent/30">
+        <div className="max-w-2xl mx-auto px-6 text-center flex flex-col items-center gap-4">
+          <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground">
+            Prefer to Speak to Someone?
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Our counsellors are available Monday to Saturday, 9 AM – 7 PM.
+            Call or WhatsApp us and we'll help you find the right program in minutes.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a
+              href="tel:+911234567890"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity"
+            >
+              <FaPhoneAlt size={13} /> Call Now
+            </a>
+            <a
+              href="https://wa.me/911234567890"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-border text-sm font-semibold text-foreground hover:bg-secondary transition-colors"
+            >
+              <FaWhatsapp size={14} /> Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

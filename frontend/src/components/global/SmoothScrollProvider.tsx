@@ -4,7 +4,9 @@ import React from "react";
 import { ReactLenis, useLenis } from "@studio-freight/react-lenis";
 import { useEffect } from "react";
 import gsap from "gsap";
+import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -32,6 +34,15 @@ function LenisGsapSync() {
 }
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  
+  // Disable root smooth scroll on internal dashboards to prevent conflicts with local layouts
+  const isDashboard = pathname?.startsWith("/admin") || pathname?.startsWith("/portal");
+
+  if (isDashboard) {
+    return <>{children}</>;
+  }
+
   return (
     <ReactLenis
       root

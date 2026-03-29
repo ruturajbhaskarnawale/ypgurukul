@@ -1,41 +1,78 @@
 import React from 'react';
-import { FadeIn, StaggerContainer, StaggerItem } from '../animations/MotionUtils';
-import { Card, CardContent } from '../global/Card';
+import { FaQuoteLeft, FaStar } from 'react-icons/fa';
+
+const testimonials = [
+  {
+    quote: "YP Gurukul transformed my average scores into top percentiles. The teachers are incredibly supportive and available for doubts anytime.",
+    name: 'Rajat K.',
+    batch: 'NEET 2024',
+    rating: 5,
+  },
+  {
+    quote: "The study material is perfectly aligned with the latest exam pattern. I didn't need any extra reference books outside of the modules.",
+    name: 'Priya S.',
+    batch: 'JEE 2023',
+    rating: 5,
+  },
+  {
+    quote: "Weekly mock tests and the detailed analytics helped me clearly identify my weak areas and improve systematically. Highly recommended!",
+    name: 'Anil D.',
+    batch: 'Board Exams 2024',
+    rating: 5,
+  },
+];
 
 export const Testimonials = () => {
-  const testimonials = [
-    { quote: "YP Gurukul transformed my average scores into top percentiles. The teachers are incredibly supportive and available 24/7 for doubts.", name: "Rajat K.", detail: "Batch 2024" },
-    { quote: "The study material is perfectly aligned with the latest exam pattern. I didn't need any extra reference books outside of the modules.", name: "Priya S.", detail: "Batch 2023" },
-    { quote: "Weekly mock tests and the detailed analytics provided on the student portal helped me identify my weak areas clearly. Highly recommended!", name: "Anil D.", detail: "Batch 2024" },
-  ];
-
   return (
-    <section className="py-32 bg-background border-b border-border overflow-hidden">
-      <div className="max-w-[1800px] mx-auto px-12">
-        
-        <div className="flex flex-col items-center mb-32">
-          <span className="font-script text-4xl text-muted-foreground lowercase mb-6">the</span>
-          <h2 className="text-7xl md:text-[8rem] font-black uppercase tracking-tighter-editorial text-center leading-[0.85]">
-            Unfiltered <br /> <span className="text-foreground/30">Voices</span>
+    <section className="py-20 md:py-32 bg-background border-b border-border">
+      <div className="max-w-6xl mx-auto px-6 md:px-12">
+
+        {/* Heading */}
+        <div className="text-center mb-12 md:mb-16">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            Student Reviews
+          </p>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground">
+            What Our Students Say
           </h2>
         </div>
 
-        <StaggerContainer className="grid md:grid-cols-3 gap-12 md:gap-24">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {testimonials.map((t, i) => (
-            <StaggerItem key={i}>
-              <div className="flex flex-col h-full items-start group relative">
-                <span className="text-8xl font-black text-foreground/5 absolute -top-16 -left-8 pointer-events-none group-hover:text-foreground/10 transition-colors">"</span>
-                <p className="text-2xl font-bold text-foreground mb-12 leading-relaxed lowercase tracking-tight italic relative z-10">
-                  {t.quote}
-                </p>
-                <div className="flex flex-col gap-2 mt-auto border-l-2 border-border pl-6 group-hover:border-primary transition-colors duration-500">
-                  <h4 className="font-black text-foreground text-xl uppercase tracking-tighter">{t.name}</h4>
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">{t.detail}</p>
+            <div
+              key={i}
+              className="flex flex-col p-6 md:p-8 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300"
+            >
+              {/* Stars */}
+              <div className="flex gap-1 mb-4">
+                {Array.from({ length: t.rating }).map((_, s) => (
+                  <FaStar key={s} size={13} className="text-yellow-400" />
+                ))}
+              </div>
+
+              {/* Quote icon */}
+              <FaQuoteLeft size={20} className="text-primary/30 mb-4" />
+
+              {/* Quote text */}
+              <p className="text-sm md:text-base text-foreground leading-relaxed flex-1 mb-6">
+                {t.quote}
+              </p>
+
+              {/* Attribution */}
+              <div className="border-t border-border pt-4 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-primary font-bold text-sm">
+                  {t.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.batch}</p>
                 </div>
               </div>
-            </StaggerItem>
+            </div>
           ))}
-        </StaggerContainer>
+        </div>
+
       </div>
     </section>
   );

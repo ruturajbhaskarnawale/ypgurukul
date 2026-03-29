@@ -55,8 +55,8 @@ export const SceneContainer: React.FC<SceneContainerProps> = ({ children }) => {
             }
         });
 
-        // Progressive ready state: only runs once after 1 second
-        const timer = setTimeout(() => setReady(true), 1000);
+        // Progressive ready state: only runs once after a delay to allow layout to settle
+        const timer = setTimeout(() => setReady(true), 1200);
 
         return () => {
             st.kill();
@@ -108,7 +108,7 @@ export const Scene: React.FC<SceneProps> = ({ children, id, sticky = false }) =>
         <section 
             id={id} 
             ref={sceneRef} 
-            className={`relative w-full ${sticky ? 'sticky top-0 h-screen overflow-hidden' : 'min-h-screen'}`}
+            className={`relative w-full ${sticky ? 'sticky top-0 h-screen h-[100svh] overflow-hidden' : 'min-h-screen min-h-[100svh]'}`}
             style={{ contain: 'layout paint' }} // Performance Optimization
         >
             {children}

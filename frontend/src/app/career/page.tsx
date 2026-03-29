@@ -1,380 +1,425 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { FadeIn, StaggerContainer, StaggerItem, SlideUp } from '@/components/animations/MotionUtils';
+import React, { useState } from 'react';
 import { apiClient } from '@/lib/apiClient';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { SectionBackground } from '@/components/home/SectionBackground';
-import Link from 'next/link';
+import {
+  FaArrowRight, FaCheckCircle, FaMapMarkerAlt, FaClock,
+  FaTimes, FaBriefcase, FaUsers, FaLightbulb, FaHeart,
+} from 'react-icons/fa';
 
-export default function CareerPage() {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
-  const isLight = mounted && resolvedTheme === 'light';
+const openings = [
+  {
+    id: '01',
+    title: 'Senior Physics Faculty',
+    type: 'Full-time',
+    location: 'Main Campus',
+    tags: ['Teaching', 'JEE', 'Mentorship'],
+    description:
+      'We are looking for an experienced Physics teacher with a strong track record of helping students secure top ranks in JEE Advanced. The ideal candidate brings deep subject knowledge, excellent communication skills, and genuine care for student success.',
+    requirements: [
+      'M.Sc./B.Tech in Physics or related field',
+      '3+ years of coaching experience for JEE/NEET',
+      'Proven results with top 500 AIR achievers',
+      'Ability to design DPPs and mock test papers',
+    ],
+  },
+  {
+    id: '02',
+    title: 'Academic Counsellor',
+    type: 'Full-time',
+    location: 'Knowledge City Campus',
+    tags: ['Counselling', 'Student Support', 'Parents'],
+    description:
+      'Join our student support team to guide students and parents through program selection, exam strategy, and academic planning. You\'ll be the first point of contact for families and a trusted mentor throughout their journey.',
+    requirements: [
+      'Background in education, psychology, or counselling',
+      'Excellent interpersonal and communication skills',
+      'Empathy and patience in student-facing interactions',
+      'Experience with CRM tools is a plus',
+    ],
+  },
+  {
+    id: '03',
+    title: 'Digital Marketing Lead',
+    type: 'Hybrid',
+    location: 'Remote / Hybrid',
+    tags: ['Marketing', 'Social Media', 'Growth'],
+    description:
+      'Drive the digital presence of YP Gurukul across platforms. This role requires expertise in performance marketing, content strategy, and education-sector storytelling to reach students and parents effectively.',
+    requirements: [
+      '3+ years in digital marketing or growth roles',
+      'Hands-on experience with Meta Ads, Google Ads, SEO',
+      'Strong copywriting and content creation skills',
+      'Education or coaching sector experience is preferred',
+    ],
+  },
+];
 
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    mobile: '',
-    position: '',
-  });
+const perks = [
+  { icon: <FaBriefcase size={16} />, title: 'Curriculum Freedom',    desc: 'Design your own teaching approach with full autonomy over how you deliver content.' },
+  { icon: <FaUsers size={16} />,     title: 'Collaborative Culture',  desc: 'Work alongside passionate educators, counsellors, and content creators every day.' },
+  { icon: <FaLightbulb size={16} />, title: 'Growth Opportunities',   desc: 'Regular training, conferences, and pathways to senior and leadership roles.' },
+  { icon: <FaHeart size={16} />,     title: 'Wellness & Benefits',    desc: 'Competitive salary, health coverage, flexible hours, and a supportive work environment.' },
+];
+
+const faq = [
+  {
+    q: 'How does the hiring process work?',
+    a: 'We review every application, followed by a phone screening, a subject/skill assessment, and a final interview with the team lead. The process typically takes 2–3 weeks.',
+  },
+  {
+    q: 'Is relocation support available?',
+    a: 'Yes. For residential roles at our Knowledge City campus we provide relocation assistance including temporary accommodation and moving support.',
+  },
+  {
+    q: 'Can I apply for more than one role?',
+    a: "Absolutely. Apply for each role separately with a note explaining your interest in both so the hiring team can consider you appropriately.",
+  },
+  {
+    q: "What if I don't see a matching role?",
+    a: 'Send us a general application below — we keep strong profiles on file and reach out when a new need arises that fits your background.',
+  },
+];
+
+// ─── Apply Modal ──────────────────────────────────────────────────────────────
+
+function ApplyModal({ position, onClose }: { position: string; onClose: () => void }) {
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', mobile: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
-  const [showApplyModal, setShowApplyModal] = useState(false);
-  const [activeJob, setActiveJob] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState('');
 
-  const openings = [
-    { 
-      id: "01",
-      title: "Senior Physics Faculty", 
-      type: "FULL-TIME", 
-      location: "MAIN CAMPUS",
-      description: "we require a subject matter expert with a proven track record of securing top 100 ranks in jee advanced. focus on conceptual depth and student mentorship."
-    },
-    { 
-      id: "02",
-      title: "Academic Counselor", 
-      type: "FULL-TIME", 
-      location: "YP GURUKUL KNOWLEDGE CITY",
-      description: "seeking individuals with professional empathy and deep understanding of student psychology to guide candidates through their academic journey."
-    },
-    { 
-      id: "03",
-      title: "Digital Strategy Lead", 
-      type: "HYBRID", 
-      location: "REMOTE/HYBRID",
-      description: "driving the digital narrative of YP Gurukul. expertise in high-intent performance marketing and educational storytelling required."
-    },
-  ];
-
-  const values = [
-    { id: "01", title: "Precision", desc: "Absolute clarity in conceptual dissemination and institutional architecture." },
-    { id: "02", title: "Mentorship", desc: "Beyond teaching—shaping the neural maps of future excellence." },
-    { id: "03", title: "Innovation", desc: "Synthesizing traditional Gurukul values with bleeding-edge educational tech." }
-  ];
-
-  const perks = [
-    { title: "Academic Autonomy", desc: "Freedom to design curriculum flows that prioritize depth over speed." },
-    { title: "Research Grants", desc: "Funding for pedagogical research and scientific travel." },
-    { title: "Wellness Integration", desc: "Focus on mental and physical homeostasis for all educators." },
-    { title: "Global Network", desc: "Collaborate with high-impact minds in the international education sector." }
-  ];
-
-  const faq = [
-    { q: "What is the selection philosophy?", a: "We seek architects of character, not just deliverers of content. Our process multi-stage, involving conceptual deep dives and cultural alignment." },
-    { q: "Is relocation support available?", a: "Yes, for our residential roles at YP Gurukul Knowledge City, we provide comprehensive logistical transitions." },
-    { q: "Can I apply for multiple roles?", a: "We recommend focusing on the requisition that matches your primary neural core (expertise)." }
-  ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const openApply = (position: string) => {
-    setFormData(prev => ({ ...prev, position }));
-    setShowApplyModal(true);
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    setMessage('');
-
+    setErrMsg('');
     try {
       await apiClient.post('/career/apply', {
-        name: `${formData.firstName} ${formData.lastName}`.trim(),
-        email: formData.email,
-        mobile: formData.mobile,
-        position: formData.position,
-        resumeUrl: 'archival_submission'
+        name: `${form.firstName} ${form.lastName}`.trim(),
+        email: form.email,
+        mobile: form.mobile,
+        position,
       });
       setStatus('success');
-      setMessage('submission logged. our archives will review your profile.');
-      setTimeout(() => setShowApplyModal(false), 2000);
-    } catch (err) {
-      console.error('Submission failed', err);
+    } catch {
       setStatus('error');
-      setMessage('submission failure. try again.');
+      setErrMsg('Submission failed. Please try again or email us directly.');
     }
   };
 
   return (
-    <div className="min-h-screen pb-32 transition-colors duration-700 relative overflow-hidden bg-background text-foreground">
-      
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        {isLight ? (
-          <SectionBackground src="/images/backgrounds/light_cinematic_ambient_bg.png" alt="Light Backdrop" className="opacity-40 mix-blend-multiply" />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex items-start justify-center p-4 overflow-y-auto"
+    >
+      <div className="max-w-xl w-full my-8 md:my-16">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4 mb-8">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">Applying for</p>
+            <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground">{position}</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shrink-0 mt-1"
+            aria-label="Close"
+          >
+            <FaTimes size={14} />
+          </button>
+        </div>
+
+        {status === 'success' ? (
+          <div className="rounded-2xl border border-primary/20 bg-accent/30 p-10 text-center flex flex-col items-center gap-4">
+            <FaCheckCircle size={36} className="text-primary" />
+            <h3 className="text-lg font-bold text-foreground">Application Submitted!</h3>
+            <p className="text-sm text-muted-foreground">
+              Thank you for applying. We'll review your profile and get back to you within 5–7 working days.
+            </p>
+            <button
+              onClick={onClose}
+              className="mt-2 text-sm font-semibold text-primary hover:underline"
+            >
+              Close
+            </button>
+          </div>
         ) : (
-          <SectionBackground src="/images/backgrounds/BG-3.png" alt="Dark Backdrop" className="opacity-20" />
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-2xl border border-border bg-card p-6 md:p-8 flex flex-col gap-5"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { name: 'firstName', label: 'First Name', placeholder: 'Rahul' },
+                { name: 'lastName',  label: 'Last Name',  placeholder: 'Sharma' },
+              ].map((f) => (
+                <div key={f.name} className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    {f.label}
+                  </label>
+                  <input
+                    required
+                    name={f.name}
+                    value={form[f.name as keyof typeof form]}
+                    onChange={handleChange}
+                    placeholder={f.placeholder}
+                    className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email Address</label>
+              <input
+                required
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="rahul@example.com"
+                className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone Number</label>
+              <input
+                required
+                type="tel"
+                name="mobile"
+                value={form.mobile}
+                onChange={handleChange}
+                placeholder="+91 98765 43210"
+                className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition"
+              />
+            </div>
+
+            {errMsg && <p className="text-sm text-destructive font-medium">{errMsg}</p>}
+
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="w-full py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 disabled:opacity-50 transition-opacity"
+            >
+              {status === 'loading' ? 'Submitting…' : 'Submit Application'}
+            </button>
+
+            <p className="text-xs text-center text-muted-foreground">
+              We respect your privacy. Your details are only used for this application.
+            </p>
+          </form>
         )}
       </div>
+    </motion.div>
+  );
+}
 
-      <div className="relative z-10">
-        {/* Archival Header */}
-        <section className="pt-32 md:pt-48 pb-16 md:pb-32 border-b border-border transition-colors">
-          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-            <div className="flex flex-col items-start leading-[0.85]">
-              <FadeIn>
-                <span className="font-script text-3xl md:text-4xl lowercase mb-6 md:mb-8 block text-muted-foreground/60">the_career</span>
-                <h1 className="text-fluid-hero font-black uppercase tracking-tighter-editorial text-foreground">
-                  Opportunities <br /> <span className="text-foreground/10">Archive</span>
-                </h1>
-                <p className="text-lg md:text-xl lowercase mt-8 md:mt-12 max-w-xl leading-relaxed text-muted-foreground">
-                  a curated index of open roles within the YP Gurukul ecosystem. we are constantly seeking architects of excellence to shape the next era of academic engineering.
-                </p>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
-        {/* Culture & Values — Values Orbit */}
-        <section className="py-20 md:py-40 border-b border-border">
-           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">The Archival Standard</span>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                 {values.map((v) => (
-                   <FadeIn key={v.id}>
-                     <div className="p-12 border border-border backdrop-blur-3xl rounded-[3rem] group transition-all duration-700 h-full bg-secondary/20 hover:bg-background">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8 block text-muted-foreground/30">Standard_0{v.id}</span>
-                        <h3 className="text-4xl font-black uppercase tracking-tighter mb-6 transition-transform duration-500 group-hover:translate-x-2 text-foreground">{v.title}</h3>
-                        <p className="text-sm lowercase tracking-widest leading-relaxed text-muted-foreground">{v.desc}</p>
-                     </div>
-                   </FadeIn>
-                 ))}
-              </div>
-           </div>
-        </section>
+export default function CareerPage() {
+  const [expandedJob, setExpandedJob] = useState<string | null>(null);
+  const [applyPosition, setApplyPosition] = useState<string | null>(null);
 
-        {/* Perks & Benefits Grid */}
-        <section className="py-20 md:py-40 border-b border-border">
-           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-              <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 gap-8">
-                 <div className="flex-1">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4 block text-muted-foreground/40">Professional Sovereignty</span>
-                    <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-foreground">Recruitment <br /> Sovereignty</h2>
-                 </div>
-                 <p className="text-sm lowercase max-w-sm mb-4 italic font-medium lg:text-right text-muted-foreground/60">
-                   we provide the environment. you provide the vision. together we curate the future.
-                 </p>
-              </div>
- 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-                 {perks.map((p, i) => (
-                   <SlideUp key={i}>
-                      <div className="p-10 border border-border rounded-[2rem] h-full flex flex-col justify-between transition-colors bg-secondary/10 hover:bg-secondary/30">
-                         <h4 className="font-black uppercase tracking-tight mb-4 text-foreground">{p.title}</h4>
-                         <p className="text-[10px] lowercase tracking-[0.2em] leading-relaxed text-muted-foreground/60">{p.desc}</p>
-                      </div>
-                   </SlideUp>
-                 ))}
-              </div>
-           </div>
-        </section>
+  const openApply = (position: string) => setApplyPosition(position);
 
-        {/* The Job Index */}
-        <section className="py-20 md:py-40">
-          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-            <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-10 md:mb-12 block text-muted-foreground/40">Active_Requisitions</span>
-            <StaggerContainer className="flex flex-col">
-              {openings.map((job) => (
-                <StaggerItem key={job.id}>
-                  <div 
-                    className={`
-                      group border-b py-16 cursor-pointer transition-all duration-700 border-border
-                      ${activeJob === job.id ? 'bg-secondary/50' : 'hover:bg-secondary/20'}
-                    `}
-                    onClick={() => setActiveJob(activeJob === job.id ? null : job.id)}
-                  >
-                     <div className="flex justify-between items-center px-2 md:px-4">
-                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-12">
-                           <span className="text-[10px] font-bold font-black uppercase text-foreground/10">{job.id}</span>
-                           <h2 className="text-2xl md:text-6xl font-black uppercase tracking-tighter group-hover:pl-4 md:group-hover:pl-6 transition-all duration-700 text-foreground">
-                             {job.title}
-                           </h2>
-                        </div>
-                        <div className="hidden md:flex gap-12 items-center text-[10px] font-bold uppercase tracking-[0.3em] transition-colors text-muted-foreground/60 group-hover:text-foreground">
-                           <span>{job.type}</span>
-                           <span className="text-foreground/10">|</span>
-                           <span>{job.location}</span>
-                           <div className="w-12 h-px transition-all duration-700 group-hover:w-24 bg-border group-hover:bg-foreground" />
-                        </div>
-                     </div>
+  return (
+    <div className="min-h-screen bg-background text-foreground">
 
-                     <AnimatePresence>
-                       {activeJob === job.id && (
-                         <motion.div 
-                           initial={{ height: 0, opacity: 0 }}
-                           animate={{ height: 'auto', opacity: 1 }}
-                           exit={{ height: 0, opacity: 0 }}
-                           transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-                           className="overflow-hidden"
-                         >
-                           <div className="px-6 md:px-24 py-12 md:py-16 max-w-[900px]">
-                              <p className={`text-lg md:text-2xl lowercase leading-relaxed mb-12 md:mb-16 font-light ${isLight ? 'text-slate-600' : 'text-white/60'}`}>
-                                {job.description}
-                              </p>
-                              <div className="flex flex-col sm:flex-row gap-6 md:gap-8">
-                                <button 
-                                  onClick={(e) => { e.stopPropagation(); openApply(job.title); }}
-                                  className="w-full sm:w-auto px-10 md:px-16 py-6 md:py-8 border text-[10px] font-black uppercase tracking-[0.5em] transition-all duration-700 shadow-xl bg-foreground text-background border-foreground hover:bg-foreground/80"
-                                >
-                                  Begin Application
-                                </button>
-                                <button className="w-full sm:w-auto px-8 md:px-12 py-6 md:py-8 border text-[10px] font-bold uppercase tracking-[0.5em] transition-all duration-700 border-border text-muted-foreground/60 hover:text-foreground hover:bg-secondary/20">
-                                   Full Role Specs
-                                </button>
-                              </div>
-                           </div>
-                         </motion.div>
-                       )}
-                     </AnimatePresence>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="border-b border-border bg-secondary py-14 md:py-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            Careers at YP Gurukul
+          </p>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-foreground leading-tight max-w-2xl mb-5">
+            Teach, Guide &amp; Grow with Us
+          </h1>
+          <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
+            Join a team of passionate educators, counsellors, and professionals dedicated to
+            transforming students' lives. We're always looking for people who share our
+            commitment to academic excellence and student success.
+          </p>
+        </div>
+      </section>
 
-            <div className="mt-20 md:mt-32 p-10 md:p-20 text-center border rounded-[2rem] md:rounded-[4rem] transition-colors border-border bg-secondary/10">
-               <FadeIn>
-                 <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-6 block text-foreground/10">General Submission</span>
-                 <p className="text-2xl lowercase max-w-xl mx-auto mb-12 font-light text-muted-foreground/60">
-                   don't see a fitting requisition? we welcome unsolicited archival submissions from visionary minds who demand impact.
-                 </p>
-                 <button 
-                   onClick={() => openApply('General Submission')}
-                   className="text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:underline underline-offset-8 text-foreground"
-                 >
-                   [ enter the general archive ]
-                 </button>
-               </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* Archival FAQ */}
-        <section className="py-20 md:py-40 bg-transparent">
-           <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-              <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-12 md:mb-24 block text-muted-foreground/40">Clarification_Engine (FAQ)</span>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-                 {faq.map((item, i) => (
-                   <FadeIn key={i}>
-                      <div className="space-y-6 pb-12 border-b border-border">
-                         <h4 className="text-lg font-black uppercase tracking-tight text-foreground">{item.q}</h4>
-                         <p className="text-sm lowercase tracking-widest leading-relaxed text-muted-foreground">{item.a}</p>
-                      </div>
-                   </FadeIn>
-                 ))}
-              </div>
-           </div>
-        </section>
-      </div>
-
-      {/* Focus Mode Application UI — Theme Adapted */}
-      <AnimatePresence>
-        {showApplyModal && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] backdrop-blur-xl flex items-center justify-center p-4 md:p-12 overflow-y-auto bg-background/95"
-          >
-            <div className="max-w-2xl w-full py-12 my-auto">
-              <FadeIn>
-                <div className="flex flex-col md:flex-row justify-between items-start mb-12 md:mb-24 gap-8">
-                   <div className="flex flex-col">
-                      <span className="font-script text-3xl md:text-4xl lowercase mb-4 text-muted-foreground/40">applying for</span>
-                      <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-foreground leading-none">{formData.position}</h2>
-                   </div>
-                   <button 
-                     onClick={() => setShowApplyModal(false)}
-                     className="text-[10px] font-bold uppercase tracking-[0.4em] p-2 md:p-4 transition-colors text-muted-foreground/40 hover:text-foreground"
-                   >
-                     [ close ]
-                   </button>
+      {/* ── Perks ────────────────────────────────────────────── */}
+      <section className="border-b border-border py-14 md:py-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            Why Join Us
+          </p>
+          <h2 className="text-2xl md:text-4xl font-black tracking-tight text-foreground mb-10">
+            What We Offer
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+            {perks.map((p, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-4 p-5 md:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-sm transition-all duration-300"
+              >
+                <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center text-primary">
+                  {p.icon}
                 </div>
+                <h3 className="text-sm font-bold text-foreground">{p.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                {status === 'success' ? (
-                  <div className="text-center py-24">
-                    <span className={`font-script text-6xl block mb-8 animate-pulse ${isLight ? 'text-slate-900' : 'text-white'}`}>accepted</span>
-                    <p className={`text-xs font-bold uppercase tracking-[0.5em] ${isLight ? 'text-slate-400' : 'text-white/40'}`}>{message}</p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-10 md:space-y-12">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-                       <div className="flex flex-col group">
-                          <label className="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors mb-4 italic text-muted-foreground/30 group-focus-within:text-foreground">01. First_Name</label>
-                          <input 
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            required
-                            className="bg-transparent border-b py-4 font-black uppercase tracking-tighter focus:outline-none transition-all text-xl border-border focus:border-foreground text-foreground"
-                            placeholder="..."
-                          />
-                       </div>
-                       <div className="flex flex-col group">
-                          <label className="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors mb-4 italic text-muted-foreground/30 group-focus-within:text-foreground">02. Last_Name</label>
-                          <input 
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            required
-                            className="bg-transparent border-b py-4 font-black uppercase tracking-tighter focus:outline-none transition-all text-xl border-border focus:border-foreground text-foreground"
-                            placeholder="..."
-                          />
-                       </div>
+      {/* ── Job listings ─────────────────────────────────────── */}
+      <section className="border-b border-border py-14 md:py-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            Open Positions
+          </p>
+          <h2 className="text-2xl md:text-4xl font-black tracking-tight text-foreground mb-10">
+            Current Openings
+          </h2>
+
+          <div className="flex flex-col gap-4">
+            {openings.map((job) => {
+              const isOpen = expandedJob === job.id;
+              return (
+                <div
+                  key={job.id}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen ? 'border-primary/40 shadow-md' : 'border-border hover:border-primary/20'
+                  } bg-card`}
+                >
+                  {/* Card header — always visible */}
+                  <button
+                    onClick={() => setExpandedJob(isOpen ? null : job.id)}
+                    className="w-full text-left p-5 md:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                  >
+                    <div className="flex flex-col gap-2">
+                      <h3 className="text-lg md:text-xl font-bold text-foreground leading-snug">
+                        {job.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1.5">
+                          <FaClock size={11} className="text-primary" /> {job.type}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <FaMapMarkerAlt size={11} className="text-primary" /> {job.location}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {job.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent text-primary"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
- 
-                    <div className="flex flex-col group">
-                       <label className="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors mb-4 italic text-muted-foreground/30 group-focus-within:text-foreground">03. Electronic_Mail</label>
-                       <input 
-                         type="email"
-                         name="email"
-                         value={formData.email}
-                         onChange={handleChange}
-                         required
-                         className="bg-transparent border-b py-4 font-black uppercase tracking-tighter focus:outline-none transition-all text-xl border-border focus:border-foreground text-foreground"
-                         placeholder="ARCHIVAL_ID@MAIL.COM"
-                       />
+                    <div className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                      isOpen ? 'rotate-45 bg-primary border-primary text-primary-foreground' : 'border-border text-muted-foreground'
+                    }`}>
+                      <FaArrowRight size={12} className={isOpen ? '-rotate-90' : ''} />
                     </div>
- 
-                    <div className="flex flex-col group">
-                       <label className="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors mb-4 italic text-muted-foreground/30 group-focus-within:text-foreground">04. Neural_Contact (Mobile)</label>
-                       <input 
-                         type="tel"
-                         name="mobile"
-                         value={formData.mobile}
-                         onChange={handleChange}
-                         required
-                         className="bg-transparent border-b py-4 font-black uppercase tracking-tighter focus:outline-none transition-all text-xl border-border focus:border-foreground text-foreground"
-                         placeholder="+00 (0) 000 000"
-                       />
-                    </div>
- 
-                    <div className="pt-12">
-                       <button 
-                         type="submit"
-                         disabled={status === 'loading'}
-                         className="w-full py-8 font-black uppercase tracking-[0.8em] text-[10px] transition-all shadow-2xl bg-foreground text-background hover:bg-foreground/80 shadow-foreground/5"
-                       >
-                         {status === 'loading' ? 'SUBMITTING...' : 'LOG APPLICATION'}
-                       </button>
-                       <p className="text-center text-[8px] font-bold uppercase tracking-[0.3em] mt-8 text-foreground/10">
-                         all submissions are filtered through the archival integrity engine.
-                       </p>
-                    </div>
-                  </form>
-                )}
-              </FadeIn>
-            </div>
-          </motion.div>
+                  </button>
+
+                  {/* Expandable detail */}
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        key="detail"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 md:px-6 pb-6 border-t border-border pt-5 flex flex-col gap-6">
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {job.description}
+                          </p>
+
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-foreground mb-3">
+                              Requirements
+                            </p>
+                            <ul className="flex flex-col gap-2">
+                              {job.requirements.map((r, i) => (
+                                <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
+                                  <FaCheckCircle size={13} className="text-primary mt-0.5 shrink-0" />
+                                  {r}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="flex flex-wrap gap-3 pt-2">
+                            <button
+                              onClick={() => openApply(job.title)}
+                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity"
+                            >
+                              Apply Now <FaArrowRight size={12} />
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* General application CTA */}
+          <div className="mt-10 p-6 md:p-8 rounded-2xl border border-dashed border-border bg-secondary text-center flex flex-col items-center gap-4">
+            <p className="text-sm font-semibold text-foreground">
+              Don't see the right role?
+            </p>
+            <p className="text-xs text-muted-foreground max-w-md">
+              We keep strong profiles on file. Send us a general application and we'll reach out
+              when a fitting opportunity opens up.
+            </p>
+            <button
+              onClick={() => openApply('General Application')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-sm font-semibold text-foreground hover:bg-card transition-colors"
+            >
+              Send General Application <FaArrowRight size={12} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────── */}
+      <section className="py-14 md:py-20 bg-secondary border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            FAQ
+          </p>
+          <h2 className="text-2xl md:text-4xl font-black tracking-tight text-foreground mb-10">
+            Common Questions
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {faq.map((item, i) => (
+              <div key={i} className="p-5 md:p-6 rounded-2xl bg-card border border-border">
+                <h3 className="text-sm font-bold text-foreground mb-3">{item.q}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Apply modal ──────────────────────────────────────── */}
+      <AnimatePresence>
+        {applyPosition && (
+          <ApplyModal position={applyPosition} onClose={() => setApplyPosition(null)} />
         )}
       </AnimatePresence>
 

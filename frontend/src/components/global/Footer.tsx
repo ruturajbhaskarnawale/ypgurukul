@@ -2,51 +2,93 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { FadeIn, StaggerContainer, StaggerItem } from '../animations/MotionUtils';
-import { Magnetic } from '../animations/Magnetic';
-import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
-
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaInstagram, FaYoutube, FaFacebook } from 'react-icons/fa';
+
+const quickLinks = [
+  { label: 'Home',    href: '/' },
+  { label: 'Courses', href: '/courses' },
+  { label: 'About',   href: '/about' },
+  { label: 'Career',  href: '/career' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const legalLinks = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Use',   href: '/terms' },
+];
+
+const socialLinks = [
+  { icon: <FaInstagram size={16} />, href: '#', label: 'Instagram' },
+  { icon: <FaYoutube size={16} />,   href: '#', label: 'YouTube'   },
+  { icon: <FaFacebook size={16} />,  href: '#', label: 'Facebook'  },
+];
 
 export const Footer = () => {
   const pathname = usePathname();
   const currentYear = new Date().getFullYear();
 
-  const isDashboard = pathname?.startsWith('/portal') || pathname?.startsWith('/admin');
+  const isDashboard =
+    pathname?.startsWith('/portal') || pathname?.startsWith('/admin');
   if (isDashboard) return null;
 
   return (
-    <footer className="bg-background text-foreground py-32 border-t border-border">
-      <div className="max-w-[1800px] mx-auto px-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-24">
-          
-          {/* Brand */}
-          <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="group flex items-center gap-6 mb-12">
-              <div className="relative w-24 h-24 overflow-hidden rounded-full border border-border shadow-2xl group-hover:scale-105 transition-transform duration-700">
-                <Image 
-                  src="/logo-icon.png" 
-                  alt="YP Gurukul Logo" 
+    <footer className="bg-secondary border-t border-border text-foreground">
+
+      {/* ── Main content ─────────────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-14 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12">
+
+          {/* Brand column */}
+          <div className="md:col-span-5 flex flex-col gap-5">
+            <Link href="/" className="flex items-center gap-3 w-fit group">
+              <div className="relative w-10 h-10 rounded-full border border-border overflow-hidden shrink-0">
+                <Image
+                  src="/logo-icon.png"
+                  alt="YP Gurukul Logo"
                   fill
                   className="object-cover"
                 />
               </div>
-              <h2 className="text-5xl font-black uppercase tracking-tighter-editorial leading-none">YP Gurukul</h2>
+              <span className="text-xl font-black tracking-tight text-foreground">
+                YP Gurukul
+              </span>
             </Link>
-            <p className="max-w-md text-2xl lowercase text-muted-foreground leading-relaxed font-medium">
-              premium foundational coaching and academic excellence for the modern scholar.
+
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+              Premium foundational coaching for JEE, NEET, MHT-CET and Board Exams.
+              Helping students and families unlock their best academic result.
             </p>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-3">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  aria-label={s.label}
+                  className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-[12px] font-bold uppercase tracking-[0.3em] mb-12 text-muted-foreground/30">Navigation</h3>
-            <ul className="space-y-6">
-              {['Home', 'Courses', 'About', 'Career', 'Contact'].map((item) => (
-                <li key={item}>
-                  <Link href={`/${item === 'Home' ? '' : item.toLowerCase()}`} className="text-xl font-bold hover:text-muted-foreground transition-colors lowercase">
-                    {item}
+          {/* Quick links */}
+          <div className="md:col-span-3">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-5">
+              Quick Links
+            </h3>
+            <ul className="flex flex-col gap-3">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                  >
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -54,33 +96,57 @@ export const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div>
-            <h3 className="text-[12px] font-bold uppercase tracking-[0.3em] mb-12 text-muted-foreground/30">Connect</h3>
-            <ul className="space-y-6">
+          <div className="md:col-span-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-5">
+              Contact Us
+            </h3>
+            <ul className="flex flex-col gap-4">
               <li>
-                <a href="mailto:contact@ypgurukul.com" className="text-xl font-bold hover:text-muted-foreground transition-colors lowercase italic">
+                <a
+                  href="tel:+911234567890"
+                  className="flex items-start gap-3 text-sm text-foreground/80 hover:text-primary transition-colors group"
+                >
+                  <FaPhoneAlt size={14} className="mt-0.5 shrink-0 text-primary" />
+                  +91 123 456 7890
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:contact@ypgurukul.com"
+                  className="flex items-start gap-3 text-sm text-foreground/80 hover:text-primary transition-colors group"
+                >
+                  <FaEnvelope size={14} className="mt-0.5 shrink-0 text-primary" />
                   contact@ypgurukul.com
                 </a>
               </li>
-              <li className="text-xl font-bold lowercase">
-                +91 123 456 7890
-              </li>
-              <li className="text-muted-foreground lowercase text-base max-w-[240px] mt-8 leading-relaxed">
-                academic street, knowledge park, city
+              <li className="flex items-start gap-3 text-sm text-muted-foreground">
+                <FaMapMarkerAlt size={14} className="mt-0.5 shrink-0 text-primary" />
+                Academic Street, Knowledge Park, City — 400001
               </li>
             </ul>
           </div>
 
         </div>
+      </div>
 
-        <div className="mt-32 pt-16 border-t border-border flex flex-col md:flex-row justify-between items-center text-[11px] font-bold uppercase tracking-[0.4em] text-muted-foreground/40">
-          <p>© {currentYear} YP Gurukul Institute. all rights reserved.</p>
-          <div className="flex gap-12 mt-6 md:mt-0">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+      {/* ── Bottom bar ───────────────────────────────────────── */}
+      <div className="border-t border-border">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+          <p>© {currentYear} YP Gurukul Institute. All rights reserved.</p>
+          <div className="flex items-center gap-5">
+            {legalLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="hover:text-foreground transition-colors"
+              >
+                {l.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
+
     </footer>
   );
 };

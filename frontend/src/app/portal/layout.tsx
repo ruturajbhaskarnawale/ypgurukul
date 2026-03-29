@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { PortalSidebar } from '@/components/portal/PortalSidebar';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { ReactLenis } from '@studio-freight/react-lenis';
+
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,14 +36,14 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         {/* Global Dashboard Header */}
         <DashboardHeader title="Student portal" />
 
-        {/* Scrollable Content View with Local Smooth Scroll */}
-        <ReactLenis className="flex-1 overflow-y-auto custom-scrollbar bg-background relative z-0">
+        {/* Scrollable Content View */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar bg-background relative z-0">
           <main className="p-6 lg:p-12">
             <div className="max-w-[1600px] mx-auto">
               {children}
             </div>
           </main>
-        </ReactLenis>
+        </div>
         
       </div>
     </div>
