@@ -81,7 +81,7 @@ export default function CoursesPage() {
         <div className="max-w-6xl mx-auto px-6 md:px-12 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
 
           {/* Category pills */}
-          <div className="flex items-center gap-2 flex-wrap flex-1">
+          <div className="overflow-x-scroll-touch flex items-center gap-2 flex-nowrap flex-1 pb-1">
             {categories.map((cat) => (
               <button
                 key={cat}

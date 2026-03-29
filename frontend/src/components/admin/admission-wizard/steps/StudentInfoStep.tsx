@@ -11,7 +11,7 @@ interface StepProps {
 
 export const StudentInfoStep: React.FC<StepProps> = ({ data, update, onNext }) => {
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 md:space-y-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Student Name */}
@@ -39,7 +39,7 @@ export const StudentInfoStep: React.FC<StepProps> = ({ data, update, onNext }) =
         {/* Gender Selection */}
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Gender_Identity*</label>
-          <div className="flex gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-3 gap-2 sm:gap-4">
             {['Male', 'Female', 'Other'].map((g) => (
               <button 
                 key={g}
@@ -80,7 +80,7 @@ export const StudentInfoStep: React.FC<StepProps> = ({ data, update, onNext }) =
         {(data.standard === '11th' || data.standard === '12th') && (
           <div className="flex flex-col gap-2 animate-in slide-in-from-left duration-500">
             <label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Academic_Stream_Specialization*</label>
-            <div className="flex gap-4">
+            <div className="grid grid-cols-1 xs:grid-cols-3 gap-2 sm:gap-4">
               {['Art', 'Commerce', 'Science'].map((stream) => (
                 <button 
                   key={stream}
@@ -97,11 +97,11 @@ export const StudentInfoStep: React.FC<StepProps> = ({ data, update, onNext }) =
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-end pt-12 border-t border-border mt-12">
+      <div className="flex justify-end pt-8 md:pt-12 border-t border-border mt-8 md:mt-12">
         <button 
           onClick={onNext}
           disabled={!data.studentName || !data.gender || !data.dob || !data.standard || ((data.standard === '11th' || data.standard === '12th') && !data.stream)}
-          className="bg-foreground text-background px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 disabled:opacity-20 disabled:scale-95 active:scale-95 shadow-2xl"
+          className="w-full xs:w-auto bg-foreground text-background px-6 xs:px-10 py-4 xs:py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.1em] xs:tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 disabled:opacity-20 disabled:scale-95 active:scale-95 shadow-2xl"
         >
           Proceed_To_Guardian_Info
         </button>

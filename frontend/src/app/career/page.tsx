@@ -119,7 +119,7 @@ function ApplyModal({ position, onClose }: { position: string; onClose: () => vo
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex items-start justify-center p-4 overflow-y-auto"
     >
-      <div className="max-w-xl w-full my-8 md:my-16">
+      <div className="max-w-xl w-full my-4 sm:my-8 md:my-16">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-8">
           <div>
@@ -154,7 +154,7 @@ function ApplyModal({ position, onClose }: { position: string; onClose: () => vo
             onSubmit={handleSubmit}
             className="rounded-2xl border border-border bg-card p-6 md:p-8 flex flex-col gap-5"
           >
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { name: 'firstName', label: 'First Name', placeholder: 'Rahul' },
                 { name: 'lastName',  label: 'Last Name',  placeholder: 'Sharma' },
@@ -169,7 +169,7 @@ function ApplyModal({ position, onClose }: { position: string; onClose: () => vo
                     value={form[f.name as keyof typeof form]}
                     onChange={handleChange}
                     placeholder={f.placeholder}
-                    className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition"
                   />
                 </div>
               ))}

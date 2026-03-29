@@ -60,7 +60,7 @@ function StatCard({ stat, active, index }: { stat: StatItem; active: boolean; in
       initial={{ opacity: 0, y: 20 }}
       animate={active ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.12 }}
-      className="flex flex-col items-center gap-1.5 px-6 py-5 rounded-2xl bg-card border border-border shadow-sm"
+      className="flex flex-col items-center gap-1.5 px-4 py-4 xs:px-6 xs:py-5 rounded-2xl bg-card border border-border shadow-sm"
     >
       <span className="text-3xl md:text-4xl font-black leading-none animate-shimmer">
         {count.toLocaleString()}{stat.suffix}
@@ -216,7 +216,7 @@ export const HeroSection = () => {
         {/* CTA buttons */}
         <motion.div
           variants={scaleFade}
-          className="flex flex-col sm:flex-row items-center gap-4"
+          className="flex flex-col xs:flex-row items-center gap-3 xs:gap-4"
         >
           <Link
             href="/courses"
@@ -246,7 +246,7 @@ export const HeroSection = () => {
         <motion.div
           variants={fadeUp}
           ref={statsRef}
-          className="grid grid-cols-3 gap-4 md:gap-6 w-full max-w-2xl pt-4"
+          className="grid grid-cols-1 xs:grid-cols-3 gap-3 md:gap-6 w-full max-w-2xl pt-4"
         >
           {STATS.map((stat, i) => (
             <StatCard key={stat.label} stat={stat} active={statsInView} index={i} />

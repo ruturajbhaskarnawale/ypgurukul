@@ -70,12 +70,12 @@ export const AdmissionWizard = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto pb-24 relative">
+    <div className="w-full max-w-6xl mx-auto pb-12 md:pb-24 relative">
       
-      <div className="bg-muted/5 border border-border rounded-[3rem] p-6 lg:p-12 shadow-sm relative overflow-hidden">
+      <div className="bg-muted/5 border border-border rounded-2xl sm:rounded-[3rem] p-4 sm:p-6 lg:p-12 shadow-sm relative overflow-hidden">
         
         {/* Progress Tracker */}
-        <div className="mb-16">
+        <div className="mb-8 md:mb-16">
           <StepperIndicator currentStep={currentStep} totalSteps={STEPS.length} steps={STEPS} />
         </div>
 
@@ -97,7 +97,7 @@ export const AdmissionWizard = () => {
       </div>
 
       {/* Persistence Note */}
-      <div className="flex justify-center mt-12 opacity-40">
+      <div className="flex justify-center mt-6 md:mt-12 opacity-40">
         <span className="text-[8px] font-black uppercase tracking-[0.3em] bg-muted px-3 py-1 rounded-full">
           Auto_Save: Enabled_Session_Context
         </span>

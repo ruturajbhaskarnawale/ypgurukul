@@ -12,7 +12,7 @@ interface StepProps {
 
 export const GuardianInfoStep: React.FC<StepProps> = ({ data, update, onNext, onBack }) => {
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 md:space-y-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Father Name */}
@@ -74,14 +74,14 @@ export const GuardianInfoStep: React.FC<StepProps> = ({ data, update, onNext, on
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between items-center pt-12 border-t border-border mt-12">
-        <button onClick={onBack} className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-foreground transition-all px-6">
+      <div className="flex flex-col-reverse xs:flex-row justify-between items-center pt-8 md:pt-12 border-t border-border mt-8 md:mt-12 gap-6">
+        <button onClick={onBack} className="text-[10px] font-black uppercase tracking-[0.1em] xs:tracking-[0.4em] text-muted-foreground hover:text-foreground transition-all px-0 xs:px-6">
           Back_Access
         </button>
         <button 
           onClick={onNext}
           disabled={!data.fatherName || !data.motherName || !data.parentMobile || !data.address}
-          className="bg-foreground text-background px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 disabled:opacity-20 shadow-2xl active:scale-95"
+          className="w-full xs:w-auto bg-foreground text-background px-6 xs:px-10 py-4 xs:py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.1em] xs:tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 disabled:opacity-20 shadow-2xl active:scale-95"
         >
           Proceed_To_Academic_Records
         </button>

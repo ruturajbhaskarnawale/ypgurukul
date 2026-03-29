@@ -212,7 +212,7 @@ export default function ContactPage() {
                           value={form[f.name as keyof typeof form]}
                           onChange={handleChange}
                           placeholder={f.placeholder}
-                          className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                          className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
                         />
                       </div>
                     ))}
@@ -229,7 +229,7 @@ export default function ContactPage() {
                       value={form.mobile}
                       onChange={handleChange}
                       placeholder="+91 98765 43210"
-                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
 
@@ -242,7 +242,7 @@ export default function ContactPage() {
                       name="course"
                       value={form.course}
                       onChange={handleChange}
-                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="">Select a program…</option>
                       {courses.map((c) => (
@@ -263,7 +263,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       rows={4}
                       placeholder="Tell us about your goals, which exam you're preparing for, or any questions you have…"
-                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
                     />
                   </div>
 

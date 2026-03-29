@@ -87,7 +87,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="space-y-12 pb-24">
+    <div className="space-y-6 md:space-y-12 pb-12 md:pb-24">
       
       <FadeIn>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -195,20 +195,20 @@ export default function AdminDashboardPage() {
                   <h3 className="text-xl font-black text-foreground tracking-tight uppercase">Quick Actions</h3>
                   <span className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.4em]">Administrative_Access</span>
                </div>
-               <div className="grid grid-cols-2 gap-6">
-                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
+                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
                      <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">01. DEPLOY</span>
                      <p className="text-xs font-black uppercase tracking-widest">NEW_COURSE</p>
                   </button>
-                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
                      <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">02. APPEND</span>
                      <p className="text-xs font-black uppercase tracking-widest">STUDY_MATERIAL</p>
                   </button>
-                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
                      <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">03. OVERSEE</span>
                      <p className="text-xs font-black uppercase tracking-widest">ALL_APPLICATIONS</p>
                   </button>
-                  <button className="p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
+                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
                      <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">04. ANALYZE</span>
                      <p className="text-xs font-black uppercase tracking-widest">RESULT_MATRICS</p>
                   </button>

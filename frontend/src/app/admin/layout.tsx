@@ -15,30 +15,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden relative">
+      <div className="flex-1 flex flex-col overflow-hidden relative min-w-0">
         
-        {/* Mobile Header (Hidden on Desktop) */}
-        <header className="md:hidden h-16 bg-muted border-b border-border flex items-center justify-between px-6 z-40">
-          <div className="text-sm font-black text-foreground uppercase tracking-tighter flex items-center gap-2">
-            <span className="w-6 h-6 bg-foreground rounded-lg flex justify-center items-center text-[10px] text-background">YP</span>
-            Admin
-          </div>
-          <button 
-            className="text-muted-foreground p-2 hover:text-foreground transition-colors"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </header>
-
-        {/* Global Dashboard Header */}
-        <DashboardHeader title="Admin Control Center" />
+        {/* Unified header — hamburger integrated, no redundant mobile header */}
+        <DashboardHeader title="Admin Control Center" onMenuOpen={() => setSidebarOpen(true)} />
 
         {/* Scrollable Content View */}
         <div className="flex-1 overflow-y-auto custom-scrollbar bg-background relative z-0">
-          <main className="p-6 lg:p-12">
+          <main className="p-4 sm:p-6 lg:p-12">
             <div className="max-w-[1600px] mx-auto">
               {children}
             </div>

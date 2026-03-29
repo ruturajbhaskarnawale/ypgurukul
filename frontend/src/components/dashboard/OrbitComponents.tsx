@@ -115,7 +115,8 @@ export const DashboardChart = ({ title, subtitle, data, className, color = "#000
         </div>
       </div>
 
-      <div className="flex items-end justify-between h-64 gap-4 px-2">
+      <div className="overflow-x-auto -mx-2 px-2">
+        <div className="flex items-end justify-between h-40 sm:h-52 md:h-64 gap-1 sm:gap-2 md:gap-4 px-2 min-w-[280px]">
         {data.map((item, i) => (
           <div key={i} className="flex-1 flex flex-col items-center group">
             <div className="relative w-full flex-1 flex items-end justify-center">
@@ -141,6 +142,7 @@ export const DashboardChart = ({ title, subtitle, data, className, color = "#000
             </span>
           </div>
         ))}
+        </div>
       </div>
 
       <div className="mt-12 p-4 rounded-xl border border-border bg-secondary/20 flex items-center justify-center gap-4">

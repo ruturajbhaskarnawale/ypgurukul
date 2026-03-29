@@ -11,9 +11,9 @@ export const RecordStatsGrid = ({ stats }: { stats?: any }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       
-      <div className="p-8 bg-muted/10 border border-border rounded-3xl space-y-4">
+      <div className="p-6 md:p-8 bg-muted/10 border border-border rounded-3xl space-y-4">
         <div className="flex items-center justify-between">
            <span className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">TOTAL_ENROLLMENT</span>
            <div className="w-2 h-2 rounded-full bg-primary" />
@@ -24,7 +24,7 @@ export const RecordStatsGrid = ({ stats }: { stats?: any }) => {
         </div>
       </div>
 
-      <div className="p-8 bg-muted/10 border border-border rounded-3xl space-y-4">
+      <div className="p-6 md:p-8 bg-muted/10 border border-border rounded-3xl space-y-4">
         <div className="flex items-center justify-between">
            <span className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">REVENUE_COLLECTED</span>
            <div className="w-2 h-2 rounded-full bg-green-500" />
@@ -34,7 +34,7 @@ export const RecordStatsGrid = ({ stats }: { stats?: any }) => {
         </div>
       </div>
 
-      <div className="p-8 bg-foreground text-background rounded-3xl space-y-4 shadow-xl">
+      <div className="p-6 md:p-8 bg-foreground text-background rounded-3xl space-y-4 shadow-xl">
         <div className="flex items-center justify-between">
            <span className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">PENDING_ARREARS</span>
            <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]" />

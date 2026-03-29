@@ -84,6 +84,26 @@
     overflow-x: hidden;
   }
 
+  /* Eliminate 300ms tap delay on all interactive elements */
+  button,
+  a,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  label {
+    touch-action: manipulation;
+  }
+
+  /* Prevent iOS Safari zoom on input focus — font-size must be >= 16px on mobile */
+  @media (max-width: 767px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
   h1,
   h2,
   h3,
@@ -118,6 +138,25 @@
 
   .min-h-svh {
     min-height: 100svh;
+  }
+
+  /* ── Minimum 44×44px tap targets (WCAG 2.5.5) ── */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Responsive overflow helpers ── */
+  .overflow-x-scroll-touch {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .overflow-x-scroll-touch::-webkit-scrollbar {
+    display: none;
   }
 
   /* Custom Scrollbar */

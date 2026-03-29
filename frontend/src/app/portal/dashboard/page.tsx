@@ -95,7 +95,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-12 pb-24">
+    <div className="space-y-6 md:space-y-12 pb-12 md:pb-24">
 
       <FadeIn>
         <div className="flex flex-col gap-2">

@@ -157,7 +157,7 @@ export default function LoginPage() {
                       onChange={(e) => setName(e.target.value)}
                       required={!isLogin}
                       placeholder="Rahul Sharma"
-                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                      className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
                 </motion.div>
@@ -177,7 +177,7 @@ export default function LoginPage() {
                 required
                 placeholder="rahul@example.com"
                 autoComplete="email"
-                className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
               />
             </div>
 
@@ -202,7 +202,7 @@ export default function LoginPage() {
                   required
                   placeholder="••••••••"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
-                  className="w-full px-3 py-2.5 pr-10 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                  className="w-full px-3 py-2.5 pr-10 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
                 />
                 <button
                   type="button"
@@ -227,7 +227,7 @@ export default function LoginPage() {
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   placeholder="+91 98765 43210"
-                  className="px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
+                  className="px-3 py-2.5 rounded-lg border border-input bg-background text-base md:text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring transition"
                 />
               </div>
             )}

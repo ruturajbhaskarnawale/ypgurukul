@@ -16,7 +16,7 @@ export const StepperIndicator: React.FC<StepperProps> = ({ currentStep, totalSte
     <div className="w-full space-y-6">
       <div className="flex justify-between items-center px-2">
         <div className="flex flex-col">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground opacity-60">Entry_Phase</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.1em] xs:tracking-[0.4em] text-muted-foreground opacity-60">Entry_Phase</span>
           <span className="text-xl font-black uppercase tracking-tight">Step {currentStep + 1} of {totalSteps}</span>
         </div>
         <div className="text-right">

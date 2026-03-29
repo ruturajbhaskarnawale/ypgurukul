@@ -12,10 +12,10 @@ interface StepProps {
 
 export const FinancialsStep: React.FC<StepProps> = ({ data, update, onNext, onBack }) => {
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 md:space-y-12">
       
       {/* Financial Overview Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <div className="p-6 bg-muted/20 border border-border rounded-2xl flex flex-col justify-between">
            <span className="text-[9px] font-black uppercase tracking-widest opacity-40 mb-4">Total_Fees_Required</span>
            <div className="flex items-baseline gap-2">
@@ -28,7 +28,7 @@ export const FinancialsStep: React.FC<StepProps> = ({ data, update, onNext, onBa
               <span className="text-3xl font-black tracking-tighter text-primary">₹{data.amountPaid || '0'}</span>
            </div>
         </div>
-        <div className="p-6 bg-foreground text-background rounded-2xl flex flex-col justify-between shadow-xl scale-105">
+        <div className="p-6 bg-foreground text-background rounded-2xl flex flex-col justify-between shadow-xl md:scale-105">
            <span className="text-[9px] font-black uppercase tracking-widest opacity-40 mb-4">Balance_Due_Output</span>
            <div className="flex items-baseline gap-2">
               <span className="text-3xl font-black tracking-tighter">₹{data.balanceDue}</span>
@@ -95,14 +95,14 @@ export const FinancialsStep: React.FC<StepProps> = ({ data, update, onNext, onBa
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between items-center pt-12 border-t border-border mt-12">
-        <button onClick={onBack} className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-foreground transition-all px-6">
+      <div className="flex flex-col-reverse xs:flex-row justify-between items-center pt-8 md:pt-12 border-t border-border mt-8 md:mt-12 gap-6">
+        <button onClick={onBack} className="text-[10px] font-black uppercase tracking-[0.1em] xs:tracking-[0.4em] text-muted-foreground hover:text-foreground transition-all px-0 xs:px-6">
           Back_Access
         </button>
         <button 
           onClick={onNext}
           disabled={!data.courseJoining || !data.totalFees}
-          className="bg-foreground text-background px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 disabled:opacity-20 shadow-2xl active:scale-95"
+          className="w-full xs:w-auto bg-foreground text-background px-6 xs:px-10 py-4 xs:py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.1em] xs:tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 disabled:opacity-20 shadow-2xl active:scale-95"
         >
           Proceed_To_Document_Vault
         </button>
