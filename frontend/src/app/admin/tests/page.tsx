@@ -4,8 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/global/Card';
 import { Input } from '@/components/global/Input';
 import { Button } from '@/components/global/Button';
-import { FadeIn, SlideUp } from '@/components/animations/MotionUtils';
+import { motion, AnimatePresence } from 'framer-motion';
 import { apiClient } from '@/lib/apiClient';
+import { 
+  FaUserGraduate, FaFileLines, FaRegCircleCheck, FaAward, 
+  FaPlus, FaCalendarCheck, FaChevronDown, FaPercent 
+} from 'react-icons/fa6';
 
 interface Student {
   id: string;
@@ -48,9 +52,9 @@ export default function AdminTestsPage() {
         apiClient.get<TestResult[]>('/admin/tests'),
         apiClient.get<Student[]>('/admin/students')
       ]);
-      setResults(testsRes);
-      setStudents(studentsRes);
-      if (studentsRes.length > 0 && !formData.userId) {
+      setResults(testsRes || []);
+      setStudents(studentsRes || []);
+      if (studentsRes && studentsRes.length > 0 && !formData.userId) {
         setFormData(prev => ({ ...prev, userId: studentsRes[0].id }));
       }
     } catch(err) {
@@ -87,132 +91,197 @@ export default function AdminTestsPage() {
   };
 
   return (
-    <div className="space-y-8 pb-20">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-        <div>
-          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase">Test Results</h1>
-          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">RECORD_SYSTEM: PERFORMANCE_LOG_v2</p>
+    <div className="space-y-10 md:space-y-12 pb-24 max-w-7xl mx-auto">
+      
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-border/50 pb-10">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+            Examination Records
+          </h1>
+          <p className="text-sm text-muted-foreground/60 font-medium">
+            Record and monitor individual student performance across all evaluation cycles.
+          </p>
         </div>
-        <Button 
+        <button 
           onClick={() => setIsAdding(!isAdding)}
-          className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[10px] px-8 py-6 rounded-full"
+          className={`px-10 py-4 rounded-[1.5rem] font-bold text-sm transition-all flex items-center justify-center gap-3 shadow-lg ${
+            isAdding ? 'bg-muted/40 text-foreground' : 'bg-primary text-primary-foreground shadow-primary/20 active:scale-95'
+          }`}
         >
-          {isAdding ? 'CANCEL_OPERATION' : '+ ADD_TEST_RESULT'}
-        </Button>
+          {isAdding ? 'Cancel' : <><FaPlus size={14} /> Record Score</>}
+        </button>
       </div>
 
-      {isAdding && (
-        <SlideUp>
-          <Card className="border border-border bg-secondary/5 shadow-2xl mb-12 rounded-3xl overflow-hidden">
-            <CardContent className="p-10">
-              <h2 className="text-xl font-black uppercase tracking-tight mb-8">Enter Test Marks</h2>
-              {errorMsg && (
-                <div className="text-[10px] font-black uppercase tracking-widest text-foreground bg-secondary/20 p-6 rounded-xl mb-8 border border-border">
-                  [ error ] {errorMsg}
+      <AnimatePresence>
+        {isAdding && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, y: -20 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -20 }}
+            className="overflow-hidden"
+          >
+            <div className="border border-border/50 bg-card shadow-2xl rounded-[2.5rem] overflow-hidden mb-12">
+              <div className="p-8 md:p-12 space-y-10">
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <FaPlus size={16} />
+                   </div>
+                   <h2 className="text-2xl font-bold text-foreground tracking-tight">Record Performance</h2>
                 </div>
-              )}
-              
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="w-full">
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">01. Select_Student</label>
-                    <select 
-                      name="userId" 
-                      value={formData.userId} 
-                      onChange={handleChange} 
-                      required
-                      className="flex h-14 w-full rounded-2xl border border-border bg-background px-4 py-2 text-sm font-bold focus:outline-none focus:border-foreground transition-all appearance-none"
-                    >
-                      {students.length === 0 && <option disabled value="">No students available.</option>}
-                      {students.map(s => (
-                        <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
-                      ))}
-                    </select>
+                
+                {errorMsg && (
+                  <div className="bg-destructive/10 text-destructive p-5 rounded-2xl text-sm font-bold border border-destructive/20">
+                    {errorMsg}
                   </div>
-                  <div className="w-full">
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">02. Test_Identity</label>
-                    <Input 
-                      name="testName" 
-                      value={formData.testName} 
-                      onChange={handleChange} 
-                      placeholder="e.g. WEEKLY_MOCK_TEST_4" 
-                      required 
-                      className="h-14 rounded-2xl border-border bg-background px-4 font-bold"
-                    />
+                )}
+                
+                <form onSubmit={handleSubmit} className="space-y-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Select Student</label>
+                      <div className="relative">
+                         <select 
+                           name="userId" 
+                           value={formData.userId} 
+                           onChange={handleChange} 
+                           required
+                           className="flex h-14 w-full rounded-2xl border border-border/40 bg-muted/10 px-6 py-2 text-sm font-bold focus:outline-none focus:ring-primary/5 focus:border-primary/20 transition-all appearance-none cursor-pointer"
+                         >
+                           {students.length === 0 && <option disabled value="">No registered students found.</option>}
+                           {students.map(s => (
+                             <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
+                           ))}
+                         </select>
+                         <FaChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground/40 pointer-events-none" size={10} />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Examination Title</label>
+                      <Input 
+                        name="testName" 
+                        value={formData.testName} 
+                        onChange={handleChange} 
+                        placeholder="e.g. Unit Test 1 - Physics" 
+                        required 
+                        className="h-14 rounded-2xl bg-muted/10 border-border/40 focus:ring-primary/5 focus:border-primary/20 text-sm font-bold"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
-                  <div>
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">03. Marks_Obtained</label>
-                    <Input type="number" name="marksObtained" value={formData.marksObtained} onChange={handleChange} placeholder="85" required className="h-14 rounded-2xl" />
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Marks Obtained</label>
+                      <Input type="number" name="marksObtained" value={formData.marksObtained} onChange={handleChange} placeholder="0" required className="h-14 rounded-2xl bg-muted/10 border-border/40" />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Total Marks</label>
+                      <Input type="number" name="totalMarks" value={formData.totalMarks} onChange={handleChange} placeholder="100" required className="h-14 rounded-2xl bg-muted/10 border-border/40" />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Examination Date</label>
+                      <Input type="date" name="testDate" value={formData.testDate} onChange={handleChange} required className="h-14 rounded-2xl bg-muted/10 border-border/40 px-6" />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">04. Total_Marks</label>
-                    <Input type="number" name="totalMarks" value={formData.totalMarks} onChange={handleChange} placeholder="100" required className="h-14 rounded-2xl" />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">05. Test_Date</label>
-                    <Input type="date" name="testDate" value={formData.testDate} onChange={handleChange} required className="h-14 rounded-2xl" />
-                  </div>
-                </div>
 
-                <div className="pt-4 flex justify-end gap-4">
-                  <Button type="button" variant="outline" onClick={() => setIsAdding(false)} className="px-8 py-6 rounded-full font-black uppercase tracking-widest text-[10px]">DISCARD</Button>
-                  <Button type="submit" isLoading={submitting} disabled={students.length === 0} className="px-12 py-6 rounded-full font-black uppercase tracking-widest text-[10px] bg-foreground text-background">SAVE_RESULT</Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </SlideUp>
-      )}
+                  <div className="pt-8 flex justify-end gap-5 border-t border-border/40 mt-10">
+                    <button type="button" onClick={() => setIsAdding(false)} className="px-10 py-4 rounded-2xl font-bold text-sm text-muted-foreground/60 hover:bg-muted/40 hover:text-foreground transition-all">Discard</button>
+                    <button type="submit" disabled={submitting || students.length === 0} className="px-12 py-4 rounded-2xl font-bold text-sm bg-primary text-primary-foreground hover:shadow-xl hover:shadow-primary/20 transition-all disabled:opacity-50 active:scale-95">
+                      {submitting ? 'Recording...' : 'Save Result'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <FadeIn>
-        <div className="border border-border rounded-3xl bg-background overflow-hidden shadow-sm">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <div className="bg-card border border-border/50 rounded-[2.5rem] overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border bg-secondary/10">
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Student_Entity</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Test_Module</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Payload_Score</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Temporal_Stamp</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 text-right">Performance_Metric</th>
+                <tr className="border-b border-border/40 bg-muted/5">
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30">Student Profile</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30">Evaluation</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30 text-center">Score Portfolio</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30">Date</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30 text-right">Performance Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-border/20">
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="py-20 text-center font-black text-[10px] uppercase tracking-widest text-muted-foreground/40">SYNCHRONIZING_DATA...</td>
+                    <td colSpan={5} className="py-32 text-center text-muted-foreground/40 italic text-sm">
+                       <div className="flex flex-col items-center gap-3">
+                          <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+                          Loading examination data...
+                       </div>
+                    </td>
                   </tr>
                 ) : results.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-20 text-center font-black text-[10px] uppercase tracking-widest text-muted-foreground/40">
-                      NO_RECORDS_AVAILABLE.
+                    <td colSpan={5} className="py-32 text-center text-muted-foreground/40 italic text-sm">
+                       <div className="flex flex-col items-center gap-5">
+                          <FaAward className="opacity-10" size={48} />
+                          <p className="font-medium">No examination records logged in the system.</p>
+                       </div>
                     </td>
                   </tr>
                 ) : (
                   results.map((res) => {
                     const percentage = (res.marksObtained / res.totalMarks) * 100;
                     return (
-                      <tr key={res.id} className="border-b border-border hover:bg-secondary/5 transition-all group">
-                        <td className="py-6 px-8">
-                          <p className="font-black text-foreground uppercase tracking-tight text-sm">{res.user.name}</p>
-                          <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest mt-1 lowercase">{res.user.email}</p>
+                      <tr key={res.id} className="hover:bg-muted/5 transition-all group">
+                        <td className="py-8 px-10">
+                          <div className="flex items-center gap-5">
+                             <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm shadow-sm group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                               {res.user.name.charAt(0).toUpperCase()}
+                             </div>
+                             <div className="flex flex-col gap-1">
+                                <p className="font-bold text-foreground text-sm tracking-tight">{res.user.name}</p>
+                                <p className="text-[10px] font-medium text-muted-foreground/40 italic">{res.user.email}</p>
+                             </div>
+                          </div>
                         </td>
-                        <td className="py-6 px-8 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                          {res.testName}
+                        <td className="py-8 px-10">
+                           <div className="flex items-center gap-3 text-xs font-bold text-foreground tracking-tight">
+                              <FaFileLines className="text-primary/20" size={14} />
+                              {res.testName}
+                           </div>
                         </td>
-                        <td className="py-6 px-8 font-black text-foreground tracking-tighter">
-                          {res.marksObtained} <span className="text-muted-foreground/20 text-[10px] font-bold tracking-widest">/ {res.totalMarks}</span>
+                        <td className="py-8 px-10 text-center">
+                           <div className="flex flex-col items-center gap-1.5">
+                              <span className="text-lg font-black text-foreground tracking-tighter tabular-nums">{res.marksObtained}<span className="text-muted-foreground/20 font-bold mx-1">/</span>{res.totalMarks}</span>
+                              <div className="w-16 h-1 bg-muted/20 rounded-full overflow-hidden shadow-inner">
+                                 <motion.div 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${percentage}%` }}
+                                    className="h-full bg-primary"
+                                 />
+                              </div>
+                           </div>
                         </td>
-                        <td className="py-6 px-8 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
-                          {new Date(res.testDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        <td className="py-8 px-10">
+                           <div className="flex items-center gap-3 text-[11px] font-bold text-muted-foreground/40 tracking-tight">
+                              <FaCalendarCheck size={14} className="opacity-20" />
+                              {new Date(res.testDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                           </div>
                         </td>
-                        <td className="py-6 px-8 text-right">
-                          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-secondary text-foreground border border-border">
-                            [ {percentage.toFixed(1)}% ]
-                          </span>
+                        <td className="py-8 px-10 text-right">
+                           <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-[10px] font-bold border transition-all ${
+                               percentage >= 85 ? 'bg-primary text-primary-foreground border-transparent shadow-lg shadow-primary/20' : 
+                               percentage >= 70 ? 'bg-muted/20 text-foreground border-border/40' : 
+                               'bg-muted/10 text-muted-foreground border-border/20'
+                           }`}>
+                             <FaPercent size={10} className={percentage >= 85 ? 'opacity-100' : 'opacity-20'} />
+                             {percentage.toFixed(0)}% Score
+                           </div>
                         </td>
                       </tr>
                     );
@@ -222,7 +291,7 @@ export default function AdminTestsPage() {
             </table>
           </div>
         </div>
-      </FadeIn>
+      </motion.div>
     </div>
   );
 }

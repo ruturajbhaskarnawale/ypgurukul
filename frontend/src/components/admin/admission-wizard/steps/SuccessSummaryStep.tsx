@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { AdmissionWizardData } from '../types';
+import { FaUserEdit, FaFileInvoice, FaCheckCircle, FaPrint, FaArrowLeft, FaDatabase } from 'react-icons/fa';
 
 interface StepProps {
   data: AdmissionWizardData;
@@ -10,96 +11,101 @@ interface StepProps {
 }
 
 export const SuccessSummaryStep: React.FC<StepProps> = ({ data, onBack }) => {
-  
-  const submitAdmission = () => {
-    console.log("FINAL_ADMISSION_DATA:", data);
-    alert("ADMISSION_PORTAL: NEW ENROLLMENT RECORDED IN HISTORICAL REPOSITORY.");
-  };
-
   return (
-    <div className="space-y-8 md:space-y-12">
+    <div className="space-y-10 md:space-y-12">
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        
-        {/* Profile Summary */}
-        <div className="p-8 bg-muted/10 border border-border rounded-3xl space-y-6">
-           <span className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">STUDENT_PROFILE</span>
-           <div className="space-y-4">
-              <div className="flex flex-col">
-                 <span className="text-[10px] font-black uppercase text-muted-foreground opacity-60">NAME</span>
-                 <span className="text-sm font-black tracking-tight">{data.studentName}</span>
-              </div>
-              <div className="flex flex-col">
-                 <span className="text-[10px] font-black uppercase text-muted-foreground opacity-60">GENDER_DOB</span>
-                 <span className="text-sm font-black tracking-tight">{data.gender} / {data.dob}</span>
-              </div>
-              <div className="flex flex-col">
-                 <span className="text-[10px] font-black uppercase text-muted-foreground opacity-60">STANDARD_STREAM</span>
-                 <span className="text-sm font-black tracking-tight">
-                    {data.standard} {data.stream && `/ ${data.stream}`}
-                 </span>
-              </div>
-           </div>
+      <div className="flex flex-col items-center text-center gap-4">
+        <div className="w-20 h-20 rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-xl shadow-emerald-500/10 animate-in zoom-in-50 duration-700">
+           <FaCheckCircle size={32} />
         </div>
-
-        {/* Guardian Summary */}
-        <div className="p-8 bg-muted/10 border border-border rounded-3xl space-y-6">
-           <span className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">GUARDIAN_NETWORK</span>
-           <div className="space-y-4">
-              <div className="flex flex-col">
-                 <span className="text-[10px] font-black uppercase text-muted-foreground opacity-60">FATHER_MOTHER</span>
-                 <span className="text-sm font-black tracking-tight leading-tight">{data.fatherName} & {data.motherName}</span>
-              </div>
-              <div className="flex flex-col">
-                 <span className="text-[10px] font-black uppercase text-muted-foreground opacity-60">CONTACT</span>
-                 <span className="text-sm font-black tracking-tight">{data.parentMobile}</span>
-              </div>
-           </div>
+        <div className="space-y-2">
+            <h3 className="text-2xl font-black text-foreground tracking-tight">Review & Finalize</h3>
+            <p className="text-sm text-muted-foreground/60 font-medium leading-relaxed max-w-lg mx-auto">
+              Please verify the application overview below. Once submitted, the record will be officially registered in the academic session.
+            </p>
         </div>
-
-        {/* Financial Summary */}
-        <div className="p-8 bg-foreground text-background rounded-3xl space-y-6 shadow-2xl">
-           <span className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">FINANCIAL_LEDGER</span>
-           <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-background/10 pb-2">
-                 <span className="text-[9px] font-black uppercase">TOTAL_FEE</span>
-                 <span className="text-sm font-black">₹{data.totalFees}</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-background/10 pb-2">
-                 <span className="text-[9px] font-black uppercase text-primary">PAID</span>
-                 <span className="text-sm font-black">₹{data.amountPaid}</span>
-              </div>
-              <div className="flex items-center justify-between pt-2">
-                 <span className="text-[9px] font-black uppercase text-primary">BALANCE_DUE</span>
-                 <span className="text-xl font-black italic underline">₹{data.balanceDue}</span>
-              </div>
-           </div>
-        </div>
-
       </div>
 
-      <div className="p-6 md:p-10 border-2 border-primary/20 bg-primary/5 rounded-3xl md:rounded-[4rem] text-center space-y-4 md:space-y-6">
-         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         {/* Candidate Snapshot */}
+         <div className="p-8 rounded-[2rem] bg-muted/10 border border-border/40 space-y-6 group hover:border-primary/20 transition-all">
+            <div className="flex items-center gap-3 text-primary opacity-40 group-hover:opacity-100 transition-opacity">
+               <FaUserEdit size={14} />
+               <span className="text-[10px] font-bold uppercase tracking-widest">Candidate Details</span>
+            </div>
+            <div className="space-y-4">
+               <div className="flex justify-between items-center border-b border-border/30 pb-3">
+                  <span className="text-xs font-semibold text-muted-foreground/60">Full Name</span>
+                  <span className="text-xs font-black text-foreground">{data.studentName || '- -'}</span>
+               </div>
+               <div className="flex justify-between items-center border-b border-border/30 pb-3">
+                  <span className="text-xs font-semibold text-muted-foreground/60">Target Class</span>
+                  <span className="text-xs font-black text-foreground">{data.standard} Standard {data.stream ? `/ ${data.stream}` : ''}</span>
+               </div>
+               <div className="flex justify-between items-center">
+                  <span className="text-xs font-semibold text-muted-foreground/60">Primary Guardian</span>
+                  <span className="text-xs font-black text-foreground">{data.fatherName || data.motherName || '- -'}</span>
+               </div>
+            </div>
          </div>
-         <h2 className="text-2xl font-black uppercase tracking-tighter">Ready_For_Deployment</h2>
-         <p className="max-w-xl mx-auto text-xs font-bold text-muted-foreground uppercase tracking-widest leading-relaxed">
-            SYSTEM_CONFIRMS_VALID_SCHEMA. UPON SUBMISSION, AN OFFICIAL STUDENT ID WILL BE GENERATED AND THE ENROLLMENT STATUS WILL BE SET TO [ACTIVE].
-         </p>
+
+         {/* Financial Snapshot */}
+         <div className="p-8 rounded-[2rem] bg-muted/10 border border-border/40 space-y-6 group hover:border-primary/20 transition-all">
+            <div className="flex items-center gap-3 text-primary opacity-40 group-hover:opacity-100 transition-opacity">
+               <FaFileInvoice size={14} />
+               <span className="text-[10px] font-bold uppercase tracking-widest">Financial Summary</span>
+            </div>
+            <div className="space-y-4">
+               <div className="flex justify-between items-center border-b border-border/30 pb-3">
+                  <span className="text-xs font-semibold text-muted-foreground/60">Enrollment Fee</span>
+                  <span className="text-xs font-black text-foreground">₹{Number(data.totalFees).toLocaleString()}</span>
+               </div>
+               <div className="flex justify-between items-center border-b border-border/30 pb-3">
+                  <span className="text-xs font-semibold text-muted-foreground/60">Advance Payment</span>
+                  <span className="text-xs font-black text-emerald-500">₹{Number(data.amountPaid).toLocaleString()}</span>
+               </div>
+               <div className="flex justify-between items-center">
+                  <span className="text-xs font-semibold text-muted-foreground/60">Balance Outstanding</span>
+                  <span className="text-xs font-black text-primary">₹{Number(data.balanceDue).toLocaleString()}</span>
+               </div>
+            </div>
+         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="flex flex-col-reverse xs:flex-row justify-between items-center pt-8 md:pt-12 border-t border-border mt-8 md:mt-12 gap-6">
-        <button onClick={onBack} className="text-[10px] font-black uppercase tracking-[0.1em] xs:tracking-[0.4em] text-muted-foreground hover:text-foreground transition-all px-0 xs:px-6">
-          Back_Access
+      <div className="p-8 rounded-[2.5rem] bg-muted/20 border border-dashed border-border/60 flex flex-col md:flex-row items-center justify-between gap-6">
+         <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-background border border-border flex items-center justify-center text-muted-foreground opacity-30">
+               <FaDatabase size={18} />
+            </div>
+            <div className="text-center md:text-left">
+               <p className="text-xs font-bold text-foreground">Cloud Registration Ready</p>
+               <p className="text-[10px] font-medium text-muted-foreground/60 tracking-tight italic">Document encryption and session sync complete.</p>
+            </div>
+         </div>
+         <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-background border border-border text-[10px] font-bold uppercase tracking-widest hover:bg-muted/40 transition-all shadow-sm">
+            <FaPrint size={12} className="opacity-40" />
+            Print Summary
+         </button>
+      </div>
+
+      {/* Navigation Buttons */}
+      <div className="flex flex-col-reverse sm:flex-row justify-between gap-4 pt-10 border-t border-border mt-12">
+        <button 
+          onClick={onBack}
+          className="px-10 py-5 rounded-2xl font-bold text-sm bg-muted/20 text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-all flex items-center justify-center gap-3 active:scale-95"
+        >
+          <FaArrowLeft size={10} className="opacity-40" />
+          Back to Verification
         </button>
         <button 
-          onClick={submitAdmission}
-          className="w-full xs:w-auto bg-foreground text-background px-6 xs:px-10 py-4 xs:py-6 rounded-full font-black uppercase text-[10px] md:text-[12px] tracking-[0.1em] xs:tracking-[0.4em] hover:bg-muted-foreground transition-all duration-300 shadow-2xl active:scale-95 flex items-center justify-center gap-4"
+          onClick={() => {
+            alert("Enrollment Processed Successfully! The record is now registered in our active ledger.");
+            window.location.reload();
+          }}
+          className="bg-primary text-primary-foreground px-12 py-5 rounded-2xl font-black text-sm hover:opacity-90 transition-all active:scale-95 shadow-2xl shadow-primary/30 flex items-center justify-center gap-4 group"
         >
-          [ Confirm_And_Submit_Final_Admission ]
+          Submit Application
+          <FaCheckCircle className="text-primary-foreground/40 transition-transform group-hover:scale-110" size={14} />
         </button>
       </div>
 

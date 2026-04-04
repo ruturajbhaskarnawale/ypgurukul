@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from '@/components/animations/MotionUtils';
+import { FadeIn, SlideUp } from '@/components/animations/MotionUtils';
 import { Card, CardContent } from '@/components/global/Card';
 import { apiClient, ApiError } from '@/lib/apiClient';
 import { useAuth } from '@/lib/authContext';
+import { FaChartBar, FaGraduationCap, FaCalendarCheck, FaAward } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
 
 interface TestResult {
   id: string;
@@ -16,15 +18,14 @@ interface TestResult {
 }
 
 const Skeleton = ({ className = '' }: { className?: string }) => (
-  <div className={`animate-pulse bg-muted rounded ${className}`} />
+  <div className={`animate-pulse bg-muted/40 rounded-xl ${className}`} />
 );
 
-// Derive subject from test name heuristic (e.g., "Physics Mock Test" → "Physics")
 function getSubject(testName: string): string {
   const lower = testName.toLowerCase();
   if (lower.includes('physics')) return 'Physics';
   if (lower.includes('chem')) return 'Chemistry';
-  if (lower.includes('math') || lower.includes('maths')) return 'Mathematics';
+  if (lower.includes('math')) return 'Mathematics';
   if (lower.includes('bio')) return 'Biology';
   return 'General';
 }
@@ -32,7 +33,6 @@ function getSubject(testName: string): string {
 export default function TestResultsPage() {
   const router = useRouter();
   const { user: authUser, isLoading: authLoading } = useAuth();
-
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -49,7 +49,7 @@ export default function TestResultsPage() {
         setTestResults(data);
       } catch (err) {
         if (err instanceof ApiError && err.status === 401) router.push('/login');
-        else setError('Failed to load test results. Check if the backend is running.');
+        else setError('Unable to load test results at the moment.');
       } finally {
         setLoading(false);
       }
@@ -57,7 +57,6 @@ export default function TestResultsPage() {
     fetchResults();
   }, [authUser, router]);
 
-  // Subject-wise averages
   const subjectMap: Record<string, { total: number; count: number }> = {};
   testResults.forEach((t) => {
     const sub = getSubject(t.testName);
@@ -65,114 +64,123 @@ export default function TestResultsPage() {
     subjectMap[sub].total += (t.marksObtained / t.totalMarks) * 100;
     subjectMap[sub].count += 1;
   });
+  
   const subjectAvg = Object.entries(subjectMap).map(([name, { total, count }]) => ({
     name,
     avg: Math.round(total / count),
   }));
 
-  // Chart bars grayscale palette
-  const chartTests = [...testResults].reverse().slice(0, 4);
-  const barColors = ['bg-primary/20', 'bg-primary/40', 'bg-primary/60', 'bg-primary/80'];
+  const chartTests = [...testResults].reverse().slice(0, 5);
 
   if (authLoading || loading) {
     return (
-      <div className="space-y-6 max-w-7xl mx-auto w-full">
-        <Skeleton className="h-10 w-64" />
-        <div className="grid lg:grid-cols-3 gap-6">
-          <Skeleton className="lg:col-span-2 h-80" />
-          <Skeleton className="h-80" />
+      <div className="space-y-8 max-w-7xl mx-auto w-full pb-20">
+        <Skeleton className="h-12 w-80" />
+        <div className="grid lg:grid-cols-3 gap-8">
+          <Skeleton className="lg:col-span-2 h-96" />
+          <Skeleton className="h-96" />
         </div>
-        <Skeleton className="h-64 mt-8" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="max-w-7xl mx-auto w-full p-8 text-center border border-border rounded-xl">
-        <p className="text-foreground font-black uppercase tracking-widest">{error}</p>
+        <Skeleton className="h-80 w-full" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto w-full">
+    <div className="space-y-10 max-w-7xl mx-auto w-full pb-24">
       <FadeIn>
-        <h1 className="text-3xl font-black uppercase tracking-tighter-editorial text-foreground mb-2">
-          Performance Analytics
-        </h1>
-        <p className="text-muted-foreground">
-          Track your test scores, batch rankings, and subject-wise progress.
-        </p>
+        <div className="flex flex-col gap-3">
+          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+            Academic Performance
+          </h1>
+          <p className="text-sm text-muted-foreground/60 font-medium">
+            Monitor your progress, subject mastery, and session rankings in one place.
+          </p>
+        </div>
       </FadeIn>
 
       {testResults.length === 0 ? (
         <FadeIn>
-          <Card>
-            <CardContent className="p-12 text-center text-muted-foreground italic">
-              No test results recorded yet. Check back after your next test.
-            </CardContent>
-          </Card>
+          <div className="p-20 text-center bg-muted/10 border border-dashed border-border rounded-[2.5rem]">
+            <p className="text-sm text-muted-foreground font-medium italic">
+              No recent test data found. Your scores will appear here after the next evaluation.
+            </p>
+          </div>
         </FadeIn>
       ) : (
         <>
-          <div className="grid lg:grid-cols-3 gap-6">
-
-            {/* Chart */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Learning Trends Chart */}
             <SlideUp className="lg:col-span-2">
-              <Card className="h-full border-border shadow-sm">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-black uppercase tracking-tighter mb-6">Score Progression</h3>
-                  <div className="w-full h-64 bg-secondary/50 rounded-xl border border-border flex items-end justify-around px-8 pb-8 pt-4 relative">
-                    <div className="absolute left-2 top-4 bottom-8 flex flex-col justify-between text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">
-                      <span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span>
+              <Card className="h-full border-border/50 shadow-sm rounded-[2.5rem] overflow-hidden bg-card">
+                <CardContent className="p-8 md:p-10">
+                  <div className="flex justify-between items-center mb-10">
+                     <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                           <FaChartBar size={16} />
+                        </div>
+                        <h3 className="text-xl font-bold text-foreground tracking-tight">Learning Trends</h3>
+                     </div>
+                  </div>
+                  
+                  <div className="w-full h-72 flex items-end justify-around px-4 sm:px-10 pb-10 relative">
+                    <div className="absolute left-0 top-0 bottom-10 flex flex-col justify-between text-[10px] font-bold text-muted-foreground/30 font-mono">
+                      <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
                     </div>
                     {chartTests.map((t, i) => {
                       const pct = Math.round((t.marksObtained / t.totalMarks) * 100);
                       return (
-                        <div key={t.id} className="flex flex-col items-center gap-2 relative group">
-                          <div
-                            className={`w-14 ${barColors[i] ?? 'bg-muted'} hover:bg-primary transition-all duration-700 relative rounded-sm shadow-inner`}
-                            style={{ height: `${pct * 1.8}px` }}
-                          >
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-primary-foreground text-[10px] font-black py-1 px-2 rounded-sm whitespace-nowrap z-10">
+                        <div key={t.id} className="flex-1 flex flex-col items-center gap-4 group relative max-w-[60px]">
+                          <div className="relative w-full h-full flex items-end justify-center">
+                            <motion.div
+                              initial={{ height: 0 }}
+                              animate={{ height: `${pct * 2}px` }}
+                              transition={{ duration: 1, type: "spring", bounce: 0.1 }}
+                              className="w-10 sm:w-12 bg-primary/20 group-hover:bg-primary transition-all duration-300 rounded-t-xl group-hover:shadow-lg group-hover:shadow-primary/20"
+                            />
+                            <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-all bg-foreground text-background text-[10px] font-bold py-1.5 px-3 rounded-lg shadow-xl z-20">
                               {pct}%
                             </div>
                           </div>
-                          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest whitespace-nowrap overflow-hidden text-ellipsis max-w-[60px]">
+                          <span className="text-[10px] font-bold text-muted-foreground/40 group-hover:text-foreground transition-colors overflow-hidden text-ellipsis whitespace-nowrap p-1">
                             {t.testName.split(' ')[0]}
                           </span>
                         </div>
                       );
                     })}
                   </div>
-                  <p className="text-center text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground/40 mt-4">Score progression over last {chartTests.length} tests.</p>
+                  <p className="text-center text-[10px] uppercase font-bold tracking-widest text-muted-foreground/20 italic">Score history overview across current cycle</p>
                 </CardContent>
               </Card>
             </SlideUp>
 
-            {/* Subject Highlights */}
+            {/* Subject Mastery */}
             <SlideUp delay={0.2}>
-              <Card className="h-full bg-primary border-0 text-primary-foreground shadow-xl">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-black uppercase tracking-tighter mb-8 text-primary-foreground">Subject Highlights</h3>
-                  <div className="space-y-6">
-                    {subjectAvg.length === 0 ? (
-                      <p className="text-primary-foreground/60 text-sm italic">No subject data available.</p>
-                    ) : subjectAvg.map(({ name, avg }) => (
-                      <div key={name}>
-                        <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] mb-2">
-                          <span className="text-primary-foreground">{name}</span>
-                          <span className={`${avg >= 80 ? 'text-primary-foreground' : 'text-primary-foreground/60'}`}>
-                            {avg >= 80 ? '[ strong ]' : avg >= 60 ? '[ average ]' : '[ improvement requested ]'} ({avg}%)
-                          </span>
+              <Card className="h-full bg-primary text-primary-foreground border-0 shadow-2xl rounded-[2.5rem] overflow-hidden">
+                <CardContent className="p-8 md:p-10 space-y-10">
+                  <div className="flex items-center gap-3">
+                     <div className="w-10 h-10 rounded-xl bg-primary-foreground/10 flex items-center justify-center">
+                        <FaGraduationCap size={18} />
+                     </div>
+                     <h3 className="text-xl font-bold tracking-tight">Subject Mastery</h3>
+                  </div>
+                  <div className="space-y-8">
+                    {subjectAvg.map(({ name, avg }) => (
+                      <div key={name} className="space-y-3">
+                        <div className="flex justify-between items-end">
+                          <span className="text-[11px] font-bold uppercase tracking-widest text-primary-foreground/90">{name}</span>
+                          <span className="text-lg font-black tracking-tighter tabular-nums">{avg}%</span>
                         </div>
-                        <div className="w-full bg-primary-foreground/20 rounded-full h-[2px]">
-                          <div
-                            className="h-full bg-primary-foreground transition-all duration-1000"
-                            style={{ width: `${avg}%` }}
+                        <div className="w-full bg-primary-foreground/15 rounded-full h-2 shadow-inner">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${avg}%` }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="h-full bg-primary-foreground shadow-sm"
                           />
                         </div>
+                        <p className="text-[9px] font-bold text-primary-foreground/40 uppercase tracking-widest text-right">
+                           {avg >= 85 ? 'Outstanding' : avg >= 70 ? 'Proficient' : 'Improving'}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -181,33 +189,48 @@ export default function TestResultsPage() {
             </SlideUp>
           </div>
 
-          {/* Detailed Table */}
+          {/* Detailed History */}
           <SlideUp delay={0.3}>
-            <h3 className="text-xl font-black uppercase tracking-tighter mt-8 mb-4">Detailed Test History</h3>
-            <Card className="border-border shadow-sm">
+            <div className="flex items-center justify-between px-2 mb-6 mt-12">
+               <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-muted/20 flex items-center justify-center text-muted-foreground">
+                     <FaCalendarCheck size={16} />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground tracking-tight">Examination History</h3>
+               </div>
+            </div>
+            
+            <div className="bg-card border border-border/50 rounded-[2.5rem] overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-secondary text-muted-foreground uppercase font-black text-[10px] tracking-[0.2em] border-b border-border">
+                <table className="w-full text-left">
+                  <thead className="bg-muted/10 text-muted-foreground/40 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-border/40">
                     <tr>
-                      <th className="px-8 py-5">Test Identification</th>
-                      <th className="px-8 py-5">Assessment Date</th>
-                      <th className="px-8 py-5 text-center">Score Metric</th>
-                      <th className="px-8 py-5 text-right">Performance Rank</th>
+                      <th className="px-10 py-6">Test Name</th>
+                      <th className="px-10 py-6">Conducted Date</th>
+                      <th className="px-10 py-6 text-center">Score Portfolio</th>
+                      <th className="px-10 py-6 text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border">
+                  <tbody className="divide-y divide-border/30">
                     {testResults.map((result) => {
                       const pct = Math.round((result.marksObtained / result.totalMarks) * 100);
                       return (
-                        <tr key={result.id} className="hover:bg-secondary/50 transition-colors group">
-                          <td className="px-8 py-6 font-black text-foreground uppercase tracking-tight">{result.testName}</td>
-                          <td className="px-8 py-6 text-muted-foreground text-[10px] font-bold uppercase tracking-widest">
+                        <tr key={result.id} className="hover:bg-muted/5 transition-colors group">
+                          <td className="px-10 py-8 font-bold text-foreground text-sm tracking-tight">{result.testName}</td>
+                          <td className="px-10 py-8 text-muted-foreground/60 text-xs font-semibold">
                             {new Date(result.testDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                           </td>
-                          <td className="px-8 py-6 font-black text-center text-foreground">{result.marksObtained}/{result.totalMarks}</td>
-                          <td className="px-8 py-6 text-right">
-                            <span className={`text-[10px] font-black px-3 py-1 border ${pct >= 85 ? 'border-foreground bg-foreground text-background' : 'border-border text-muted-foreground'} uppercase tracking-[0.2em]`}>
-                              {pct >= 85 ? 'Excellence' : pct >= 70 ? 'Merit' : 'Standard'}
+                          <td className="px-10 py-8 font-black text-center text-foreground tabular-nums text-lg tracking-tighter">
+                            {result.marksObtained}<span className="text-muted-foreground/30 font-bold mx-1">/</span>{result.totalMarks}
+                          </td>
+                          <td className="px-10 py-8 text-right">
+                            <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold border transition-all ${
+                               pct >= 85 ? 'bg-primary text-primary-foreground border-transparent shadow-[0_4px_12px_rgba(var(--primary-rgb),0.2)]' : 
+                               pct >= 70 ? 'bg-muted/20 text-foreground border-border/50' : 
+                               'bg-muted/10 text-muted-foreground border-border/20'
+                            }`}>
+                               <FaAward size={10} className={pct >= 85 ? 'opacity-100' : 'opacity-20'} />
+                               {pct >= 85 ? 'Honours' : pct >= 70 ? 'Merit' : 'General'}
                             </span>
                           </td>
                         </tr>
@@ -216,7 +239,7 @@ export default function TestResultsPage() {
                   </tbody>
                 </table>
               </div>
-            </Card>
+            </div>
           </SlideUp>
         </>
       )}

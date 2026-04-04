@@ -3,38 +3,63 @@
 import React from 'react';
 import { RecordStatsGrid } from '@/components/admin/records-explorer/RecordStatsGrid';
 import { getGlobalStats } from '@/components/admin/records-explorer/mockData';
-import { FadeIn } from '@/components/animations/MotionUtils';
+import { motion } from 'framer-motion';
+import { FaDatabase, FaLayerGroup, FaSearch } from 'react-icons/fa';
 
 export default function GlobalRecordsPage() {
   const stats = getGlobalStats();
 
   return (
-    <div className="space-y-12">
-      <FadeIn delay={0.1}>
+    <div className="space-y-10 md:space-y-12 pb-20">
+      
+      {/* Stats Grid */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <RecordStatsGrid stats={stats} />
-      </FadeIn>
+      </motion.div>
 
-      <FadeIn delay={0.2}>
-        <div className="p-10 border border-border rounded-[3rem] bg-muted/5 space-y-8">
-           <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-black uppercase tracking-tight">System_Holistic_Scan</h2>
-              <p className="text-xs text-muted-foreground uppercase tracking-widest leading-relaxed max-w-2xl">
-                THIS VIEW AGGREGATES DATA FROM THE FULL ARCHIVE. SELECT A SPECIFIC ACADEMIC YEAR FROM THE NAVIGATION SIDEBAR TO PERFORM A SEGMENTED AUDIT OF ADMISSION RECORDS.
-              </p>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-6 bg-background border border-border rounded-2xl flex items-center justify-between group hover:bg-muted/10 transition-colors">
-                 <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Active_Sessions</span>
-                 <span className="text-sm font-black italic">4_RECORDED</span>
-              </div>
-              <div className="p-6 bg-background border border-border rounded-2xl flex items-center justify-between group hover:bg-muted/10 transition-colors">
-                 <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Data_Integrity</span>
-                 <span className="text-sm font-black italic text-green-500">100%_SYNC</span>
-              </div>
-           </div>
-        </div>
-      </FadeIn>
+      {/* Search & Insight Section */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1, duration: 0.4 }}
+        className="p-8 md:p-12 border border-border rounded-[2.5rem] bg-card space-y-10 shadow-sm"
+      >
+         <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 text-primary">
+               <FaSearch size={14} />
+               <h2 className="text-xl font-black tracking-tight">Records Search & Insights</h2>
+            </div>
+            <p className="text-sm text-muted-foreground font-medium leading-relaxed max-w-2xl">
+              This overview aggregates student data from all previous academic sessions. To view detailed student lists, please select a specific academic year from the navigation sidebar.
+            </p>
+         </div>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-6 bg-muted/20 border border-border rounded-2xl flex items-center justify-between group hover:bg-muted/30 transition-all">
+               <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+                     <FaLayerGroup size={16} />
+                  </div>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Active Sessions</span>
+               </div>
+               <span className="text-sm font-black text-foreground">4 Active Years</span>
+            </div>
+            <div className="p-6 bg-muted/20 border border-border rounded-2xl flex items-center justify-between group hover:bg-muted/30 transition-all">
+               <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center text-muted-foreground group-hover:text-emerald-500 transition-colors">
+                     <FaDatabase size={16} />
+                  </div>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">System Integrity</span>
+               </div>
+               <span className="text-sm font-black text-emerald-500">100% Synced</span>
+            </div>
+         </div>
+      </motion.div>
+
     </div>
   );
 }

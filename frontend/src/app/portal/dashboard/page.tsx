@@ -7,6 +7,7 @@ import { DashboardCard, DashboardChart } from '@/components/dashboard/OrbitCompo
 import { apiClient, ApiError } from '@/lib/apiClient';
 import { useAuth } from '@/lib/authContext';
 import { motion } from 'framer-motion';
+import { FaBolt, FaShield, FaClipboardList, FaFire } from 'react-icons/fa6';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Course { id: string; title: string; }
@@ -65,14 +66,14 @@ export default function DashboardPage() {
   }, [authUser, router]);
 
   const firstName = profile?.name?.split(' ')[0] ?? authUser?.name?.split(' ')[0] ?? 'Student';
-  const enrolledCourse = profile?.studentProfile?.enrollments?.[0]?.course?.title ?? 'NO_ACTIVE_ENROLLMENT';
+  const enrolledCourse = profile?.studentProfile?.enrollments?.[0]?.course?.title ?? 'Not yet enrolled';
   
   // Calculate Avg Score
   const avgScore = testResults.length > 0
     ? Math.round(testResults.reduce((sum, t) => sum + (t.marksObtained / t.totalMarks) * 100, 0) / testResults.length)
     : 0;
 
-  // Chart Data (Mocking rhythm based on scores)
+  // Chart Data: Academic Rhythm
   const chartData = [
     { label: '6 AM', value: 45 },
     { label: '9 AM', value: 92 },
@@ -95,15 +96,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6 md:space-y-12 pb-12 md:pb-24">
+    <div className="space-y-10 md:space-y-16 pb-24">
 
       <FadeIn>
-        <div className="flex flex-col gap-2">
-          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
-            Insights
+        <div className="flex flex-col gap-3">
+          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+            Learning Overview
           </h1>
-          <p className="text-xs text-muted-foreground tracking-widest uppercase font-bold">
-            ARCHIVAL_NODE: ST_DB_{authUser?.id?.slice(0, 8)}
+          <p className="text-[11px] text-muted-foreground/40 font-bold uppercase tracking-widest flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-primary/40" />
+            Session Portfolio: {authUser?.name}
           </p>
         </div>
       </FadeIn>
@@ -112,56 +114,40 @@ export default function DashboardPage() {
       <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StaggerItem>
           <DashboardCard
-            title="Avg. Academic Rank"
-            value={`${avgScore}/100`}
-            subtitle="PEAK PERFORMANCE_INDEX"
+            title="Average Score"
+            value={`${avgScore}`}
+            subtitle="Overall academic rank"
             variant="blue"
             trend={{ value: '12%', isUp: true }}
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            }
+            icon={<FaBolt size={14} />}
           />
         </StaggerItem>
         <StaggerItem>
           <DashboardCard
-            title="Program Integrity"
-            value={enrolledCourse === 'NO_ACTIVE_ENROLLMENT' ? 'OFFLINE' : 'STABLE'}
+            title="Course Status"
+            value={enrolledCourse === 'Not yet enrolled' ? 'Pending' : 'Active'}
             subtitle={enrolledCourse}
             variant="teal"
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            }
+            icon={<FaShield size={14} />}
           />
         </StaggerItem>
         <StaggerItem>
           <DashboardCard
-            title="Assessments Logged"
+            title="Tests Completed"
             value={testResults.length}
-            subtitle="TOTAL_UNIT_SESSIONS"
+            subtitle="Assessments logged"
             variant="purple"
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2" />
-              </svg>
-            }
+            icon={<FaClipboardList size={14} />}
           />
         </StaggerItem>
         <StaggerItem>
           <DashboardCard
-            title="Consistently Streak"
-            value="14"
-            subtitle="DAYS_ACTIVE"
+            title="Study Streak"
+            value="14 Days"
+            subtitle="Engagement consistency"
             variant="orange"
             trend={{ value: '2d', isUp: true }}
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.99 7.99 0 0120 13a7.99 7.99 0 01-2.343 5.657z" />
-              </svg>
-            }
+            icon={<FaFire size={14} />}
           />
         </StaggerItem>
       </StaggerContainer>
@@ -170,31 +156,35 @@ export default function DashboardPage() {
         <FadeIn>
           <DashboardChart 
             title="Academic Rhythm"
-            subtitle="Visualizing peak conceptual engagement across cycle"
+            subtitle="Weekly study and conceptual engagement trends"
             data={chartData}
-            color="#000000"
+            color="var(--primary)"
           />
         </FadeIn>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-8">
          <FadeIn>
-            <div className="rounded-2xl border border-border bg-muted p-8">
-               <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-8">Recent Results</h3>
-               <div className="space-y-6">
+            <div className="rounded-[2.5rem] border border-border bg-card p-10 group transition-all hover:border-primary/20">
+               <div className="flex items-center justify-between mb-10">
+                  <h3 className="text-xl font-bold text-foreground tracking-tight">Recent Results</h3>
+                  <button className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">View All</button>
+               </div>
+               <div className="space-y-8">
                  {testResults.slice(0, 4).map((test) => (
-                   <div key={test.id} className="flex justify-between items-center group cursor-pointer border-b border-border/40 pb-4 last:border-0 last:pb-0">
-                      <div className="flex flex-col">
-                         <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest mb-1">{test.testDate.split('T')[0]}</span>
-                         <span className="text-sm font-black text-foreground group-hover:text-muted-foreground transition-colors uppercase tracking-tight">{test.testName}</span>
+                   <div key={test.id} className="flex justify-between items-center group/item cursor-pointer border-b border-border/40 pb-6 last:border-0 last:pb-0">
+                      <div className="flex flex-col gap-1">
+                         <span className="text-[10px] font-bold text-muted-foreground/30 uppercase tracking-widest">{new Date(test.testDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>
+                         <span className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors tracking-tight">{test.testName}</span>
                       </div>
-                      <div className="text-right">
-                         <span className="text-lg font-black text-foreground tracking-tighter">{test.marksObtained}/{test.totalMarks}</span>
-                         <div className="w-24 h-1 bg-muted rounded-full mt-2 overflow-hidden">
+                      <div className="flex flex-col items-end gap-2.5">
+                         <span className="text-lg font-bold text-foreground tabular-nums tracking-tighter">{test.marksObtained}/{test.totalMarks}</span>
+                         <div className="w-24 h-1.5 bg-muted/30 rounded-full overflow-hidden shadow-inner">
                             <motion.div 
-                              initial={{ width: 0 }}
-                              animate={{ width: `${(test.marksObtained / test.totalMarks) * 100}%` }}
-                              className="h-full bg-primary"
+                               initial={{ width: 0 }}
+                               animate={{ width: `${(test.marksObtained / test.totalMarks) * 100}%` }}
+                               transition={{ duration: 1, delay: 0.2 }}
+                               className="h-full bg-primary shadow-sm shadow-primary/20"
                             />
                          </div>
                       </div>
@@ -205,19 +195,19 @@ export default function DashboardPage() {
          </FadeIn>
 
          <FadeIn>
-            <div className="rounded-2xl border border-border bg-secondary/10 p-8 h-full">
-               <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-8">Announcements</h3>
+            <div className="rounded-[2.5rem] border border-border bg-muted/10 p-10 h-full group hover:border-primary/20 transition-all">
+               <h3 className="text-xl font-bold text-foreground tracking-tight mb-10">Important Updates</h3>
                <div className="space-y-6">
-                  <div className="p-4 rounded-sm bg-background border border-foreground shadow-sm relative overflow-hidden">
-                     <div className="absolute top-0 right-0 w-8 h-8 bg-foreground text-background flex items-center justify-center">
-                        <span className="text-[8px] font-black italic">!</span>
+                  <div className="p-6 rounded-[1.5rem] bg-card border border-border/50 shadow-sm relative overflow-hidden group/notice">
+                     <div className="absolute top-0 right-0 w-12 h-12 bg-primary/5 flex items-center justify-center text-primary group-hover/notice:bg-primary/10 transition-colors">
+                        <span className="text-[10px] font-black italic">!</span>
                      </div>
-                     <span className="text-[9px] font-black text-foreground uppercase tracking-[0.3em] mb-2 block">CRITICAL_NOTICE</span>
-                     <p className="text-xs text-muted-foreground leading-relaxed">JEE Advanced practice modules for Thermodynamics have been pushed to the Study Materials repository. Verify checksum before download.</p>
+                     <span className="text-[10px] font-bold text-primary uppercase tracking-widest mb-3 block">Essential Notice</span>
+                     <p className="text-xs text-muted-foreground/60 leading-relaxed font-medium">New study materials for Thermodynamics and Advanced Mechanics have been added to your portal. Please review them before the next evaluation session.</p>
                   </div>
-                  <div className="p-4 rounded-xl bg-muted/10 border border-border">
-                     <span className="text-[9px] font-black text-muted-foreground/60 uppercase tracking-[0.3em] mb-2 block">ROUTINE_PATCH</span>
-                     <p className="text-xs text-muted-foreground/40 leading-relaxed">Weekly doubt clearing cycle begins Monday. Ensure your conceptual queries are logged in the student terminal.</p>
+                  <div className="p-6 rounded-[1.5rem] bg-muted/20 border border-border/30">
+                     <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest mb-3 block">General Update</span>
+                     <p className="text-xs text-muted-foreground/40 leading-relaxed font-normal italic">Weekly live doubt-clearing sessions will resume this Thursday at 5 PM. Link will be available on the sidebar portal.</p>
                   </div>
                </div>
             </div>

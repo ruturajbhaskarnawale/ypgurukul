@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StepperIndicator } from './StepperIndicator';
 import { AdmissionWizardData, initialWizardData } from './types';
-import { FadeIn } from '@/components/animations/MotionUtils';
+import { 
+  FaUser, FaUsers, FaGraduationCap, FaMoneyCheckAlt, 
+  FaCloudUploadAlt, FaFileContract, FaCheckDouble 
+} from 'react-icons/fa';
 
 import { StudentInfoStep } from './steps/StudentInfoStep';
 import { GuardianInfoStep } from './steps/GuardianInfoStep';
@@ -15,13 +18,13 @@ import { LegalDeclarationStep } from './steps/LegalDeclarationStep';
 import { SuccessSummaryStep } from './steps/SuccessSummaryStep';
 
 const STEPS = [
-  'Student Info',
+  'Student Information',
   'Guardian Details',
   'Academic History',
-  'Fees & Logic',
-  'Document Vault',
-  'Final Declaration',
-  'Review & Submission'
+  'Fee Details',
+  'Document Upload',
+  'Declaration',
+  'Review & Submit'
 ];
 
 export const AdmissionWizard = () => {
@@ -70,24 +73,28 @@ export const AdmissionWizard = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto pb-12 md:pb-24 relative">
+    <div className="w-full max-w-5xl mx-auto pb-16 md:pb-24 relative px-4">
       
-      <div className="bg-muted/5 border border-border rounded-2xl sm:rounded-[3rem] p-4 sm:p-6 lg:p-12 shadow-sm relative overflow-hidden">
+      <div className="bg-card border border-border rounded-3xl md:rounded-[2.5rem] p-6 lg:p-14 shadow-sm relative overflow-hidden transition-all duration-500 bg-gradient-to-tr from-background via-card to-background">
+        
+        {/* Step-specific Gradient Background Accents */}
+        <div className="absolute top-0 left-0 w-full h-[6px] bg-muted/10 opacity-50" />
+        <div className="absolute top-[-30%] left-[-20%] w-[60%] h-[60%] bg-primary/5 blur-[120px] rounded-full pointer-events-none opacity-30 select-none animate-pulse-slow" />
         
         {/* Progress Tracker */}
-        <div className="mb-8 md:mb-16">
+        <div className="mb-12 md:mb-20">
           <StepperIndicator currentStep={currentStep} totalSteps={STEPS.length} steps={STEPS} />
         </div>
 
-        {/* Step Container */}
-        <div className="min-h-[500px] relative">
+        {/* Step Container with smooth layout change */}
+        <div className="min-h-[400px] relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -20, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
             >
               {renderStep()}
             </motion.div>
@@ -96,11 +103,14 @@ export const AdmissionWizard = () => {
 
       </div>
 
-      {/* Persistence Note */}
-      <div className="flex justify-center mt-6 md:mt-12 opacity-40">
-        <span className="text-[8px] font-black uppercase tracking-[0.3em] bg-muted px-3 py-1 rounded-full">
-          Auto_Save: Enabled_Session_Context
-        </span>
+      {/* Progress Sync Note */}
+      <div className="flex justify-center mt-10">
+        <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-emerald-500/5 text-emerald-600/60 border border-emerald-500/10 shadow-sm shadow-emerald-500/5">
+           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+           <span className="text-[10px] font-bold uppercase tracking-widest leading-none">
+             Session auto-sync active
+           </span>
+        </div>
       </div>
 
     </div>

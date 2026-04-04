@@ -2,10 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FadeIn, StaggerContainer, StaggerItem } from '@/components/animations/MotionUtils';
+import { motion } from 'framer-motion';
 import { DashboardCard, DashboardChart } from '@/components/dashboard/OrbitComponents';
-import { apiClient, ApiError } from '@/lib/apiClient';
+import { apiClient } from '@/lib/apiClient';
 import { useAuth } from '@/lib/authContext';
+import { 
+  FaPlus, FaCloudArrowUp, FaUsersGear, FaArrowTrendUp, 
+  FaRegCircleCheck, FaTriangleExclamation, FaInfo
+} from 'react-icons/fa6';
 
 interface AdminStats {
   totalCourses: number;
@@ -21,27 +25,6 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [dashboardMode, setDashboardMode] = useState<'governance' | 'admin'>('governance');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('ypg_admin_mode') as 'governance' | 'admin';
-    if (saved) setDashboardMode(saved);
-
-    const handleModeChange = (e: any) => {
-      setDashboardMode((e as CustomEvent).detail);
-    };
-
-    window.addEventListener('ypg_admin_mode_change', handleModeChange);
-    return () => window.removeEventListener('ypg_admin_mode_change', handleModeChange);
-  }, []);
-
-  const toggleMode = () => {
-    const next = dashboardMode === 'governance' ? 'admin' : 'governance';
-    setDashboardMode(next);
-    localStorage.setItem('ypg_admin_mode', next);
-    window.dispatchEvent(new CustomEvent('ypg_admin_mode_change', { detail: next }));
-  };
-
   useEffect(() => {
     if (!authLoading && (!authUser || authUser.role !== 'ADMIN')) {
       router.push('/login');
@@ -55,7 +38,7 @@ export default function AdminDashboardPage() {
         const data = await apiClient.get<AdminStats>('/admin/stats');
         setStats(data);
       } catch (err) {
-         setError('Failed to load administrative metrics.');
+         setError('Unable to load current administrative data.');
       } finally {
         setLoading(false);
       }
@@ -63,187 +46,173 @@ export default function AdminDashboardPage() {
     fetchData();
   }, [authUser, router]);
 
-  // Mocking Application Rhythm
+  // Chart: Application Inflow (Weekly Trends)
   const chartData = [
-    { label: 'MON', value: 45 },
-    { label: 'TUE', value: 82 },
-    { label: 'WED', value: 68 },
-    { label: 'THU', value: 95 },
-    { label: 'FRI', value: 55 },
-    { label: 'SAT', value: 25 },
-    { label: 'SUN', value: 12 },
+    { label: 'Mon', value: 45 },
+    { label: 'Tue', value: 82 },
+    { label: 'Wed', value: 68 },
+    { label: 'Thu', value: 95 },
+    { label: 'Fri', value: 55 },
+    { label: 'Sat', value: 25 },
+    { label: 'Sun', value: 12 },
   ];
 
   if (authLoading || (!stats && loading)) {
     return (
       <div className="space-y-12 animate-pulse">
-        <div className="h-12 w-64 bg-muted/40 rounded-xl" />
+        <div className="h-10 w-64 bg-muted/40 rounded-xl" />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-muted/40 rounded-2xl" />)}
         </div>
-        <div className="h-96 bg-muted/40 rounded-2xl" />
+        <div className="h-[400px] bg-muted/40 rounded-2xl" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 md:space-y-12 pb-12 md:pb-24">
+    <div className="space-y-10 md:space-y-12 pb-24">
       
-      <FadeIn>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
-              {dashboardMode === 'governance' ? 'Governance' : 'Operational Admin'}
-            </h1>
-            <p className="text-[10px] text-muted-foreground tracking-widest uppercase font-black italic">
-              SYSTEM_STATUS: {dashboardMode === 'governance' ? 'TERMINAL_ACTIVE' : 'OPERATION_MODE_REPOSITORY'}
-            </p>
-          </div>
-
-          <button
-            onClick={toggleMode}
-            className="flex items-center gap-4 bg-foreground text-background px-6 py-4 rounded-2xl hover:bg-muted-foreground transition-all duration-300 shadow-xl active:scale-95 group"
-          >
-            <div className="flex flex-col items-start leading-none">
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-1">Switch_View</span>
-              <span className="text-[10px] font-black uppercase tracking-widest">
-                To {dashboardMode === 'governance' ? 'Admin' : 'Governance'}
-              </span>
-            </div>
-            <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center group-hover:rotate-180 transition-transform duration-500">
-              <svg className="w-4 h-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-              </svg>
-            </div>
-          </button>
-        </div>
-      </FadeIn>
-
-      {/* KPI Stats */}
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StaggerItem>
-          <DashboardCard
-            title="Active Requisitions"
-            value={stats?.totalApplications || 0}
-            subtitle="CANDIDATE_POOL_SIZE"
-            variant="orange"
-            trend={{ value: '8%', isUp: true }}
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            }
-          />
-        </StaggerItem>
-        <StaggerItem>
-          <DashboardCard
-            title="Academic Modules"
-            value={stats?.totalCourses || 0}
-            subtitle="DEPLOYED_PROGRAMS"
-            variant="blue"
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            }
-          />
-        </StaggerItem>
-        <StaggerItem>
-          <DashboardCard
-            title="Assessment Logs"
-            value={stats?.totalResults || 0}
-            subtitle="EVALUATION_SESSIONS"
-            variant="teal"
-            trend={{ value: '142', isUp: true }}
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            }
-          />
-        </StaggerItem>
-        <StaggerItem>
-          <DashboardCard
-            title="Archival Assets"
-            value={stats?.totalMaterials || 0}
-            subtitle="TOTAL_RESOURCES"
-            variant="purple"
-            icon={
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
-              </svg>
-            }
-          />
-        </StaggerItem>
-      </StaggerContainer>
-
-      <div className="grid lg:grid-cols-1 gap-8">
-        <FadeIn>
-          <DashboardChart 
-            title="Application Inflow"
-            subtitle="Visualizing candidate interest over the current archival cycle"
-            data={chartData}
-            color="#000000"
-          />
-        </FadeIn>
+      {/* Header Section */}
+      <div className="flex flex-col gap-3">
+        <motion.h1 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-4xl md:text-5xl font-black text-foreground tracking-tight"
+        >
+          Management Overview
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-sm text-muted-foreground/60 flex items-center gap-2.5 font-medium"
+        >
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/20" />
+          System Operational • Welcome back, {authUser?.name}.
+        </motion.p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8">
-         <FadeIn>
-            <div className="rounded-3xl border border-border bg-secondary/10 p-10">
-               <div className="flex justify-between items-center mb-10">
-                  <h3 className="text-xl font-black text-foreground tracking-tight uppercase">Quick Actions</h3>
-                  <span className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.4em]">Administrative_Access</span>
-               </div>
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
-                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
-                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">01. DEPLOY</span>
-                     <p className="text-xs font-black uppercase tracking-widest">NEW_COURSE</p>
-                  </button>
-                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
-                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">02. APPEND</span>
-                     <p className="text-xs font-black uppercase tracking-widest">STUDY_MATERIAL</p>
-                  </button>
-                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
-                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">03. OVERSEE</span>
-                     <p className="text-xs font-black uppercase tracking-widest">ALL_APPLICATIONS</p>
-                  </button>
-                  <button className="p-4 md:p-8 rounded-2xl border border-border bg-background hover:bg-foreground hover:text-background transition-all text-left group shadow-sm">
-                     <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest block mb-2 group-hover:text-background/40 transition-colors">04. ANALYZE</span>
-                     <p className="text-xs font-black uppercase tracking-widest">RESULT_MATRICS</p>
-                  </button>
-               </div>
-            </div>
-         </FadeIn>
+      {/* Main KPI Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <DashboardCard
+          title="Candidate Applications"
+          value={stats?.totalApplications || 0}
+          subtitle="Pending reviews"
+          variant="orange"
+          trend={{ value: '12%', isUp: true }}
+          icon={<FaUsersGear size={16} />}
+        />
+        <DashboardCard
+          title="Active Courses"
+          value={stats?.totalCourses || 0}
+          subtitle="Academic curriculum"
+          variant="blue"
+          icon={<FaArrowTrendUp size={16} />}
+        />
+        <DashboardCard
+          title="Exam Records"
+          value={stats?.totalResults || 0}
+          subtitle="Evaluations completed"
+          variant="teal"
+          trend={{ value: '55', isUp: true }}
+          icon={<FaRegCircleCheck size={16} />}
+        />
+        <DashboardCard
+          title="Digital Resources"
+          value={stats?.totalMaterials || 0}
+          subtitle="Study materials"
+          variant="purple"
+          icon={<FaCloudArrowUp size={16} />}
+        />
+      </div>
 
-         <FadeIn>
-            <div className="rounded-3xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-10 h-full">
-               <h3 className="text-xl font-black text-foreground tracking-tight uppercase mb-10">System Health</h3>
-               <div className="space-y-8">
-                  <div className="flex items-center justify-between p-6 rounded-2xl bg-background border border-border shadow-sm">
-                     <div className="flex items-center gap-6">
-                        <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(0,0,0,0.5)]" />
-                        <span className="text-[10px] font-black text-foreground uppercase tracking-widest">Database_Sync</span>
-                     </div>
-                     <span className="text-[9px] font-black text-primary uppercase tracking-widest">ACTIVE</span>
-                  </div>
-                  <div className="flex items-center justify-between p-6 rounded-2xl bg-background border border-border shadow-sm">
-                     <div className="flex items-center gap-6">
-                        <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(0,0,0,0.5)]" />
-                        <span className="text-[10px] font-black text-foreground uppercase tracking-widest">Auth_Protocol</span>
-                     </div>
-                     <span className="text-[9px] font-black text-primary uppercase tracking-widest">SECURE</span>
-                  </div>
-                  <div className="flex items-center justify-between p-6 rounded-2xl bg-background border border-border shadow-sm">
-                     <div className="flex items-center gap-6">
-                        <div className="w-2 h-2 rounded-full bg-primary/40" />
-                        <span className="text-[10px] font-black text-foreground uppercase tracking-widest">Resource_Load</span>
-                     </div>
-                     <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">NOMINAL</span>
-                  </div>
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Main Chart */}
+        <div className="lg:col-span-2">
+          <DashboardChart 
+            title="Application Inflow"
+            subtitle="Candidate interest trends over the current week"
+            data={chartData}
+            color="var(--primary)"
+          />
+        </div>
+
+        {/* Quick Actions Card */}
+        <div className="rounded-[2.5rem] border border-border bg-card p-10 flex flex-col h-full group hover:border-primary/20 transition-all">
+           <div className="flex justify-between items-center mb-10">
+              <h3 className="text-xl font-bold text-foreground tracking-tight">Quick Actions</h3>
+              <FaInfo className="text-muted-foreground/30" size={12} />
+           </div>
+           <div className="flex flex-col gap-4">
+              <button className="flex items-center gap-5 p-5 rounded-2xl border border-border/50 bg-muted/10 hover:bg-primary/5 hover:border-primary/30 transition-all text-left group/btn">
+                 <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center border border-border group-hover/btn:text-primary transition-colors shadow-sm">
+                    <FaPlus size={14} />
+                 </div>
+                 <div className="flex flex-col gap-0.5">
+                    <p className="text-xs font-bold text-foreground tracking-tight">Add New Course</p>
+                    <p className="text-[10px] text-muted-foreground/60 font-medium">Deploy a new module</p>
+                 </div>
+              </button>
+              <button className="flex items-center gap-5 p-5 rounded-2xl border border-border/50 bg-muted/10 hover:bg-primary/5 hover:border-primary/30 transition-all text-left group/btn">
+                 <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center border border-border group-hover/btn:text-primary transition-colors shadow-sm">
+                    <FaCloudArrowUp size={14} />
+                 </div>
+                 <div className="flex flex-col gap-0.5">
+                    <p className="text-xs font-bold text-foreground tracking-tight">Upload Resources</p>
+                    <p className="text-[10px] text-muted-foreground/60 font-medium">Add new study PDFs</p>
+                 </div>
+              </button>
+              <button className="flex items-center gap-5 p-5 rounded-2xl border border-border/50 bg-muted/10 hover:bg-primary/5 hover:border-primary/30 transition-all text-left group/btn">
+                 <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center border border-border group-hover/btn:text-primary transition-colors shadow-sm">
+                    <FaUsersGear size={14} />
+                 </div>
+                 <div className="flex flex-col gap-0.5">
+                    <p className="text-xs font-bold text-foreground tracking-tight">Review Records</p>
+                    <p className="text-[10px] text-muted-foreground/60 font-medium">Check pending inbox</p>
+                 </div>
+              </button>
+           </div>
+        </div>
+      </div>
+
+      {/* System Status / Health (Professional Layout) */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+         <div className="rounded-[2rem] border border-border bg-card p-6 flex items-center justify-between group hover:border-emerald-500/20 transition-all">
+            <div className="flex items-center gap-4">
+               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 shadow-sm shadow-emerald-500/10">
+                  <FaRegCircleCheck size={18} />
+               </div>
+               <div>
+                  <p className="text-sm font-bold text-foreground tracking-tight">Database Connectivity</p>
+                  <p className="text-[10px] text-muted-foreground/60 font-medium tracking-tight">Synched and operational</p>
                </div>
             </div>
-         </FadeIn>
+            <span className="text-[10px] font-bold tracking-widest text-emerald-600 bg-emerald-500/10 px-3 py-1 rounded-full uppercase">Healthy</span>
+         </div>
+         <div className="rounded-[2rem] border border-border bg-card p-6 flex items-center justify-between group hover:border-primary/20 transition-all">
+            <div className="flex items-center gap-4">
+               <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-sm shadow-primary/10">
+                  <FaRegCircleCheck size={18} />
+               </div>
+               <div>
+                  <p className="text-sm font-bold text-foreground tracking-tight">Security Protocol</p>
+                  <p className="text-[10px] text-muted-foreground/60 font-medium tracking-tight">Auth modules verified</p>
+               </div>
+            </div>
+            <span className="text-[10px] font-bold tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full uppercase">Secure</span>
+         </div>
+         <div className="rounded-[2rem] border border-border bg-card p-6 flex items-center justify-between group hover:border-orange-500/20 transition-all">
+            <div className="flex items-center gap-4">
+               <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-600 shadow-sm shadow-orange-500/10">
+                  <FaTriangleExclamation size={18} />
+               </div>
+               <div>
+                  <p className="text-sm font-bold text-foreground tracking-tight">Network Activity</p>
+                  <p className="text-[10px] text-muted-foreground/60 font-medium tracking-tight">Moderate traffic detected</p>
+               </div>
+            </div>
+            <span className="text-[10px] font-bold tracking-widest text-orange-600 bg-orange-500/10 px-3 py-1 rounded-full uppercase">Normal</span>
+         </div>
       </div>
 
     </div>

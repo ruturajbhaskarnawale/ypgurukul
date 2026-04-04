@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { AdmissionLedgerTable } from '@/components/admin/records-explorer/AdmissionLedgerTable';
 import { getMockAdmissions } from '@/components/admin/records-explorer/mockData';
 import { FadeIn } from '@/components/animations/MotionUtils';
+import { FaSearch, FaFilter, FaFileExport, FaUserFriends } from 'react-icons/fa';
 
 export default function StandardRecordsPage() {
   const params = useParams();
@@ -12,48 +13,58 @@ export default function StandardRecordsPage() {
   const standard = params.standard as string;
   const admissions = getMockAdmissions(year, standard);
 
+  // Capitalize standardized text
+  const formatText = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-10 md:space-y-12">
       
       {/* Filtering Actions Bar */}
       <FadeIn delay={0.1}>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-muted/5 border border-border p-6 rounded-[2.5rem] shadow-sm">
-           <div className="flex items-center gap-4 bg-background border border-border px-6 py-4 rounded-2xl w-full md:w-96 focus-within:border-primary transition-all">
-              <svg className="w-4 h-4 text-muted-foreground opacity-40 italic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input 
-                placeholder="SEARCH_LEDGER_BY_NAME_OR_IDS..." 
-                className="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest w-full placeholder:text-muted-foreground/40"
-              />
-           </div>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-card border border-border p-6 rounded-[2.5rem] shadow-sm">
+            <div className="flex items-center gap-4 bg-muted/20 border border-border/50 px-6 py-4 rounded-2xl w-full md:w-96 focus-within:border-primary/40 focus-within:bg-background transition-all group">
+               <FaSearch size={14} className="text-muted-foreground opacity-30 group-focus-within:opacity-100 transition-opacity" />
+               <input 
+                 placeholder={`Search ${formatText(standard)} students...`} 
+                 className="bg-transparent border-none outline-none text-xs font-bold w-full placeholder:text-muted-foreground/30 placeholder:font-medium"
+               />
+            </div>
 
-           <div className="flex items-center gap-4 w-full md:w-auto">
-              <button className="flex-1 md:flex-none flex items-center gap-3 bg-muted/40 hover:bg-foreground hover:text-background px-6 py-4 rounded-2xl transition-all">
-                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                 </svg>
-                 <span className="text-[10px] font-black uppercase tracking-widest">Filters</span>
-              </button>
-              <button className="flex-2 md:flex-none flex items-center gap-4 bg-foreground text-background px-10 py-4 rounded-2xl transition-all hover:bg-muted-foreground font-black uppercase text-[10px] tracking-widest shadow-2xl active:scale-95">
-                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                 </svg>
-                 Export_CSV
-              </button>
-           </div>
+            <div className="flex items-center gap-3 w-full md:w-auto">
+               <button className="flex-1 md:flex-none flex items-center justify-center gap-3 bg-muted/20 hover:bg-muted/40 text-foreground px-6 py-4 rounded-xl transition-all border border-border/40 font-bold text-xs">
+                  <FaFilter size={12} className="opacity-40" />
+                  Advanced Filters
+               </button>
+                <button 
+                  className="flex-none flex items-center justify-center bg-primary text-primary-foreground w-12 h-12 rounded-xl transition-all hover:opacity-90 shadow-lg shadow-primary/20 active:scale-[0.98]"
+                  title="Export CSV"
+                >
+                  <FaFileExport size={16} />
+                </button>
+            </div>
         </div>
       </FadeIn>
 
       <FadeIn delay={0.2}>
-        <div className="space-y-4">
-           <div className="flex items-center justify-between px-4">
-              <h3 className="text-xl font-black uppercase tracking-tight">Student_Ledger_Output</h3>
-              <span className="text-[10px] font-black text-muted-foreground uppercase opacity-40 italic tracking-widest">
-                 Found {admissions.length} Data Points
-              </span>
-           </div>
-           <AdmissionLedgerTable admissions={admissions} />
+        <div className="space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4">
+               <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                     <FaUserFriends size={16} />
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-xl font-black text-foreground tracking-tight">{formatText(standard)} Standard Records</h3>
+                    <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">Academic Session {year}</p>
+                  </div>
+               </div>
+               <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">
+                     Showing {admissions.length} Students
+                  </span>
+               </div>
+            </div>
+            
+            <AdmissionLedgerTable admissions={admissions} />
         </div>
       </FadeIn>
 

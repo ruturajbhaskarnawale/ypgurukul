@@ -4,8 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/global/Card';
 import { Input } from '@/components/global/Input';
 import { Button } from '@/components/global/Button';
-import { FadeIn, SlideUp } from '@/components/animations/MotionUtils';
+import { motion, AnimatePresence } from 'framer-motion';
 import { apiClient } from '@/lib/apiClient';
+import { 
+  FaFileLines, FaBookOpen, FaCalendarCheck, FaPlus, 
+  FaCloudArrowUp, FaArrowUpRightFromSquare, FaChevronDown 
+} from 'react-icons/fa6';
 
 interface Course {
   id: string;
@@ -43,9 +47,9 @@ export default function AdminMaterialsPage() {
         apiClient.get<Material[]>('/admin/materials'),
         apiClient.get<Course[]>('/admin/courses')
       ]);
-      setMaterials(matsRes);
-      setCourses(coursesRes);
-      if (coursesRes.length > 0 && !formData.courseId) {
+      setMaterials(matsRes || []);
+      setCourses(coursesRes || []);
+      if (coursesRes && coursesRes.length > 0 && !formData.courseId) {
         setFormData(prev => ({ ...prev, courseId: coursesRes[0].id }));
       }
     } catch(err) {
@@ -66,8 +70,6 @@ export default function AdminMaterialsPage() {
     setSubmitting(true);
     setErrorMsg('');
     try {
-      // For demo, we are pretending the file is at a static URL if they didn't provide one
-      // In reality, you'd upload the file to S3 and get the URL back here
       const finalData = {
         ...formData,
         fileUrl: formData.fileUrl || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
@@ -85,134 +87,183 @@ export default function AdminMaterialsPage() {
   };
 
   return (
-    <div className="space-y-8 pb-20">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-        <div>
-          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase">Study Materials</h1>
-          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">ARCHIVE_SYSTEM: RESOURCE_REPOSITORY_v4</p>
+    <div className="space-y-10 md:space-y-12 pb-24 max-w-7xl mx-auto">
+      
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-border/50 pb-10">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+            Study Resources
+          </h1>
+          <p className="text-sm text-muted-foreground/60 font-medium">
+            Upload and manage study guides, notes, and session PDFs.
+          </p>
         </div>
-        <Button 
+        <button 
           onClick={() => setIsAdding(!isAdding)}
-          className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[10px] px-8 py-6 rounded-full"
+          className={`px-10 py-4 rounded-[1.5rem] font-bold text-sm transition-all flex items-center justify-center gap-3 shadow-lg ${
+            isAdding ? 'bg-muted/40 text-foreground' : 'bg-primary text-primary-foreground shadow-primary/20 active:scale-95'
+          }`}
         >
-          {isAdding ? 'CANCEL_OPERATION' : '+ UPLOAD_MATERIAL'}
-        </Button>
+          {isAdding ? 'Cancel' : <><FaPlus size={14} /> New Resource</>}
+        </button>
       </div>
 
-      {isAdding && (
-        <SlideUp>
-          <Card className="border border-border bg-secondary/5 shadow-2xl mb-12 rounded-3xl overflow-hidden">
-            <CardContent className="p-10">
-              <h2 className="text-xl font-black uppercase tracking-tight mb-8">Upload New Material</h2>
-              {errorMsg && (
-                <div className="text-[10px] font-black uppercase tracking-widest text-foreground bg-secondary/20 p-6 rounded-xl mb-8 border border-border">
-                  [ error ] {errorMsg}
+      <AnimatePresence>
+        {isAdding && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, y: -20 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -20 }}
+            className="overflow-hidden"
+          >
+            <div className="border border-border/50 bg-card shadow-2xl rounded-[2.5rem] overflow-hidden mb-12">
+              <div className="p-8 md:p-12 space-y-10">
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <FaPlus size={16} />
+                   </div>
+                   <h2 className="text-2xl font-bold text-foreground tracking-tight">Upload New Resource</h2>
                 </div>
-              )}
-              
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="w-full">
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">01. Material_Title</label>
-                    <Input 
-                      name="title" 
-                      value={formData.title} 
-                      onChange={handleChange} 
-                      placeholder="e.g. CURRENT_ELECTRICITY_NOTES_PART_1" 
-                      required 
-                      className="h-14 rounded-2xl border-border bg-background px-4 font-bold"
-                    />
+                
+                {errorMsg && (
+                   <div className="bg-destructive/10 text-destructive p-5 rounded-2xl text-sm font-bold border border-destructive/20">
+                    {errorMsg}
                   </div>
-                  
-                  <div className="w-full">
-                    <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">02. Associated_Module</label>
-                    <select 
-                      name="courseId" 
-                      value={formData.courseId} 
-                      onChange={handleChange} 
-                      required
-                      className="flex h-14 w-full rounded-2xl border border-border bg-background px-4 py-2 text-sm font-bold focus:outline-none focus:border-foreground transition-all appearance-none"
-                    >
-                      {courses.length === 0 && <option disabled value="">No courses available. Create one first.</option>}
-                      {courses.map(c => (
-                        <option key={c.id} value={c.id}>{c.title}</option>
-                      ))}
-                    </select>
+                )}
+                
+                <form onSubmit={handleSubmit} className="space-y-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Resource Title</label>
+                      <Input 
+                        name="title" 
+                        value={formData.title} 
+                        onChange={handleChange} 
+                        placeholder="e.g. Thermodynamics Chapter 1 Notes" 
+                        required 
+                        className="h-14 rounded-2xl bg-muted/10 border-border/40 focus:ring-primary/5 focus:border-primary/20 text-sm font-bold"
+                      />
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Associated Program</label>
+                      <div className="relative">
+                         <select 
+                           name="courseId" 
+                           value={formData.courseId} 
+                           onChange={handleChange} 
+                           required
+                           className="flex h-14 w-full rounded-2xl border border-border/40 bg-muted/10 px-6 py-2 text-sm font-bold focus:outline-none focus:ring-primary/5 focus:border-primary/20 transition-all appearance-none cursor-pointer"
+                         >
+                           {courses.length === 0 && <option disabled value="">No programs available.</option>}
+                           {courses.map(c => (
+                             <option key={c.id} value={c.id}>{c.title}</option>
+                           ))}
+                         </select>
+                         <FaChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground/40 pointer-events-none" size={10} />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="w-full">
-                  <label className="block text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-3 italic">03. Payload_Upload (PDF)</label>
-                  <input 
-                    type="file" 
-                    accept=".pdf"
-                    className="block w-full text-[10px] font-black uppercase tracking-widest text-muted-foreground file:mr-6 file:py-3 file:px-8 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-foreground file:text-background hover:file:opacity-90 cursor-pointer border border-border rounded-2xl p-3 bg-background" 
-                  />
-                  <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest mt-4">
-                    [ note ] Upload logic is currently simulated for environmental validation.
-                  </p>
-                </div>
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest ml-1">Document Upload</label>
+                    <div className="border-2 border-dashed border-border/50 rounded-[2rem] p-12 flex flex-col items-center justify-center gap-5 bg-muted/5 group hover:border-primary/30 transition-all cursor-pointer shadow-inner">
+                       <div className="w-16 h-16 rounded-2xl bg-card border border-border/50 flex items-center justify-center text-muted-foreground/40 group-hover:text-primary group-hover:border-primary/20 transition-all shadow-sm">
+                          <FaCloudUploadAlt size={28} />
+                       </div>
+                       <div className="text-center">
+                          <p className="text-sm font-bold text-foreground">Click to select or drag and drop</p>
+                          <p className="text-[10px] font-medium text-muted-foreground/40 mt-1.5 uppercase tracking-widest">PDF Documents (Max 10MB)</p>
+                       </div>
+                       <input type="file" className="hidden" accept=".pdf" />
+                    </div>
+                    <p className="text-[10px] font-medium text-primary/40 italic flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary/20 animate-pulse" />
+                      File upload is simulated for this demonstration.
+                    </p>
+                  </div>
 
-                <div className="pt-4 flex justify-end gap-4">
-                  <Button type="button" variant="outline" onClick={() => setIsAdding(false)} className="px-8 py-6 rounded-full font-black uppercase tracking-widest text-[10px]">DISCARD</Button>
-                  <Button type="submit" isLoading={submitting} disabled={courses.length === 0} className="px-12 py-6 rounded-full font-black uppercase tracking-widest text-[10px] bg-foreground text-background">SAVE_RESOURCE</Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </SlideUp>
-      )}
+                  <div className="pt-8 flex justify-end gap-5 border-t border-border/40">
+                    <button type="button" onClick={() => setIsAdding(false)} className="px-10 py-4 rounded-2xl font-bold text-sm text-muted-foreground/60 hover:bg-muted/40 hover:text-foreground transition-all">Discard</button>
+                    <button type="submit" disabled={submitting || courses.length === 0} className="px-12 py-4 rounded-2xl font-bold text-sm bg-primary text-primary-foreground hover:shadow-xl hover:shadow-primary/20 transition-all disabled:opacity-50 active:scale-95">
+                      {submitting ? 'Uploading...' : 'Save Resource'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <FadeIn>
-        <div className="border border-border rounded-3xl bg-background overflow-hidden shadow-sm">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <div className="bg-card border border-border/50 rounded-[2.5rem] overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border bg-secondary/10">
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Resource_Identity</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Module_Origin</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Temporal_Stamp</th>
-                  <th className="py-6 px-8 font-black text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 text-right">System_Actions</th>
+                <tr className="border-b border-border/40 bg-muted/5">
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30">Resource History</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30">Program</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30">Added On</th>
+                  <th className="py-6 px-10 text-[10px] uppercase tracking-widest font-bold text-muted-foreground/30 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-border/20">
                 {loading ? (
                   <tr>
-                    <td colSpan={4} className="py-20 text-center font-black text-[10px] uppercase tracking-widest text-muted-foreground/40">SYNCHRONIZING_ARCHIVES...</td>
+                    <td colSpan={4} className="py-32 text-center text-muted-foreground/40 italic text-sm">
+                       <div className="flex flex-col items-center gap-3">
+                          <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+                          Loading resources...
+                       </div>
+                    </td>
                   </tr>
                 ) : materials.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="py-20 text-center font-black text-[10px] uppercase tracking-widest text-muted-foreground/40">
-                      NO_RESOURCES_FOUND.
+                    <td colSpan={4} className="py-32 text-center text-muted-foreground/40 italic text-sm">
+                       <div className="flex flex-col items-center gap-5">
+                          <FaFileLines className="opacity-10" size={48} />
+                          <p className="font-medium">No study materials found in the repository.</p>
+                       </div>
                     </td>
                   </tr>
                 ) : (
                   materials.map((mat) => (
-                    <tr key={mat.id} className="border-b border-border hover:bg-secondary/5 transition-all group">
-                      <td className="py-6 px-8">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center text-foreground flex-shrink-0 group-hover:bg-foreground group-hover:text-background transition-colors">
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
+                    <tr key={mat.id} className="hover:bg-muted/5 transition-all group">
+                      <td className="py-8 px-10">
+                        <div className="flex items-center gap-5">
+                          <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 shadow-inner border border-primary/10">
+                            <FaFileLines size={16} />
                           </div>
-                          <span className="font-black text-foreground uppercase tracking-tight text-sm">{mat.title}</span>
+                          <span className="font-bold text-foreground text-sm tracking-tight">{mat.title}</span>
                         </div>
                       </td>
-                      <td className="py-6 px-8 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                        {mat.course?.title || 'Unknown Module'}
+                      <td className="py-8 px-10">
+                        <div className="flex items-center gap-3 text-[11px] font-bold tracking-tight text-muted-foreground/60">
+                           <FaBookOpen size={12} className="text-primary/20" />
+                           {mat.course?.title || 'General'}
+                        </div>
                       </td>
-                      <td className="py-6 px-8 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
-                        {new Date(mat.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      <td className="py-8 px-10 text-[11px] font-bold text-muted-foreground/20 tracking-tight">
+                        <div className="flex items-center gap-3">
+                           <FaCalendarCheck size={14} />
+                           {new Date(mat.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </div>
                       </td>
-                      <td className="py-6 px-8 text-right">
+                      <td className="py-8 px-10 text-right">
                         <a 
                           href={mat.fileUrl} 
                           target="_blank" 
                           rel="noreferrer"
-                          className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+                          className="inline-flex items-center gap-3 px-6 py-2.5 rounded-2xl bg-muted/10 hover:bg-primary text-muted-foreground/60 hover:text-primary-foreground border border-border/50 hover:border-transparent transition-all text-[11px] font-bold shadow-sm"
                         >
-                          [ Access_File ]
+                          <FaArrowUpRightFromSquare size={12} />
+                          Open
                         </a>
                       </td>
                     </tr>
@@ -222,7 +273,7 @@ export default function AdminMaterialsPage() {
             </table>
           </div>
         </div>
-      </FadeIn>
+      </motion.div>
     </div>
   );
 }
